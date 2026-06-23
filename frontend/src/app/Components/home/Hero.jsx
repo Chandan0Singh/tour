@@ -1,46 +1,88 @@
+"use client";
+
+import { Search } from "lucide-react";
+
 export default function Hero() {
   return (
-    <section className="relative h-screen">
-
+    <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
+      {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b')",
+            "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000')",
         }}
       />
 
+      {/* Overlay */}
       <div className="absolute inset-0 bg-black/50" />
 
-      <div className="relative z-10 container mx-auto flex h-full items-center px-4">
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center text-white">
+        <p className="uppercase tracking-[4px] text-green-300 mb-4 text-sm font-medium">
+          Adventure • Nature • Exploration
+        </p>
 
-        <div className="max-w-3xl text-white">
+        <h1
+          className="text-5xl md:text-7xl font-bold leading-tight mb-6"
+          style={{ fontFamily: "'Playfair Display', serif" }}
+        >
+          Explore Nature's
+          <br />
+          Greatest Adventures
+        </h1>
 
-          <span className="mb-4 inline-block rounded-full bg-white/20 px-4 py-2 text-sm backdrop-blur">
-            Explore Nature Like Never Before
-          </span>
+        <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-200 mb-10">
+          From mountain trails to memorable journeys. Discover breathtaking
+          destinations, thrilling treks, and unforgettable travel experiences.
+        </p>
 
-          <h1 className="mb-6 font-serif text-6xl font-bold leading-tight">
-            From Mountain Trails
-            <br />
-            To Memorable Journeys
-          </h1>
+        {/* Search Box */}
+        <div className="bg-white rounded-2xl p-4 max-w-5xl mx-auto shadow-2xl">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input
+              type="text"
+              placeholder="Destination"
+              className="border border-gray-200 rounded-xl px-4 py-3 text-gray-700 outline-none"
+            />
 
-          <p className="mb-8 max-w-xl text-lg text-gray-200">
-            Discover breathtaking treks, guided adventures,
-            and unforgettable travel experiences across India.
-          </p>
+            <select className="border border-gray-200 rounded-xl px-4 py-3 text-gray-700">
+              <option>Duration</option>
+              <option>1-3 Days</option>
+              <option>4-7 Days</option>
+              <option>7+ Days</option>
+            </select>
 
-          <div className="flex flex-wrap gap-4">
-            <button className="rounded-full bg-green-800 px-8 py-4 text-white">
-              Explore Treks
-            </button>
+            <select className="border border-gray-200 rounded-xl px-4 py-3 text-gray-700">
+              <option>Budget</option>
+              <option>₹5,000+</option>
+              <option>₹10,000+</option>
+              <option>₹20,000+</option>
+            </select>
 
-            <button className="rounded-full border border-white px-8 py-4">
-              View Tours
+            <button className="bg-[#1B5E20] hover:bg-[#14461A] text-white rounded-xl px-6 py-3 flex items-center justify-center gap-2 transition">
+              <Search size={18} />
+              Search Trips
             </button>
           </div>
+        </div>
 
+        {/* CTA Buttons */}
+        <div className="flex flex-wrap justify-center gap-4 mt-8">
+          <button className="bg-[#FF9800] hover:bg-[#e68900] text-white px-8 py-4 rounded-full font-semibold transition">
+            Explore Treks
+          </button>
+
+          <button className="border border-white hover:bg-white hover:text-black text-white px-8 py-4 rounded-full font-semibold transition">
+            View Tours
+          </button>
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+        <div className="w-7 h-12 border-2 border-white rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-white rounded-full mt-2 animate-bounce" />
         </div>
       </div>
     </section>
