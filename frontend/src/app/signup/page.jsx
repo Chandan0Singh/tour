@@ -4,19 +4,25 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
+  FaUser,
   FaEnvelope,
+  FaPhone,
   FaLock,
   FaMountain,
 } from "react-icons/fa";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
     email: "",
+    phone: "",
     password: "",
+    confirmPassword: "",
   });
 
   const handleChange = (e) => {
@@ -33,7 +39,7 @@ export default function LoginPage() {
       setLoading(true);
 
       const response = await fetch(
-        `http://localhost:5000/api/auth/login`,
+        `http://localhost:5000/api/auth/signup`,
         {
           method: "POST",
           headers: {
@@ -46,20 +52,15 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Login failed");
+        throw new Error(data.message || "Signup failed");
       }
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      alert("Login Successful");
+      alert("Account created successfully!");
 
-      // Admin Redirect
-      if (data.user.role === "admin") {
-        router.push("/admin");
-      } else {
-        router.push("/");
-      }
+      router.push("/login");
     } catch (error) {
       alert(error.message);
     } finally {
@@ -82,18 +83,16 @@ export default function LoginPage() {
         <div className="relative z-10 flex flex-col justify-center px-16">
           <div className="flex items-center gap-3 mb-6">
             <FaMountain size={40} />
-            <h1 className="text-4xl font-bold">
-              Nature Explorer
-            </h1>
+            <h1 className="text-4xl font-bold">Nature Explorer</h1>
           </div>
 
           <h2 className="text-5xl font-bold leading-tight mb-6">
-            Welcome Back
+            Start Your Adventure
           </h2>
 
           <p className="text-lg text-gray-200 max-w-lg">
-            Sign in to manage your bookings, save favourite
-            destinations and continue your next adventure.
+            Create an account to book treks, save destinations,
+            track bookings, and explore unforgettable journeys.
           </p>
         </div>
       </div>
@@ -106,15 +105,43 @@ export default function LoginPage() {
               className="text-4xl font-bold text-[#1B5E20]"
               style={{ fontFamily: "Playfair Display" }}
             >
-              Sign In
+              Create Account
             </h2>
 
             <p className="text-gray-500 mt-2">
-              Login to your account
+              Join Nature Explorer today
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* First Name */}
+            <div className="flex items-center border rounded-xl px-4 py-3">
+              <FaUser className="text-gray-400 mr-3" />
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                value={formData.firstName}
+                onChange={handleChange}
+                className="w-full outline-none"
+                required
+              />
+            </div>
+
+            {/* Last Name */}
+            <div className="flex items-center border rounded-xl px-4 py-3">
+              <FaUser className="text-gray-400 mr-3" />
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                value={formData.lastName}
+                onChange={handleChange}
+                className="w-full outline-none"
+                required
+              />
+            </div>
+
             {/* Email */}
             <div className="flex items-center border rounded-xl px-4 py-3">
               <FaEnvelope className="text-gray-400 mr-3" />
@@ -123,6 +150,20 @@ export default function LoginPage() {
                 name="email"
                 placeholder="Email Address"
                 value={formData.email}
+                onChange={handleChange}
+                className="w-full outline-none"
+                required
+              />
+            </div>
+
+            {/* Phone */}
+            <div className="flex items-center border rounded-xl px-4 py-3">
+              <FaPhone className="text-gray-400 mr-3" />
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone Number"
+                value={formData.phone}
                 onChange={handleChange}
                 className="w-full outline-none"
                 required
@@ -143,15 +184,25 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Forgot Password */}
-            <div className="flex justify-end">
-              <Link
-                href="/forgot-password"
-                className="text-sm text-[#1B5E20] font-medium hover:underline"
-              >
-                Forgot Password?
-              </Link>
+            {/* Confirm Password */}
+            <div className="flex items-center border rounded-xl px-4 py-3">
+              <FaLock className="text-gray-400 mr-3" />
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="w-full outline-none"
+                required
+              />
             </div>
+
+            {/* Terms */}
+            <label className="flex items-start gap-2 text-sm text-gray-600">
+              <input type="checkbox" required className="mt-1" />
+              I agree to the Terms & Conditions and Privacy Policy
+            </label>
 
             {/* Submit */}
             <button
@@ -159,11 +210,10 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full bg-[#1B5E20] hover:bg-[#154918] text-white py-3 rounded-xl font-semibold transition disabled:opacity-50"
             >
-              {loading ? "Signing In..." : "Sign In"}
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
           </form>
 
-          {/* Divider */}
           <div className="relative my-6">
             <div className="border-t"></div>
             <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-white px-3 text-gray-500 text-sm">
@@ -171,19 +221,17 @@ export default function LoginPage() {
             </span>
           </div>
 
-          {/* Google Login */}
           <button className="w-full border py-3 rounded-xl font-medium hover:bg-gray-50">
-            Continue with Google
+            Sign Up with Google
           </button>
 
-          {/* Signup Link */}
           <p className="text-center mt-6 text-gray-600">
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <Link
-              href="/signup"
+              href="/login"
               className="text-[#1B5E20] font-semibold"
             >
-              Create Account
+              Sign In
             </Link>
           </p>
         </div>
