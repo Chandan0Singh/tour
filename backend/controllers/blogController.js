@@ -260,6 +260,9 @@ const getSingleBlog = async (req, res) => {
   try {
     const { id } = req.params;
 
+
+    console.log("ID:", id); // Log the ID to check if it's being received correctly
+
     // Find blog by ID
     const blog = await Blog.findById(id);
 

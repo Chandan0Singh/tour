@@ -16,9 +16,11 @@ router.get("/", getAllBlogs);
 
 router.get("/published", getPublishedBlogs);
 
-router.get("/:id", getSingleBlog);
+
 
 router.get("/search", filterBlogs);
+
+router.get("/:id", getSingleBlog);
 
 router.delete("/delete", deleteBlog);
 
