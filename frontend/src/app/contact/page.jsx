@@ -10,11 +10,11 @@ export default function ContactPage() {
     <>
       {/* Hero Section */}
       <section className="relative h-[50vh] flex items-center justify-center">
-        <img
+        {/* <img
           src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600"
           alt="Contact"
           className="absolute inset-0 w-full h-full object-cover"
-        />
+        /> */}
 
         <div className="absolute inset-0 bg-black/50"></div>
 
