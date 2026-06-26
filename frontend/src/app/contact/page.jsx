@@ -1,3 +1,8 @@
+"use client";
+
+import { useState } from "react";
+import axios from "axios";
+
 import {
   FaPhoneAlt,
   FaEnvelope,
@@ -6,6 +11,47 @@ import {
 } from "react-icons/fa";
 
 export default function ContactPage() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      const res = await axios.post("http://localhost:5000/api/contact", form);
+
+      alert(res.data.message);
+
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+    } catch (err) {
+      alert(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -74,9 +120,7 @@ export default function ContactPage() {
 
                   <div>
                     <h4 className="font-semibold text-lg">Email</h4>
-                    <p className="text-gray-600">
-                      info@natureexplorer.com
-                    </p>
+                    <p className="text-gray-600">info@natureexplorer.com</p>
                   </div>
                 </div>
 
@@ -114,10 +158,14 @@ export default function ContactPage() {
                 Send a Message
               </h3>
 
-              <form className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <input
                     type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    required
                     placeholder="Your Name"
                     className="w-full border border-gray-300 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
                   />
@@ -126,6 +174,9 @@ export default function ContactPage() {
                 <div>
                   <input
                     type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
                     placeholder="Your Email"
                     className="w-full border border-gray-300 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
                   />
@@ -134,6 +185,9 @@ export default function ContactPage() {
                 <div>
                   <input
                     type="tel"
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleChange}
                     placeholder="Phone Number"
                     className="w-full border border-gray-300 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
                   />
@@ -142,13 +196,28 @@ export default function ContactPage() {
                 <div>
                   <input
                     type="text"
+                    name="subject"
+                    value={form.subject}
+                    onChange={handleChange}
                     placeholder="Subject"
                     className="w-full border border-gray-300 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
                   />
+                  <textarea
+                    name="message"
+                    value={form.message}
+                    onChange={handleChange}
+                    required
+                    rows={6}
+                    placeholder="Write your message..."
+                    className="w-full border border-gray-300 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
+                  ></textarea>
                 </div>
 
                 <div>
                   <textarea
+                    name="message"
+                    value={form.message}
+                    onChange={handleChange}
                     rows="6"
                     placeholder="Write your message..."
                     className="w-full border border-gray-300 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
@@ -157,9 +226,14 @@ export default function ContactPage() {
 
                 <button
                   type="submit"
-                  className="w-full bg-[#1B5E20] text-white py-4 rounded-xl font-semibold hover:bg-[#4CAF50] transition"
+                  disabled={loading}
+                  className={`w-full py-4 rounded-xl font-semibold transition ${
+                    loading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-[#1B5E20] hover:bg-[#4CAF50] text-white"
+                  }`}
                 >
-                  Send Message
+                  {loading ? "Sending..." : "Send Message"}
                 </button>
               </form>
             </div>
