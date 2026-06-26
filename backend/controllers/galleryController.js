@@ -3,12 +3,17 @@ const Gallery = require("../models/Gallery");
 // Get All Images
 const getGallery = async (req, res) => {
   try {
-    const gallery = await Gallery.find({ isActive: true }).sort({
+    const gallery = await Gallery.find({
+      status: "Active",
+    }).sort({
       createdAt: -1,
     });
 
+    console.log("Gallery Fetch Success:", gallery);
+
     res.json(gallery);
   } catch (err) {
+    console.log("Gallery Fetch Error:", err);
     res.status(500).json({
       message: "Failed to fetch gallery",
       error: err.message,
@@ -54,13 +59,9 @@ const createGallery = async (req, res) => {
 // Update Image
 const updateGallery = async (req, res) => {
   try {
-    const gallery = await Gallery.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-      }
-    );
+    const gallery = await Gallery.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
 
     if (!gallery) {
       return res.status(404).json({

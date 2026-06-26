@@ -208,7 +208,7 @@ export default function GalleryPage() {
   const fetchGallery = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("http://localhost:5000http://localhost:5000/api/gallery");
+      const { data } = await axios.get("http://localhost:5000/api/gallery");
       setGallery(data);
     } catch (e) {
       setError("Failed to load gallery.");
