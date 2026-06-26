@@ -8,6 +8,7 @@ const cartRoutes = require('./routes/cart');
 const user = require('./routes/user')
 const blog = require("./routes/blogRoutes");
 const order = require("./routes/orderRouter");
+const galleryRoutes = require("./routes/galleryRoutes");
 
 require('dotenv').config();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 // Routes
+app.use("/api/gallery", galleryRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
