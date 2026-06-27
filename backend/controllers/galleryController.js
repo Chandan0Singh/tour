@@ -9,8 +9,6 @@ const getGallery = async (req, res) => {
       createdAt: -1,
     });
 
-    console.log("Gallery Fetch Success:", gallery);
-
     res.json(gallery);
   } catch (err) {
     console.log("Gallery Fetch Error:", err);

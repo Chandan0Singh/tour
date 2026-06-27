@@ -1,5 +1,3 @@
-// controllers/productController.js
-
 const Product = require("../models/Product");
 
 // Get All Products (with filters, sorting & pagination)

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const itinerarySchema = new mongoose.Schema({
   day: Number,
@@ -25,7 +25,6 @@ const reviewSchema = new mongoose.Schema(
 
 const packageSchema = new mongoose.Schema(
   {
-    // Package Type
     type: {
       type: String,
       enum: ["Tour", "Trek"],
@@ -163,4 +162,4 @@ const packageSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Package", packageSchema);
+module.exports = mongoose.model("Product", packageSchema);
