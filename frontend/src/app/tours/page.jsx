@@ -13,18 +13,17 @@ const categories = [
   "Honeymoon",
 ];
 
+// Backend enum: ["Easy", "Moderate", "Difficult"]
 const difficultyStyle = {
   Easy: "bg-[#E8F5E9] text-[#2E7D32]",
   Moderate: "bg-[#FFF3E0] text-[#E65100]",
-  Challenging: "bg-[#FFEBEE] text-[#B71C1C]",
+  Difficult: "bg-[#FFEBEE] text-[#B71C1C]",
 };
 
+// Backend enum: ["Tour", "Trek"]
 const typeStyle = {
-  Family: "bg-[#E3F2FD] text-[#1565C0]",
-  Adventure: "bg-[#F3E5F5] text-[#6A1B9A]",
-  Scenic: "bg-[#E3F2FD] text-[#1565C0]",
-  Beach: "bg-[#FCE4EC] text-[#880E4F]",
-  "Off-beat": "bg-[#E3F2FD] text-[#1565C0]",
+  Tour: "bg-[#E3F2FD] text-[#1565C0]",
+  Trek: "bg-[#F3E5F5] text-[#6A1B9A]",
 };
 
 const whyUs = [
@@ -79,6 +78,8 @@ const testimonials = [
   },
 ];
 
+const FALLBACK_IMAGE = "https://picsum.photos/seed/tourfallback/800/600";
+
 export default function ToursPage() {
   const [wishlist, setWishlist] = useState([]);
 
@@ -130,21 +131,26 @@ export default function ToursPage() {
       const res = await axios.get("http://localhost:5000/api/products", {
         params,
       });
-      
 
-      console.log("Fetched tours:", res.data.products);
+      const fetchedTours = res.data?.products || [];
 
-      setTours(res.data.products);
-      setTotal(res.data.total);
+      setTours((prev) => (page === 1 ? fetchedTours : [...prev, ...fetchedTours]));
+      setTotal(res.data?.total || 0);
     } catch (err) {
       console.log(err);
+      setTours((prev) => (page === 1 ? [] : prev));
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    setPage(1);
+  }, [activeCategory, budget, sortBy]);
+
+  useEffect(() => {
     fetchTours();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCategory, budget, sortBy, page]);
 
   return (
@@ -287,7 +293,7 @@ export default function ToursPage() {
             </div>
             {[
               ["Duration", ["1–3 Days", "4–7 Days", "8–14 Days", "15+ Days"]],
-              ["Difficulty", ["Easy", "Moderate", "Challenging"]],
+              ["Difficulty", ["Easy", "Moderate", "Difficult"]],
               [
                 "Group Size",
                 ["Solo / Private", "Small Group (≤12)", "Large Group"],
@@ -334,7 +340,7 @@ export default function ToursPage() {
             <div className="flex justify-between items-center mb-5 flex-wrap gap-3">
               <p className="text-sm text-gray-400">
                 <span className="text-[#1B5E20] font-semibold">
-                  {tours?.length} tours
+                  {tours?.length || 0} tours
                 </span>{" "}
                 found
               </p>
@@ -359,98 +365,139 @@ export default function ToursPage() {
             </div>
 
             <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-              {tours?.map((tour) => (
-                <article
-                  key={tour._id}
-                  className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col"
-                >
-                  <div className="relative">
-                    <img
-                      src={tour.image}
-                      alt={tour.title}
-                      className="w-full h-48 object-cover"
-                    />
-                    {tour.badge && (
-                      <span
-                        className={`absolute top-3 left-3 ${tour.badgeColor} text-white text-xs font-semibold px-3 py-1 rounded-full`}
-                      >
-                        {tour.badge}
-                      </span>
-                    )}
-                    <button
-                      onClick={() => toggleWishlist(tour._id)}
-                      className="absolute top-3 right-3 bg-white/90 rounded-full w-8 h-8 flex items-center justify-center text-base hover:scale-110 transition-transform"
-                    >
-                      {wishlist.includes(tour._id) ? "❤️" : "♡"}
-                    </button>
-                  </div>
-                  <div className="p-5 flex flex-col flex-1">
-                    <div className="flex gap-2 items-center mb-2 flex-wrap">
-                      <span
-                        className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                          difficultyStyle[tour.difficulty]
-                        }`}
-                      >
-                        {tour.difficulty}
-                      </span>
-                      <span
-                        className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                          typeStyle[tour.type]
-                        }`}
-                      >
-                        {tour.type}
-                      </span>
-                    </div>
-                    <h3 className="fd text-base text-[#1B3A1F] leading-snug mb-2">
-                      {tour.title}
-                    </h3>
-                    <div className="flex items-center gap-1 mb-2">
-                      <span className="text-[#FF9800] text-xs">
-                        {"★".repeat(Math.floor(tour.rating || 0))}
-                        {"☆".repeat(5 - Math.floor(tour.rating || 0))}
-                      </span>
-                      <span className="text-xs text-gray-400">
-                        {tour.rating} ({tour.reviews})
-                      </span>
-                    </div>
-                    <div className="flex gap-4 text-xs text-gray-400 mb-3">
-                      <span>📅 {tour.duration}</span>
-                      <span>👥 Max {tour.maxGroup}</span>
-                    </div>
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {(tour.includes || []).map((inc) => (
+              {tours?.map((tour) => {
+                const imageUrl = tour?.images?.[0]?.url || FALLBACK_IMAGE;
+                const imageAlt = tour?.images?.[0]?.alt || tour?.title || "Tour package";
+
+                const displayPrice = tour?.discountPrice || tour?.price || 0;
+                const hasDiscount =
+                  tour?.discountPrice &&
+                  tour?.price &&
+                  tour.discountPrice < tour.price;
+
+                const durationLabel =
+                  tour?.duration?.days != null && tour?.duration?.nights != null
+                    ? `${tour.duration.days}D / ${tour.duration.nights}N`
+                    : "N/A";
+
+                const maxGroup = tour?.groupSize?.max ?? "N/A";
+
+                const avgRating = tour?.averageRating || 0;
+                const reviewCount = tour?.totalReviews ?? tour?.reviews?.length ?? 0;
+
+                const badge = tour?.bestSeller
+                  ? "Best Seller"
+                  : tour?.featured
+                  ? "Featured"
+                  : null;
+                const badgeColor = tour?.bestSeller
+                  ? "bg-[#FF9800]"
+                  : "bg-[#1B5E20]";
+
+                return (
+                  <article
+                    key={tour?._id}
+                    className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col"
+                  >
+                    <div className="relative">
+                      <img
+                        src={imageUrl}
+                        alt={imageAlt}
+                        className="w-full h-48 object-cover"
+                      />
+                      {badge && (
                         <span
-                          key={inc}
-                          className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-lg"
+                          className={`absolute top-3 left-3 ${badgeColor} text-white text-xs font-semibold px-3 py-1 rounded-full`}
                         >
-                          {inc}
+                          {badge}
                         </span>
-                      ))}
-                    </div>
-                    <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                      <div>
-                        {tour.originalPrice && (
-                          <div className="text-xs text-gray-400 line-through">
-                            ₹{tour.originalPrice.toLocaleString()}
-                          </div>
-                        )}
-                        <div className="text-xl font-bold text-[#1B5E20]">
-                          ₹{tour.price.toLocaleString()}{" "}
-                          <span className="text-xs font-normal text-gray-400">
-                            / person
-                          </span>
-                        </div>
-                      </div>
-                      <button className="bg-[#FF9800] hover:bg-[#F57C00] text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors">
-                        Book Now
+                      )}
+                      <button
+                        onClick={() => toggleWishlist(tour?._id)}
+                        className="absolute top-3 right-3 bg-white/90 rounded-full w-8 h-8 flex items-center justify-center text-base hover:scale-110 transition-transform"
+                      >
+                        {wishlist.includes(tour?._id) ? "❤️" : "♡"}
                       </button>
                     </div>
-                  </div>
-                </article>
-              ))}
+                    <div className="p-5 flex flex-col flex-1">
+                      <div className="flex gap-2 items-center mb-2 flex-wrap">
+                        {tour?.difficulty && (
+                          <span
+                            className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                              difficultyStyle[tour.difficulty] ||
+                              "bg-gray-100 text-gray-500"
+                            }`}
+                          >
+                            {tour.difficulty}
+                          </span>
+                        )}
+                        {tour?.type && (
+                          <span
+                            className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                              typeStyle[tour.type] || "bg-gray-100 text-gray-500"
+                            }`}
+                          >
+                            {tour.type}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="fd text-base text-[#1B3A1F] leading-snug mb-1">
+                        {tour?.title || "Untitled Tour"}
+                      </h3>
+                      {tour?.destination && (
+                        <p className="text-xs text-gray-400 mb-2">
+                          📍 {tour.destination}
+                        </p>
+                      )}
+                      <div className="flex items-center gap-1 mb-2">
+                        <span className="text-[#FF9800] text-xs">
+                          {"★".repeat(Math.floor(avgRating))}
+                          {"☆".repeat(5 - Math.floor(avgRating))}
+                        </span>
+                        <span className="text-xs text-gray-400">
+                          {avgRating.toFixed ? avgRating.toFixed(1) : avgRating} (
+                          {reviewCount} reviews)
+                        </span>
+                      </div>
+                      <div className="flex gap-4 text-xs text-gray-400 mb-3">
+                        <span>📅 {durationLabel}</span>
+                        <span>👥 Max {maxGroup}</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        {(tour?.inclusions || []).slice(0, 4).map((inc, idx) => (
+                          <span
+                            key={`${tour?._id}-inclusion-${idx}`}
+                            className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-lg"
+                          >
+                            {inc}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <div>
+                          {hasDiscount && (
+                            <div className="text-xs text-gray-400 line-through">
+                              ₹{tour.price.toLocaleString()}
+                            </div>
+                          )}
+                          <div className="text-xl font-bold text-[#1B5E20]">
+                            ₹{displayPrice.toLocaleString()}{" "}
+                            <span className="text-xs font-normal text-gray-400">
+                              / person
+                            </span>
+                          </div>
+                        </div>
+                        <button className="bg-[#FF9800] hover:bg-[#F57C00] text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors">
+                          Book Now
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
 
-            {!loading && tours?.length === 0 && (
+            {!loading && (!tours || tours.length === 0) && (
               <div className="text-center py-20 text-gray-400">
                 <p className="text-base">
                   No tours match your current filters.
@@ -467,13 +514,21 @@ export default function ToursPage() {
               </div>
             )}
 
-            {tours?.length < total && (
-              <button
-                onClick={() => setPage(page + 1)}
-                className="border-2 border-[#1B5E20] text-[#1B5E20] px-10 py-3 rounded-full"
-              >
-                Load More Tours
-              </button>
+            {loading && (
+              <div className="text-center py-14 text-gray-400 text-sm">
+                Loading tours...
+              </div>
+            )}
+
+            {!loading && tours?.length > 0 && tours.length < total && (
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={() => setPage((p) => p + 1)}
+                  className="border-2 border-[#1B5E20] text-[#1B5E20] px-10 py-3 rounded-full hover:bg-[#1B5E20] hover:text-white transition-colors"
+                >
+                  Load More Tours
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -555,7 +610,6 @@ export default function ToursPage() {
           © 2025 Nature Explorer. From Mountain Trails to Memorable Journeys.
         </footer>
       </div>
-      {loading && <div className="text-center py-20">Loading tours...</div>}
     </>
   );
 }
