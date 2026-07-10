@@ -65,36 +65,6 @@ export default function BlogPage() {
         .font-body { font-family: 'Poppins', sans-serif; }
       `}</style>
 
-      {/* NAV */}
-      <header className="bg-[#1B5E20] text-white">
-        <div className="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <polygon points="14,3 27,24 1,24" fill="#4CAF50" />
-              <polygon points="14,9 23,24 5,24" fill="#A5D6A7" opacity="0.6" />
-            </svg>
-            <span className="font-display text-xl tracking-tight">
-              Nature Explorer
-            </span>
-          </div>
-          <nav className="hidden md:flex gap-7 text-sm font-medium text-white/80">
-            {["Home", "Treks", "Tours", "Destinations", "Blog", "Contact"].map(
-              (n) => (
-                <a
-                  key={n}
-                  href="#"
-                  className={`hover:text-white transition-colors ${n === "Blog" ? "text-white border-b border-[#4CAF50] pb-0.5" : ""}`}
-                >
-                  {n}
-                </a>
-              ),
-            )}
-          </nav>
-          <button className="bg-[#FF9800] hover:bg-[#F57C00] text-white text-sm font-semibold px-5 py-2 rounded-full transition-colors">
-            Book Now
-          </button>
-        </div>
-      </header>
 
       {/* HERO */}
       <section className="bg-[#1B5E20] text-white pt-14 pb-16 px-5">
