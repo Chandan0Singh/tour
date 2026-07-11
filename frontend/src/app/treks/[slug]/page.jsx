@@ -5,11 +5,13 @@ import { use } from "react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function TrekDetailPage({ params }) {
   const { slug } = use(params);
   const [trek, setTrek] = useState(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     fetchTrek();
@@ -165,7 +167,7 @@ export default function TrekDetailPage({ params }) {
               <div>⭐ Difficulty : {trek.difficulty}</div>
             </div>
 
-            <button className="w-full mt-8 bg-green-700 hover:bg-green-800 text-white py-4 rounded-xl">
+            <button onClick={() => router.push(`/booking/${trek.slug}`)} className="w-full mt-8 bg-green-700 hover:bg-green-800 text-white py-4 rounded-xl">
               Book Now
             </button>
           </div>

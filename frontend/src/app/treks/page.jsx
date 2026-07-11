@@ -4,19 +4,20 @@ import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Link from "next/link";
 
+
 const API = "http://localhost:5000";
 
 const DIFFICULTIES = ["Easy", "Moderate", "Difficult"];
 const SORT_OPTIONS = [
-  { label: "Latest",        value: "latest" },
-  { label: "Price: Low",   value: "price_asc" },
-  { label: "Price: High",  value: "price_desc" },
-  { label: "Top Rated",    value: "rating" },
+  { label: "Latest", value: "latest" },
+  { label: "Price: Low", value: "price_asc" },
+  { label: "Price: High", value: "price_desc" },
+  { label: "Top Rated", value: "rating" },
 ];
 
 const diffColor = (d) => {
-  if (d === "Easy")      return "bg-green-100 text-green-700";
-  if (d === "Moderate")  return "bg-orange-100 text-orange-700";
+  if (d === "Easy") return "bg-green-100 text-green-700";
+  if (d === "Moderate") return "bg-orange-100 text-orange-700";
   if (d === "Difficult") return "bg-red-100 text-red-700";
   return "bg-gray-100 text-gray-600";
 };
@@ -38,6 +39,7 @@ function SkeletonCard() {
 
 // ─── Trek Card ────────────────────────────────────────────────────────────────
 function TrekCard({ trek }) {
+
   const image =
     trek.bannerImage ||
     (trek.images && trek.images[0]?.url) ||
@@ -75,7 +77,11 @@ function TrekCard({ trek }) {
 
         {/* Difficulty */}
         <div className="absolute top-4 right-4">
-          <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${diffColor(trek.difficulty)}`}>
+          <span
+            className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${diffColor(
+              trek.difficulty,
+            )}`}
+          >
             {trek.difficulty}
           </span>
         </div>
@@ -95,7 +101,10 @@ function TrekCard({ trek }) {
         {/* Location */}
         <div className="flex items-center gap-1.5 text-gray-500 text-sm mb-2">
           <span className="text-[#4CAF50]">📍</span>
-          <span>{trek.destination}{trek.state ? `, ${trek.state}` : ""}</span>
+          <span>
+            {trek.destination}
+            {trek.state ? `, ${trek.state}` : ""}
+          </span>
         </div>
 
         {/* Title */}
@@ -108,20 +117,28 @@ function TrekCard({ trek }) {
 
         {/* Short Description */}
         {trek.shortDescription && (
-          <p className="text-gray-500 text-sm mb-4 line-clamp-2">{trek.shortDescription}</p>
+          <p className="text-gray-500 text-sm mb-4 line-clamp-2">
+            {trek.shortDescription}
+          </p>
         )}
 
         {/* Meta row */}
         <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
           {trek.altitude ? (
-            <span className="flex items-center gap-1">⛰️ {trek.altitude.toLocaleString()}m</span>
+            <span className="flex items-center gap-1">
+              ⛰️ {trek.altitude.toLocaleString()}m
+            </span>
           ) : (
-            <span className="flex items-center gap-1">👥 Max {trek.groupSize?.max || "—"} pax</span>
+            <span className="flex items-center gap-1">
+              👥 Max {trek.groupSize?.max || "—"} pax
+            </span>
           )}
           {trek.averageRating > 0 && (
             <span className="flex items-center gap-1 font-semibold text-gray-700">
               ⭐ {trek.averageRating.toFixed(1)}
-              <span className="text-xs text-gray-400 font-normal">({trek.totalReviews})</span>
+              <span className="text-xs text-gray-400 font-normal">
+                ({trek.totalReviews})
+              </span>
             </span>
           )}
         </div>
@@ -130,12 +147,17 @@ function TrekCard({ trek }) {
         {trek.highlights && trek.highlights.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-4">
             {trek.highlights.slice(0, 2).map((h, i) => (
-              <span key={i} className="text-[10px] bg-green-50 text-green-700 px-2 py-0.5 rounded-full border border-green-100">
+              <span
+                key={i}
+                className="text-[10px] bg-green-50 text-green-700 px-2 py-0.5 rounded-full border border-green-100"
+              >
                 ✓ {h}
               </span>
             ))}
             {trek.highlights.length > 2 && (
-              <span className="text-[10px] text-gray-400">+{trek.highlights.length - 2} more</span>
+              <span className="text-[10px] text-gray-400">
+                +{trek.highlights.length - 2} more
+              </span>
             )}
           </div>
         )}
@@ -170,21 +192,21 @@ function TrekCard({ trek }) {
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function TreksPage() {
-  const [treks, setTreks]           = useState([]);
-  const [total, setTotal]           = useState(0);
-  const [loading, setLoading]       = useState(true);
-  const [error, setError]           = useState("");
+  const [treks, setTreks] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   // Filters
-  const [search, setSearch]         = useState("");
+  const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [difficulty, setDifficulty] = useState("");
-  const [minPrice, setMinPrice]     = useState("");
-  const [maxPrice, setMaxPrice]     = useState("");
-  const [sort, setSort]             = useState("latest");
-  const [featured, setFeatured]     = useState(false);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [sort, setSort] = useState("latest");
+  const [featured, setFeatured] = useState(false);
   const [bestSeller, setBestSeller] = useState(false);
-  const [page, setPage]             = useState(1);
+  const [page, setPage] = useState(1);
   const LIMIT = 9;
 
   // ── Fetch ──────────────────────────────────────────────────────────────────
@@ -198,14 +220,16 @@ export default function TreksPage() {
         sort,
         page,
         limit: LIMIT,
-        ...(difficulty  && { difficulty }),
-        ...(minPrice    && { minPrice }),
-        ...(maxPrice    && { maxPrice }),
-        ...(featured    && { featured: "true" }),
-        ...(bestSeller  && { bestSeller: "true" }),
+        ...(difficulty && { difficulty }),
+        ...(minPrice && { minPrice }),
+        ...(maxPrice && { maxPrice }),
+        ...(featured && { featured: "true" }),
+        ...(bestSeller && { bestSeller: "true" }),
       };
 
-      const { data } = await axios.get(`http://localhost:5000/api/products`, { params });
+      const { data } = await axios.get(`http://localhost:5000/api/products`, {
+        params,
+      });
 
       setTreks(data.products || []);
       setTotal(data.total || 0);
@@ -217,7 +241,9 @@ export default function TreksPage() {
     }
   }, [sort, page, difficulty, minPrice, maxPrice, featured, bestSeller]);
 
-  useEffect(() => { fetchTreks(); }, [fetchTreks]);
+  useEffect(() => {
+    fetchTreks();
+  }, [fetchTreks]);
 
   // Search (separate endpoint)
   const handleSearch = async () => {
@@ -232,7 +258,9 @@ export default function TreksPage() {
       const { data } = await axios.get(`${API}/api/products/search`, {
         params: { q: searchInput },
       });
-      const filtered = (Array.isArray(data) ? data : []).filter((p) => p.type === "Trek");
+      const filtered = (Array.isArray(data) ? data : []).filter(
+        (p) => p.type === "Trek",
+      );
       setTreks(filtered);
       setTotal(filtered.length);
       setSearch(searchInput);
@@ -286,7 +314,8 @@ export default function TreksPage() {
             Explore Treks
           </h1>
           <p className="text-lg md:text-xl text-white/85 max-w-2xl mx-auto mb-8">
-            Discover breathtaking mountain trails, pristine valleys and unforgettable high-altitude adventures.
+            Discover breathtaking mountain trails, pristine valleys and
+            unforgettable high-altitude adventures.
           </p>
 
           {/* Quick stats */}
@@ -311,8 +340,18 @@ export default function TreksPage() {
         {/* Scroll hint */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-xs flex flex-col items-center gap-1 animate-bounce">
           <span>Scroll</span>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </div>
       </section>
@@ -321,10 +360,11 @@ export default function TreksPage() {
       <section className="bg-white shadow-md sticky top-0 z-20 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex flex-wrap gap-3 items-center">
-
             {/* Search */}
             <div className="relative flex-1 min-w-[200px]">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                🔍
+              </span>
               <input
                 type="text"
                 value={searchInput}
@@ -334,25 +374,38 @@ export default function TreksPage() {
                 className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#4CAF50] bg-[#F4F1EA]"
               />
               {searchInput && (
-                <button onClick={clearSearch} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg">×</button>
+                <button
+                  onClick={clearSearch}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg"
+                >
+                  ×
+                </button>
               )}
             </div>
 
             {/* Difficulty */}
             <select
               value={difficulty}
-              onChange={(e) => { setDifficulty(e.target.value); setPage(1); }}
+              onChange={(e) => {
+                setDifficulty(e.target.value);
+                setPage(1);
+              }}
               className="px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#4CAF50] bg-[#F4F1EA]"
             >
               <option value="">All Difficulty</option>
-              {DIFFICULTIES.map((d) => <option key={d}>{d}</option>)}
+              {DIFFICULTIES.map((d) => (
+                <option key={d}>{d}</option>
+              ))}
             </select>
 
             {/* Min Price */}
             <input
               type="number"
               value={minPrice}
-              onChange={(e) => { setMinPrice(e.target.value); setPage(1); }}
+              onChange={(e) => {
+                setMinPrice(e.target.value);
+                setPage(1);
+              }}
               placeholder="Min ₹"
               className="w-24 px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#4CAF50] bg-[#F4F1EA]"
             />
@@ -361,7 +414,10 @@ export default function TreksPage() {
             <input
               type="number"
               value={maxPrice}
-              onChange={(e) => { setMaxPrice(e.target.value); setPage(1); }}
+              onChange={(e) => {
+                setMaxPrice(e.target.value);
+                setPage(1);
+              }}
               placeholder="Max ₹"
               className="w-24 px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#4CAF50] bg-[#F4F1EA]"
             />
@@ -369,10 +425,17 @@ export default function TreksPage() {
             {/* Sort */}
             <select
               value={sort}
-              onChange={(e) => { setSort(e.target.value); setPage(1); }}
+              onChange={(e) => {
+                setSort(e.target.value);
+                setPage(1);
+              }}
               className="px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#4CAF50] bg-[#F4F1EA]"
             >
-              {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+              {SORT_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
             </select>
 
             {/* Search button */}
@@ -395,17 +458,27 @@ export default function TreksPage() {
           {/* Toggle pills */}
           <div className="flex items-center gap-3 mt-3 flex-wrap">
             <button
-              onClick={() => { setFeatured(!featured); setPage(1); }}
+              onClick={() => {
+                setFeatured(!featured);
+                setPage(1);
+              }}
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                featured ? "bg-[#1B5E20] text-white border-[#1B5E20]" : "bg-white text-gray-600 border-gray-200 hover:border-[#1B5E20] hover:text-[#1B5E20]"
+                featured
+                  ? "bg-[#1B5E20] text-white border-[#1B5E20]"
+                  : "bg-white text-gray-600 border-gray-200 hover:border-[#1B5E20] hover:text-[#1B5E20]"
               }`}
             >
               ⭐ Featured Only
             </button>
             <button
-              onClick={() => { setBestSeller(!bestSeller); setPage(1); }}
+              onClick={() => {
+                setBestSeller(!bestSeller);
+                setPage(1);
+              }}
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                bestSeller ? "bg-[#FF9800] text-white border-[#FF9800]" : "bg-white text-gray-600 border-gray-200 hover:border-[#FF9800] hover:text-[#FF9800]"
+                bestSeller
+                  ? "bg-[#FF9800] text-white border-[#FF9800]"
+                  : "bg-white text-gray-600 border-gray-200 hover:border-[#FF9800] hover:text-[#FF9800]"
               }`}
             >
               🏆 Best Sellers
@@ -415,23 +488,43 @@ export default function TreksPage() {
             {difficulty && (
               <span className="flex items-center gap-1 bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full text-xs font-medium">
                 {difficulty}
-                <button onClick={() => setDifficulty("")} className="ml-1 hover:text-red-500">×</button>
+                <button
+                  onClick={() => setDifficulty("")}
+                  className="ml-1 hover:text-red-500"
+                >
+                  ×
+                </button>
               </span>
             )}
             {(minPrice || maxPrice) && (
               <span className="flex items-center gap-1 bg-orange-50 text-orange-700 border border-orange-200 px-3 py-1 rounded-full text-xs font-medium">
                 ₹{minPrice || "0"} – ₹{maxPrice || "∞"}
-                <button onClick={() => { setMinPrice(""); setMaxPrice(""); }} className="ml-1 hover:text-red-500">×</button>
+                <button
+                  onClick={() => {
+                    setMinPrice("");
+                    setMaxPrice("");
+                  }}
+                  className="ml-1 hover:text-red-500"
+                >
+                  ×
+                </button>
               </span>
             )}
             {search && (
               <span className="flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1 rounded-full text-xs font-medium">
                 "{search}"
-                <button onClick={clearSearch} className="ml-1 hover:text-red-500">×</button>
+                <button
+                  onClick={clearSearch}
+                  className="ml-1 hover:text-red-500"
+                >
+                  ×
+                </button>
               </span>
             )}
 
-            <span className="ml-auto text-xs text-gray-400">{total} trek{total !== 1 ? "s" : ""} found</span>
+            <span className="ml-auto text-xs text-gray-400">
+              {total} trek{total !== 1 ? "s" : ""} found
+            </span>
           </div>
         </div>
       </section>
@@ -439,17 +532,24 @@ export default function TreksPage() {
       {/* ── Trek Grid ── */}
       <section className="py-16 bg-[#F4F1EA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-
           {/* Section heading */}
           <div className="text-center mb-12">
             <span className="text-[#FF9800] uppercase tracking-wider font-medium text-sm">
-              {search ? `Results for "${search}"` : difficulty ? `${difficulty} Treks` : "All Treks"}
+              {search
+                ? `Results for "${search}"`
+                : difficulty
+                ? `${difficulty} Treks`
+                : "All Treks"}
             </span>
             <h2
               className="text-3xl md:text-4xl font-bold text-[#1B5E20] mt-2"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              {featured ? "Featured Treks" : bestSeller ? "Best Seller Treks" : "Explore All Treks"}
+              {featured
+                ? "Featured Treks"
+                : bestSeller
+                ? "Best Seller Treks"
+                : "Explore All Treks"}
             </h2>
           </div>
 
@@ -457,14 +557,21 @@ export default function TreksPage() {
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-5 py-4 rounded-2xl text-sm text-center mb-8">
               ⚠️ {error}
-              <button onClick={fetchTreks} className="ml-3 underline font-semibold hover:no-underline">Retry</button>
+              <button
+                onClick={fetchTreks}
+                className="ml-3 underline font-semibold hover:no-underline"
+              >
+                Retry
+              </button>
             </div>
           )}
 
           {/* Loading skeletons */}
           {loading && (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
+              {[...Array(6)].map((_, i) => (
+                <SkeletonCard key={i} />
+              ))}
             </div>
           )}
 
@@ -478,7 +585,9 @@ export default function TreksPage() {
               >
                 No Treks Found
               </h3>
-              <p className="text-gray-400 mb-6">Try adjusting your filters or search query.</p>
+              <p className="text-gray-400 mb-6">
+                Try adjusting your filters or search query.
+              </p>
               <button
                 onClick={resetFilters}
                 className="px-6 py-3 rounded-xl bg-[#1B5E20] text-white font-semibold hover:bg-[#4CAF50] transition-colors"
@@ -510,10 +619,16 @@ export default function TreksPage() {
 
               {[...Array(totalPages)].map((_, i) => {
                 const pg = i + 1;
-                const show = pg === 1 || pg === totalPages || Math.abs(pg - page) <= 1;
+                const show =
+                  pg === 1 || pg === totalPages || Math.abs(pg - page) <= 1;
                 const isEllipsis = !show && (pg === 2 || pg === totalPages - 1);
 
-                if (isEllipsis) return <span key={pg} className="text-gray-400 px-1">…</span>;
+                if (isEllipsis)
+                  return (
+                    <span key={pg} className="text-gray-400 px-1">
+                      …
+                    </span>
+                  );
                 if (!show) return null;
 
                 return (
@@ -546,7 +661,9 @@ export default function TreksPage() {
       {/* ── Why Trek With Us ── */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <span className="text-[#FF9800] uppercase tracking-wider font-medium text-sm">Why Choose Us</span>
+          <span className="text-[#FF9800] uppercase tracking-wider font-medium text-sm">
+            Why Choose Us
+          </span>
           <h2
             className="text-3xl md:text-4xl font-bold text-[#1B5E20] mt-2 mb-12"
             style={{ fontFamily: "'Playfair Display', serif" }}
@@ -556,19 +673,43 @@ export default function TreksPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: "🏕️", title: "Expert Guides", desc: "Certified and experienced mountain guides with 10+ years on trails." },
-              { icon: "🛡️", title: "Safety First",  desc: "Full safety equipment, first-aid trained staff and emergency protocols." },
-              { icon: "🌿", title: "Eco Friendly",  desc: "Leave-no-trace principles. We protect the trails we love." },
-              { icon: "💰", title: "Best Value",    desc: "Transparent pricing with no hidden charges. All-inclusive packages." },
+              {
+                icon: "🏕️",
+                title: "Expert Guides",
+                desc: "Certified and experienced mountain guides with 10+ years on trails.",
+              },
+              {
+                icon: "🛡️",
+                title: "Safety First",
+                desc: "Full safety equipment, first-aid trained staff and emergency protocols.",
+              },
+              {
+                icon: "🌿",
+                title: "Eco Friendly",
+                desc: "Leave-no-trace principles. We protect the trails we love.",
+              },
+              {
+                icon: "💰",
+                title: "Best Value",
+                desc: "Transparent pricing with no hidden charges. All-inclusive packages.",
+              },
             ].map((item) => (
-              <div key={item.title} className="bg-[#F4F1EA] rounded-3xl p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
+              <div
+                key={item.title}
+                className="bg-[#F4F1EA] rounded-3xl p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-200"
+              >
                 <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-md">
                   {item.icon}
                 </div>
-                <h3 className="font-bold text-[#1B5E20] text-base mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <h3
+                  className="font-bold text-[#1B5E20] text-base mb-2"
+                  style={{ fontFamily: "'Playfair Display', serif" }}
+                >
                   {item.title}
                 </h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+                <p className="text-gray-500 text-sm leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
