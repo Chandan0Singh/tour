@@ -65,9 +65,7 @@ const getAllProducts = async (req, res) => {
         query = query.sort({ createdAt: -1 });
     }
 
-    const products = await query
-      .skip((page - 1) * limit)
-      .limit(Number(limit));
+    const products = await query.skip((page - 1) * limit).limit(Number(limit));
 
     const total = await Product.countDocuments(filter);
 
@@ -143,6 +141,7 @@ const searchProducts = async (req, res) => {
 // Single Product by Slug
 const getProductBySlug = async (req, res) => {
   try {
+    console.log(`Fetching product with slug: ${req.params.slug}`); // Debugging line
     const product = await Product.findOne({
       slug: req.params.slug,
       status: "Active",
@@ -154,7 +153,9 @@ const getProductBySlug = async (req, res) => {
       });
     }
 
-    res.json(product);
+    console.log(`Product founded: ${product}`); // Debugging line
+
+    return res.json(product);
   } catch (err) {
     res.status(500).json({
       message: err.message,
@@ -206,13 +207,9 @@ const createProduct = async (req, res) => {
 // Update Product
 const updateProduct = async (req, res) => {
   try {
-    const updated = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-      }
-    );
+    const updated = await Product.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
 
     if (!updated) {
       return res.status(404).json({

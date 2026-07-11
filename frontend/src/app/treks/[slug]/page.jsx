@@ -21,8 +21,12 @@ export default function TrekDetailPage({ params }) {
 
       const data = await res.json();
 
-      if (data.success) {
-        setTrek(data.data);
+      const jsonString = JSON.stringify(data, null, 2);
+
+      console.log("Fetched Trek Data:", jsonString); // Debugging line
+
+      if (data) {
+        setTrek(data);
       }
 
       setLoading(false);
@@ -31,6 +35,8 @@ export default function TrekDetailPage({ params }) {
       setLoading(false);
     }
   };
+
+  console.log("Trek Data in Component:", trek); // Debugging line
 
   if (loading) {
     return <div className="py-32 text-center text-xl">Loading Trek...</div>;
@@ -47,9 +53,9 @@ export default function TrekDetailPage({ params }) {
       {/* Hero */}
       <div className="relative h-[550px]">
         <Image
-          src={trek.images?.[0] || "/placeholder.jpg"}
+          src={trek.images?.[0]?.url || "/placeholder.jpg"}
+          alt={trek.images?.[0]?.alt || trek.title}
           fill
-          alt={trek.title}
           className="object-cover"
         />
 
@@ -60,7 +66,9 @@ export default function TrekDetailPage({ params }) {
             <div className="flex gap-8 mt-6 text-lg">
               <span>📍 {trek.location}</span>
 
-              <span>⛰ {trek.duration}</span>
+              <span>
+                {trek.duration?.days} Days / {trek.duration?.nights} Nights
+              </span>
 
               <span>⭐ {trek.difficulty}</span>
             </div>
@@ -99,10 +107,10 @@ export default function TrekDetailPage({ params }) {
               {trek.itinerary?.map((day, index) => (
                 <div key={index} className="bg-white rounded-xl p-6 shadow">
                   <h3 className="font-semibold text-xl mb-2">
-                    Day {index + 1}
+                    Day {day.day}: {day.title}
                   </h3>
 
-                  <p>{day}</p>
+                  <p>{day.description}</p>
                 </div>
               ))}
             </div>
@@ -142,11 +150,17 @@ export default function TrekDetailPage({ params }) {
             <hr className="my-6" />
 
             <div className="space-y-4">
-              <div>📅 Duration : {trek.duration}</div>
+              <div>
+                📅 Duration : {trek.duration?.days} Days /{" "}
+                {trek.duration?.nights} Nights
+              </div>
 
               <div>📍 Location : {trek.location}</div>
 
-              <div>👥 Group Size : {trek.groupSize}</div>
+              <div>
+                👥 Group Size : {trek.groupSize?.min} - {trek.groupSize?.max}{" "}
+                People
+              </div>
 
               <div>⭐ Difficulty : {trek.difficulty}</div>
             </div>
@@ -171,9 +185,9 @@ export default function TrekDetailPage({ params }) {
                 className="relative h-64 rounded-xl overflow-hidden"
               >
                 <Image
-                  src={img}
+                  src={img.url}
                   fill
-                  alt=""
+                  alt={img.alt}
                   className="object-cover hover:scale-110 duration-300"
                 />
               </div>
