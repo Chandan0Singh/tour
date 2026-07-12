@@ -38,16 +38,13 @@ export default function SignupPage() {
     try {
       setLoading(true);
 
-      const response = await fetch(
-        `http://localhost:5000/api/auth/signup`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`http://localhost:5000/api/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
       const data = await response.json();
 
@@ -60,7 +57,7 @@ export default function SignupPage() {
 
       alert("Account created successfully!");
 
-      router.push("/login");
+      window.location.href = "/";
     } catch (error) {
       alert(error.message);
     } finally {
@@ -91,8 +88,8 @@ export default function SignupPage() {
           </h2>
 
           <p className="text-lg text-gray-200 max-w-lg">
-            Create an account to book treks, save destinations,
-            track bookings, and explore unforgettable journeys.
+            Create an account to book treks, save destinations, track bookings,
+            and explore unforgettable journeys.
           </p>
         </div>
       </div>
@@ -108,9 +105,7 @@ export default function SignupPage() {
               Create Account
             </h2>
 
-            <p className="text-gray-500 mt-2">
-              Join Nature Explorer today
-            </p>
+            <p className="text-gray-500 mt-2">Join Nature Explorer today</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -200,8 +195,8 @@ export default function SignupPage() {
 
             {/* Terms */}
             <label className="flex items-start gap-2 text-sm text-gray-600">
-              <input type="checkbox" required className="mt-1" />
-              I agree to the Terms & Conditions and Privacy Policy
+              <input type="checkbox" required className="mt-1" />I agree to the
+              Terms & Conditions and Privacy Policy
             </label>
 
             {/* Submit */}
@@ -227,10 +222,7 @@ export default function SignupPage() {
 
           <p className="text-center mt-6 text-gray-600">
             Already have an account?{" "}
-            <Link
-              href="/login"
-              className="text-[#1B5E20] font-semibold"
-            >
+            <Link href="/login" className="text-[#1B5E20] font-semibold">
               Sign In
             </Link>
           </p>

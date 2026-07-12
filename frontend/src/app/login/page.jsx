@@ -56,9 +56,10 @@ export default function LoginPage() {
 
       // Admin Redirect
       if (data.user.role === "admin") {
+
         router.push("/admin");
       } else {
-        router.push("/");
+        window.location.href = "/";
       }
     } catch (error) {
       alert(error.message);
