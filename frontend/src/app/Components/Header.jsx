@@ -3,9 +3,21 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import {
-  Menu, X, ChevronDown, Mountain, Search,
-  Heart, ShoppingCart, User, CalendarPlus, Phone, Mail,
+  Menu,
+  X,
+  ChevronDown,
+  Mountain,
+  Search,
+  Heart,
+  ShoppingCart,
+  User,
+  CalendarPlus,
+  Phone,
+  Mail,
 } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+// import LoginModal from "./LoginModal";
+// import SignupModal from "./SignupModal";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
@@ -133,7 +145,10 @@ function DropdownMenu({ item, mobile = false, onClose }) {
 }
 
 export default function Header() {
+  const { user, logout, isAuthenticated } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [signupOpen, setSignupOpen] = useState(false);
 
   useEffect(() => {
     function onResize() {
@@ -144,172 +159,207 @@ export default function Header() {
   }, []);
 
   return (
-    <header>
-      {/* ── Top Bar ── */}
-      <div className="bg-green-900 text-white/75 text-[11px] font-medium">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 flex items-center justify-between py-1.5">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1.5">
-              <Phone size={11} aria-hidden="true" />
-              +91 98765 43210
-            </span>
-            <span className="hidden sm:flex items-center gap-1.5">
-              <Mail size={11} aria-hidden="true" />
-              info@natureexplorer.in
-            </span>
-          </div>
-          <div className="hidden sm:flex items-center gap-4">
-            {["Instagram", "Facebook", "YouTube"].map((s) => (
-              <a
-                key={s}
-                href={`https://${s.toLowerCase()}.com`}
-                aria-label={s}
-                className="text-white/60 hover:text-green-300 transition-colors"
-              >
-                {s}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Main Navbar ── */}
-      <nav
-        className="bg-white border-b border-gray-200 sticky top-0 z-40"
-        aria-label="Main navigation"
-      >
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 flex items-center justify-between h-16 gap-4">
-
-          {/* Logo */}
-          <Link
-            href="/"
-            aria-label="Nature Explorer home"
-            className="flex items-center gap-2.5 shrink-0 no-underline"
-          >
-            <span className="w-9 h-9 bg-green-900 rounded-lg flex items-center justify-center text-green-300 shrink-0">
-              <Mountain size={20} aria-hidden="true" />
-            </span>
-            <span className="flex flex-col leading-tight">
-              <span className="font-serif text-[17px] font-bold text-green-900 tracking-tight">
-                Nature Explorer
+    <>
+      <header>
+        {/* ── Top Bar ── */}
+        <div className="bg-green-900 text-white/75 text-[11px] font-medium">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 flex items-center justify-between py-1.5">
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1.5">
+                <Phone size={11} aria-hidden="true" />
+                +91 98765 43210
               </span>
-              <span className="hidden sm:block text-[9px] font-medium uppercase tracking-widest text-amber-800">
-                From Mountain Trails to Memorable Journeys
+              <span className="hidden sm:flex items-center gap-1.5">
+                <Mail size={11} aria-hidden="true" />
+                info@natureexplorer.in
               </span>
-            </span>
-          </Link>
-
-          {/* Desktop nav */}
-          <ul className="hidden lg:flex items-center gap-0.5 flex-1 justify-center list-none m-0 p-0">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.label}>
-                <DropdownMenu item={item} />
-              </li>
-            ))}
-          </ul>
-
-          {/* Desktop actions */}
-          <div className="hidden lg:flex items-center gap-1.5 shrink-0">
-            {[
-              { icon: <Search size={17} />, label: "Search" },
-              { icon: <Heart size={17} />, label: "Wishlist" },
-            ].map(({ icon, label }) => (
-              <button
-                key={label}
-                aria-label={label}
-                className="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-green-50 hover:text-green-900 hover:border-green-200 transition-colors"
-              >
-                {icon}
-              </button>
-            ))}
-
-            {/* Cart with notification dot */}
-            <Link
-              href="/cart"
-              aria-label="Cart"
-              className="relative w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-green-50 hover:text-green-900 hover:border-green-200 transition-colors"
-            >
-              <ShoppingCart size={17} aria-hidden="true" />
-              <span
-                aria-hidden="true"
-                className="absolute top-1.5 right-1.5 w-[7px] h-[7px] rounded-full bg-orange-500 border-[1.5px] border-white"
-              />
-            </Link>
-
-            <Link
-              href="/account"
-              aria-label="My account"
-              className="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-green-50 hover:text-green-900 hover:border-green-200 transition-colors"
-            >
-              <User size={17} aria-hidden="true" />
-            </Link>
-
-            <Link
-              href="/booking"
-              className="flex items-center gap-1.5 bg-green-900 hover:bg-green-800 text-white text-[13px] font-semibold px-5 py-2 rounded-full transition-colors"
-            >
-              <CalendarPlus size={14} aria-hidden="true" />
-              Book Now
-            </Link>
-          </div>
-
-          {/* Mobile toggle */}
-          <button
-            className="lg:hidden w-9 h-9 border border-gray-200 rounded-lg flex items-center justify-center text-gray-700 hover:bg-green-50 transition-colors"
-            onClick={() => setMobileOpen((p) => !p)}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-nav"
-          >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
-
-        {/* ── Mobile Drawer ── */}
-        {mobileOpen && (
-          <div
-            id="mobile-nav"
-            className="lg:hidden border-t border-gray-100 bg-white max-h-[calc(100vh-4rem)] overflow-y-auto"
-          >
-            <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-3 flex flex-col gap-0.5">
-              {NAV_ITEMS.map((item) => (
-                <DropdownMenu
-                  key={item.label}
-                  item={item}
-                  mobile
-                  onClose={() => setMobileOpen(false)}
-                />
-              ))}
-
-              <div className="flex gap-3 pt-4 mt-2 border-t border-gray-100">
-                <Link
-                  href="/login"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex-1 text-center border border-green-900 text-green-900 font-semibold text-[13px] py-2.5 rounded-full hover:bg-green-50 transition-colors"
+            </div>
+            <div className="hidden sm:flex items-center gap-4">
+              {["Instagram", "Facebook", "YouTube"].map((s) => (
+                <a
+                  key={s}
+                  href={`https://${s.toLowerCase()}.com`}
+                  aria-label={s}
+                  className="text-white/60 hover:text-green-300 transition-colors"
                 >
-                  Login
+                  {s}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Main Navbar ── */}
+        <nav
+          className="bg-white border-b border-gray-200 sticky top-0 z-40"
+          aria-label="Main navigation"
+        >
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 flex items-center justify-between h-16 gap-4">
+            {/* Logo */}
+            <Link
+              href="/"
+              aria-label="Nature Explorer home"
+              className="flex items-center gap-2.5 shrink-0 no-underline"
+            >
+              <span className="w-9 h-9 bg-green-900 rounded-lg flex items-center justify-center text-green-300 shrink-0">
+                <Mountain size={20} aria-hidden="true" />
+              </span>
+              <span className="flex flex-col leading-tight">
+                <span className="font-serif text-[17px] font-bold text-green-900 tracking-tight">
+                  Nature Explorer
+                </span>
+                <span className="hidden sm:block text-[9px] font-medium uppercase tracking-widest text-amber-800">
+                  From Mountain Trails to Memorable Journeys
+                </span>
+              </span>
+            </Link>
+
+            {/* Desktop nav */}
+            <ul className="hidden lg:flex items-center gap-0.5 flex-1 justify-center list-none m-0 p-0">
+              {NAV_ITEMS.map((item) => (
+                <li key={item.label}>
+                  <DropdownMenu item={item} />
+                </li>
+              ))}
+            </ul>
+
+            {/* Desktop actions */}
+            {isAuthenticated ? (
+              <div className="hidden lg:flex items-center gap-1.5 shrink-0">
+                {[
+                  { icon: <Search size={17} />, label: "Search" },
+                  { icon: <Heart size={17} />, label: "Wishlist" },
+                ].map(({ icon, label }) => (
+                  <button
+                    key={label}
+                    aria-label={label}
+                    className="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-green-50 hover:text-green-900 hover:border-green-200 transition-colors"
+                  >
+                    {icon}
+                  </button>
+                ))}
+
+                {/* Cart */}
+                <Link
+                  href="/cart"
+                  aria-label="Cart"
+                  className="relative w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-green-50 hover:text-green-900 hover:border-green-200 transition-colors"
+                >
+                  <ShoppingCart size={17} />
+                  <span className="absolute top-1.5 right-1.5 w-[7px] h-[7px] rounded-full bg-orange-500 border-[1.5px] border-white" />
                 </Link>
+
+                {/* Account */}
+                <Link
+                  href="/account"
+                  aria-label="My account"
+                  className="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-green-50 hover:text-green-900 hover:border-green-200 transition-colors"
+                >
+                  <User size={17} />
+                </Link>
+
+                {/* Book Now */}
                 <Link
                   href="/booking"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex-1 flex items-center justify-center gap-1.5 bg-green-900 hover:bg-green-800 text-white font-semibold text-[13px] py-2.5 rounded-full transition-colors"
+                  className="flex items-center gap-1.5 bg-green-900 hover:bg-green-800 text-white text-[13px] font-semibold px-5 py-2 rounded-full transition-colors"
                 >
-                  <CalendarPlus size={14} aria-hidden="true" />
+                  <CalendarPlus size={14} />
                   Book Now
                 </Link>
               </div>
-            </div>
-          </div>
-        )}
-      </nav>
+            ) : (
+              <div className="hidden lg:flex items-center gap-3">
+                <Link
+                  href="/login"
+                  className="px-5 py-2 rounded-full border border-green-900 text-green-900 text-sm font-semibold hover:bg-green-50 transition-colors"
+                >
+                  Login
+                </Link>
 
-      {/* Dropdown keyframe — one tiny <style> block, no external CSS needed */}
-      <style>{`
+                <Link
+                  href="/signup"  
+                  className="px-5 py-2 rounded-full bg-green-900 text-white text-sm font-semibold hover:bg-green-800 transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
+
+            {/* Mobile toggle */}
+            <button
+              className="lg:hidden w-9 h-9 border border-gray-200 rounded-lg flex items-center justify-center text-gray-700 hover:bg-green-50 transition-colors"
+              onClick={() => setMobileOpen((p) => !p)}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-nav"
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+
+          {/* ── Mobile Drawer ── */}
+          {mobileOpen && (
+            <div
+              id="mobile-nav"
+              className="lg:hidden border-t border-gray-100 bg-white max-h-[calc(100vh-4rem)] overflow-y-auto"
+            >
+              <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-3 flex flex-col gap-0.5">
+                {NAV_ITEMS.map((item) => (
+                  <DropdownMenu
+                    key={item.label}
+                    item={item}
+                    mobile
+                    onClose={() => setMobileOpen(false)}
+                  />
+                ))}
+
+                <div className="flex gap-3 pt-4 mt-2 border-t border-gray-100">
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex-1 text-center border border-green-900 text-green-900 font-semibold text-[13px] py-2.5 rounded-full hover:bg-green-50 transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/booking"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex-1 flex items-center justify-center gap-1.5 bg-green-900 hover:bg-green-800 text-white font-semibold text-[13px] py-2.5 rounded-full transition-colors"
+                  >
+                    <CalendarPlus size={14} aria-hidden="true" />
+                    Book Now
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+        </nav>
+
+        {/* Dropdown keyframe — one tiny <style> block, no external CSS needed */}
+        <style>{`
         @keyframes dropIn {
           from { opacity: 0; transform: translateY(-6px); }
           to   { opacity: 1; transform: translateY(0); }
         }
       `}</style>
-    </header>
+      </header>
+      {/* <LoginModal
+        isOpen={loginOpen}
+        onClose={() => setLoginOpen(false)}
+        openSignup={() => {
+          setLoginOpen(false);
+          setSignupOpen(true);
+        }}
+      />
+
+      <SignupModal
+        isOpen={signupOpen}
+        onClose={() => setSignupOpen(false)}
+        openLogin={() => {
+          setSignupOpen(false);
+          setLoginOpen(true);
+        }}
+        /> */}
+    </>
   );
 }
