@@ -11,6 +11,7 @@ const blog = require("./routes/blogRoutes");
 const order = require("./routes/orderRouter");
 const galleryRoutes = require("./routes/galleryRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const homeRoutes = require("./routes/homerotes")
 
 require('dotenv').config();
 
@@ -31,6 +32,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/user', user);
 app.use("/api/blog", blog);
 app.use("/api/order", order);
+app.use("/api/home", homeRoutes);
 app.use("/api/payment", require("./routes/paymentRoutes"));
 app.use("/api/contact", contactRoutes);
 

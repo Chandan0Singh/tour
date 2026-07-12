@@ -1,3 +1,5 @@
+"use client"
+const { useEffect, useState } = require("react");
 import Hero from "../Components/home/Hero";
 import FeaturedTreks from "../Components/home/FeaturedTreks";
 import FeaturedTours from "../Components/home/FeaturedTours";
@@ -8,15 +10,36 @@ import Blogs from "../Components/home/Blogs";
 import Newsletter from "../Components/home/Newsletter";
 
 export default function Home() {
+
+  const [data , setData] = useState([])
+
+  const homeData = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/home");
+      const data = await response.json();
+      setData(data)
+
+    } catch (error) {
+      console.log("Error fetching home data:", error);
+    }
+
+  }
+
+  useEffect(() => {
+    homeData();
+  }, []);
+
+  console.log("homeData : ", data);
+
   return (
     <>
       <Hero />
-      <FeaturedTreks />
-      <FeaturedTours />
-      <TopDestinations />
-      <BestSellers />
+      <FeaturedTreks data = {data.featuredTreks} />
+      <FeaturedTours data={data.featuredTours} />
+      <TopDestinations data={data.topDestinations} />
+      {/* <BestSellers /> */}
       <Testimonials />
-      <Blogs />
+      <Blogs data = {data.latestBlogs} />
       <Newsletter />
     </>
   );
