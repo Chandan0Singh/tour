@@ -226,18 +226,17 @@ export default function Header() {
             {/* Desktop actions */}
             {isAuthenticated ? (
               <div className="hidden lg:flex items-center gap-1.5 shrink-0">
-                {[
-                  { icon: <Search size={17} />, label: "Search" },
-                  { icon: <Heart size={17} />, label: "Wishlist" },
-                ].map(({ icon, label }) => (
-                  <button
-                    key={label}
-                    aria-label={label}
-                    className="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-green-50 hover:text-green-900 hover:border-green-200 transition-colors"
-                  >
-                    {icon}
-                  </button>
-                ))}
+                {[{ icon: <Heart size={17} />, label: "Wishlist" }].map(
+                  ({ icon, label }) => (
+                    <button
+                      key={label}
+                      aria-label={label}
+                      className="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-green-50 hover:text-green-900 hover:border-green-200 transition-colors"
+                    >
+                      {icon}
+                    </button>
+                  ),
+                )}
 
                 {/* Cart */}
                 <Link
@@ -250,22 +249,94 @@ export default function Header() {
                 </Link>
 
                 {/* Account */}
-                <Link
-                  href="/account"
-                  aria-label="My account"
-                  className="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-green-50 hover:text-green-900 hover:border-green-200 transition-colors"
-                >
-                  <User size={17} />
-                </Link>
+                <div className="relative group">
+                  <button
+                    aria-label="Account"
+                    className="hover:text-green-700 transition-colors"
+                  >
+                    <User size={18} strokeWidth={1.5} />
+                  </button>
+
+                  <div
+                    className="
+      absolute right-0 top-full mt-2
+      w-60 bg-white border border-gray-200
+      rounded-xl shadow-xl
+      opacity-0 invisible
+      group-hover:opacity-100
+      group-hover:visible
+      transition-all duration-200
+      z-50 overflow-hidden
+    "
+                  >
+                    <div className="px-5 py-4 border-b">
+                      <p className="text-sm text-gray-500">Welcome</p>
+                      <p className="font-semibold text-gray-900">
+                        {user?.firstName || user?.name}
+                      </p>
+                    </div>
+
+                    <Link
+                      href="/account"
+                      className="block px-5 py-3 text-sm hover:bg-green-50"
+                    >
+                      👤 My Profile
+                    </Link>
+
+                    <Link
+                      href="/my-bookings"
+                      className="block px-5 py-3 text-sm hover:bg-green-50"
+                    >
+                      🧳 My Bookings
+                    </Link>
+
+                    <Link
+                      href="/wishlist"
+                      className="block px-5 py-3 text-sm hover:bg-green-50"
+                    >
+                      ❤️ Wishlist
+                    </Link>
+
+                    <Link
+                      href="/support"
+                      className="block px-5 py-3 text-sm hover:bg-green-50"
+                    >
+                      💬 Help & Support
+                    </Link>
+
+                    <Link
+                      href="/contact"
+                      className="block px-5 py-3 text-sm hover:bg-green-50"
+                    >
+                      📞 Contact Us
+                    </Link>
+
+                    {user?.role === "admin" && (
+                      <Link
+                        href="/admin"
+                        className="block px-5 py-3 text-sm hover:bg-green-50"
+                      >
+                        ⚙️ Admin Dashboard
+                      </Link>
+                    )}
+
+                    <button
+                      onClick={logout}
+                      className="w-full text-left px-5 py-3 text-sm text-red-600 hover:bg-red-50 border-t"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
 
                 {/* Book Now */}
-                <Link
+                {/* <Link
                   href="/booking"
                   className="flex items-center gap-1.5 bg-green-900 hover:bg-green-800 text-white text-[13px] font-semibold px-5 py-2 rounded-full transition-colors"
                 >
                   <CalendarPlus size={14} />
                   Book Now
-                </Link>
+                </Link> */}
               </div>
             ) : (
               <div className="hidden lg:flex items-center gap-3">
@@ -277,7 +348,7 @@ export default function Header() {
                 </Link>
 
                 <Link
-                  href="/signup"  
+                  href="/signup"
                   className="px-5 py-2 rounded-full bg-green-900 text-white text-sm font-semibold hover:bg-green-800 transition-colors"
                 >
                   Sign Up
