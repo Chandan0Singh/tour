@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/productRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
 const cartRoutes = require('./routes/cart');
 const user = require('./routes/user')
 const blog = require("./routes/blogRoutes");
@@ -25,6 +26,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/gallery", galleryRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/bookings', bookingRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/user', user);
 app.use("/api/blog", blog);

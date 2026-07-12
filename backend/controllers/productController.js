@@ -141,7 +141,7 @@ const searchProducts = async (req, res) => {
 // Single Product by Slug
 const getProductBySlug = async (req, res) => {
   try {
-    console.log(`Fetching product with slug: ${req.params.slug}`); // Debugging line
+
     const product = await Product.findOne({
       slug: req.params.slug,
       status: "Active",
@@ -152,8 +152,6 @@ const getProductBySlug = async (req, res) => {
         message: "Product not found",
       });
     }
-
-    console.log(`Product founded: ${product}`); // Debugging line
 
     return res.json(product);
   } catch (err) {
