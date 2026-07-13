@@ -1,8 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
-const { getHomeData } = require("../controllers/homeController");
+const {
+  getHome,
+  createHome,
+  updateHome,
+  deleteHome,
+} = require("../controllers/homeController");
 
-router.get("/", getHomeData);
+router.get("/", getHome);
+router.post("/", createHome);
+router.put("/", updateHome);
+router.delete("/", deleteHome);
 
 module.exports = router;

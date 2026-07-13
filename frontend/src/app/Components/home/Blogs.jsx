@@ -2,7 +2,6 @@ import React from "react";
 import { FaArrowRight, FaCalendarAlt } from "react-icons/fa";
 
 const Blogs = ({ data = [] }) => {
-  console.log("blogs:", data);
 
   return (
     <section className="py-20 bg-[#F4F1EA]">
@@ -33,7 +32,7 @@ const Blogs = ({ data = [] }) => {
             >
               <div className="overflow-hidden">
                 <img
-                  src={blog.featuredImage}
+                  src={blog.bannerImage}
                   alt={blog.title}
                   className="w-full h-64 object-cover hover:scale-110 transition duration-500"
                 />
