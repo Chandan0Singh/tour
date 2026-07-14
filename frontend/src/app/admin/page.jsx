@@ -53,7 +53,7 @@ const statsCards = [
 
 const managementCards = [
   { icon: "🏔️", title: "Tour Packages", desc: "Manage all trekking & tour packages", color: "bg-green-50", border: "border-green-100", href: "/admin/packages" },
-  { icon: "🗺️", title: "Destinations", desc: "Add and edit travel destinations", color: "bg-orange-50", border: "border-orange-100", href: "/admin/destinations" },
+  { icon: "🗺️", title: "Home", desc: "Add and edit travel destinations", color: "bg-orange-50", border: "border-orange-100", href: "/admin/home" },
   { icon: "📅", title: "Bookings", desc: "View and manage tour bookings", color: "bg-blue-50", border: "border-blue-100", href: "/admin/bookings" },
   { icon: "👥", title: "Customers", desc: "Customer profiles and history", color: "bg-purple-50", border: "border-purple-100", href: "/admin/customers" },
   { icon: "✍️", title: "Travel Blogs", desc: "Create and publish travel blogs", color: "bg-yellow-50", border: "border-yellow-100", href: "/admin/blogs" },
