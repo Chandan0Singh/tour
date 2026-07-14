@@ -10,6 +10,7 @@ const {
   updateReview,
   deleteReview,
   approveReview,
+  rejectReview,
   getPendingReviews,
 } = require("../controllers/reviewController");
 
@@ -28,5 +29,6 @@ router.put("/:id", updateReview);
 router.delete("/:id", deleteReview);
 
 router.patch("/:id/approve", approveReview);
+router.patch("/:id/reject", rejectReview);
 
 module.exports = router;
