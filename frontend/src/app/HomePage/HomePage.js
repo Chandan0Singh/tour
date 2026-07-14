@@ -25,6 +25,8 @@ export default function Home() {
 
   }
 
+  console.log("home", data)
+
   useEffect(() => {
     homeData();
   }, []);
@@ -33,7 +35,7 @@ export default function Home() {
 
   return (
     <>
-      <Hero />
+      <Hero data={data.home} />
       <FeaturedTreks data = {data.featuredTreks} />
       <FeaturedTours data={data.featuredTours} />
       <TopDestinations data={data.topDestinations} />

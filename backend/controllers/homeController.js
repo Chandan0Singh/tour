@@ -1,6 +1,6 @@
 const Product = require("../models/Product");
 const Blog = require("../models/Product");
-const Home = require("../models/Product");
+const Home = require("../models/homeSchema");
 
 // Get Home Data
 const getHome = async (req, res) => {

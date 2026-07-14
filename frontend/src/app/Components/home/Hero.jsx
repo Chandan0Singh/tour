@@ -1,16 +1,21 @@
 "use client";
 
 import { Search } from "lucide-react";
+import Link from "next/link";
 
-export default function Hero() {
+export default function Hero({ data }) {
+  const hero = data?.hero;
+
   return (
     <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000')",
+          backgroundImage: `url(${
+            hero?.backgroundImage ||
+            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000"
+          })`,
         }}
       />
 
@@ -27,14 +32,13 @@ export default function Hero() {
           className="text-5xl md:text-7xl font-bold leading-tight mb-6"
           style={{ fontFamily: "'Playfair Display', serif" }}
         >
-          Explore Nature's
+          {hero?.title}
           <br />
-          Greatest Adventures
+          {hero?.subtitle}
         </h1>
 
         <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-200 mb-10">
-          From mountain trails to memorable journeys. Discover breathtaking
-          destinations, thrilling treks, and unforgettable travel experiences.
+          {hero?.description}
         </p>
 
         {/* Search Box */}
@@ -69,13 +73,17 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <div className="flex flex-wrap justify-center gap-4 mt-8">
-          <button className="bg-[#FF9800] hover:bg-[#e68900] text-white px-8 py-4 rounded-full font-semibold transition">
-            Explore Treks
-          </button>
+          <Link href={hero?.primaryButton?.link || "#"}>
+            <button className="bg-[#FF9800] hover:bg-[#e68900] text-white px-8 py-4 rounded-full font-semibold transition">
+              {hero?.primaryButton?.text}
+            </button>
+          </Link>
 
-          <button className="border border-white hover:bg-white hover:text-black text-white px-8 py-4 rounded-full font-semibold transition">
-            View Tours
-          </button>
+          <Link href={hero?.secondaryButton?.link || "#"}>
+            <button className="border border-white hover:bg-white hover:text-black text-white px-8 py-4 rounded-full font-semibold transition">
+              {hero?.secondaryButton?.text}
+            </button>
+          </Link>
         </div>
       </div>
 
