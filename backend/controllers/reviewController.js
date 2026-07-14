@@ -2,6 +2,25 @@ const express = require("express");
 const Review = require("../models/Review");
 const Product = require("../models/Product");
 
+const updateProductRating = async (productId) => {
+  const reviews = await Review.find({
+    product: productId,
+    isApproved: true,
+  });
+
+  const totalReviews = reviews.length;
+
+  const averageRating =
+    totalReviews > 0
+      ? reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews
+      : 0;
+
+  await Product.findByIdAndUpdate(productId, {
+    averageRating: Number(averageRating.toFixed(1)),
+    totalReviews,
+  });
+};
+
 const createReview = async (req, res) => {
   try {
     const { productId, userId, name, email, rating, title, review, images } =
@@ -71,7 +90,6 @@ const getAllReviews = async (req, res) => {
       reviews,
     });
   } catch (error) {
-        console.log(error);
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -191,18 +209,26 @@ const approveReview = async (req, res) => {
       });
     }
 
-    review.isApproved = true;
+    if (review.status === "Approved") {
+      return res.status(400).json({
+        success: false,
+        message: "Review already approved.",
+      });
+    }
 
-    await review.save();
+    review.status = "Approved";
 
-    await updateProductRating(review.product);
+    await review.save({ validateModifiedOnly: true });
 
-    return res.json({
+    await updateProductRating(review.productId);
+
+    return res.status(200).json({
       success: true,
       message: "Review approved successfully.",
       review,
     });
   } catch (error) {
+
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -215,7 +241,7 @@ const getPendingReviews = async (req, res) => {
     const reviews = await Review.find({
       isApproved: false,
     })
-      .populate("product", "name")
+      .populate("productId", "name")
       .sort({ createdAt: -1 });
 
     return res.json({
