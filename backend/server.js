@@ -11,7 +11,8 @@ const blog = require("./routes/blogRoutes");
 const order = require("./routes/orderRouter");
 const galleryRoutes = require("./routes/galleryRoutes");
 const contactRoutes = require("./routes/contactRoutes");
-const homeRoutes = require("./routes/homerotes")
+const homeRoutes = require("./routes/homerotes");
+const reviewRoutes = require("./routes/reviewRoutes")
 
 require('dotenv').config();
 
@@ -35,6 +36,7 @@ app.use("/api/order", order);
 app.use("/api/home", homeRoutes);
 app.use("/api/payment", require("./routes/paymentRoutes"));
 app.use("/api/contact", contactRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 app.get('/', (req, res) => {
   res.send('API running...');

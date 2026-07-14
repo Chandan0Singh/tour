@@ -155,7 +155,7 @@ const getProductBySlug = async (req, res) => {
 
     return res.json(product);
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       message: err.message,
     });
   }
