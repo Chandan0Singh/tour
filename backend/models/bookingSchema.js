@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const bookingSchema = new mongoose.Schema(
   {
+    bookingId: {
+      type: String,
+      unique: true,
+      required: true,
+    },
     productId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
@@ -61,7 +66,7 @@ const bookingSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Booking", bookingSchema);
