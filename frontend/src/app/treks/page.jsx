@@ -3,9 +3,10 @@
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { BACKEND_URL } from "@/keyword";
 
 
-const API = "http://localhost:5000";
+const API = `${BACKEND_URL}`;
 
 const DIFFICULTIES = ["Easy", "Moderate", "Difficult"];
 const SORT_OPTIONS = [
@@ -227,7 +228,7 @@ export default function TreksPage() {
         ...(bestSeller && { bestSeller: "true" }),
       };
 
-      const { data } = await axios.get(`http://localhost:5000/api/products`, {
+      const { data } = await axios.get(`${BACKEND_URL}/api/products`, {
         params,
       });
 

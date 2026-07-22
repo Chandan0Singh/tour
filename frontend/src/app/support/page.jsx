@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "@/keyword";
 import {
   ChevronDown,
   Search,
@@ -148,7 +149,7 @@ const CONTACT_CHANNELS = [
   },
 ];
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const API_BASE = `${BACKEND_URL}/api`;
 
 // ---- component -----------------------------------------------------
 

@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState, useCallback } from "react";
+import { BACKEND_URL } from "@/keyword";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = BACKEND_URL;
 
 const STATUS_STYLES = {
   Approved: "bg-[#EEF1EC] text-[#5E6B58] border border-[#5E6B58]",

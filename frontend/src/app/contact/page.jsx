@@ -3,6 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 
+import { BACKEND_URL } from "@/keyword";
 import {
   FaPhoneAlt,
   FaEnvelope,
@@ -34,7 +35,7 @@ export default function ContactPage() {
     try {
       setLoading(true);
 
-      const res = await axios.post("http://localhost:5000/api/contact", form);
+      const res = await axios.post(`${BACKEND_URL}/api/contact`, form);
 
       alert(res.data.message);
 

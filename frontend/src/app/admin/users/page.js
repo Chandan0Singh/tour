@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { BACKEND_URL } from "@/keyword";
 
 export default function UserDashboard() {
   const [users, setUsers] = useState([]);
@@ -29,7 +30,7 @@ export default function UserDashboard() {
   const handleAddUser = async () => {
   try {
     const { data } = await axios.post(
-      "http://localhost:5000/api/auth/signup",
+      `${BACKEND_URL}/api/auth/signup`,
       newUser
     );
 
@@ -53,7 +54,7 @@ export default function UserDashboard() {
     const fetchUser = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5000/api/user/users",
+          `${BACKEND_URL}/api/user/users`,
           {
             params: {
               page: currentPage,
@@ -76,7 +77,7 @@ export default function UserDashboard() {
   const fetchSearchUSer = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:5000/api/user/search",
+        `${BACKEND_URL}/api/user/search`,
         {
           params: {
             search: searchInput,
@@ -104,7 +105,7 @@ export default function UserDashboard() {
     const newStatus = currentStatus === "active" ? "blocked" : "active";
 
     try {
-      const { data } = await axios.put("http://localhost:5000/api/user/block", {
+      const { data } = await axios.put(`${BACKEND_URL}/api/user/block`, {
         userId: id,
         status: newStatus,
       });
@@ -121,7 +122,7 @@ export default function UserDashboard() {
 
   const handleChangeRole = async (id, currentRole) => {
     try {
-      const { data } = await axios.put("http://localhost:5000/api/user/role", {
+      const { data } = await axios.put(`${BACKEND_URL}/api/user/role`, {
         userId: id,
         role: currentRole,
       });
@@ -148,7 +149,7 @@ export default function UserDashboard() {
 
     try {
       const { data } = await axios.delete(
-        "http://localhost:5000/api/user/delete",
+        `${BACKEND_URL}/api/user/delete`,
         {
           data: {
             userId: id,
@@ -177,7 +178,7 @@ export default function UserDashboard() {
   const handleEditUser = async () => {
     try {
       const { data } = await axios.put(
-        "http://localhost:5000/api/user/update",
+        `${BACKEND_URL}/api/user/update`,
         {
           userId: editData.userId,
           name: editData.name,

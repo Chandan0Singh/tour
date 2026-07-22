@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { BACKEND_URL } from "@/keyword";
 
-const API_BASE = "http://localhost:5000/api/user";
+const API_BASE = `${BACKEND_URL}/api/user`;
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState([]);

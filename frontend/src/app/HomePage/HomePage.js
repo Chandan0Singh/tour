@@ -8,6 +8,7 @@ import TopDestinations from "../Components/home/TopDestinations";
 import Testimonials from "../Components/home/Testimonials";
 import Blogs from "../Components/home/Blogs";
 import Newsletter from "../Components/home/Newsletter";
+import { BACKEND_URL } from "@/keyword";
 
 export default function Home() {
 
@@ -15,7 +16,7 @@ export default function Home() {
 
   const homeData = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/home");
+      const response = await fetch(`${BACKEND_URL}/api/home`);
       const data = await response.json();
       setData(data)
 

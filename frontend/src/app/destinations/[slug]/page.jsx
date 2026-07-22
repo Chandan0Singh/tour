@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { BACKEND_URL } from "@/keyword";
 
 export default function DestinationDetailPage() {
   const { slug } = useParams();
@@ -20,7 +21,7 @@ export default function DestinationDetailPage() {
   const fetchDestination = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/products/${slug}`
+        `${BACKEND_URL}/api/products/${slug}`
       );
 
       const data = await res.json();

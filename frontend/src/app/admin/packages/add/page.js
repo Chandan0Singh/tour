@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "@/keyword";
 
 const emptyImage = () => ({ url: "", alt: "" });
 const emptyItineraryDay = () => ({ day: "", title: "", description: "" });
@@ -301,7 +302,7 @@ export default function AddPackagePage() {
     try {
       setSubmitting(true);
       const payload = buildPayload();
-      await axios.post("http://localhost:5000/api/products", payload);
+      await axios.post(`${BACKEND_URL}/api/products`, payload);
       setStatusMsg({ type: "success", text: "Package created successfully." });
       setFormData(initialState);
       setSlugTouched(false);

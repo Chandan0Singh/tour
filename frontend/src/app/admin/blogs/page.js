@@ -6,6 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import { useRouter } from "next/navigation";
 import ConfirmPopup from "@/app/Components/confimationpopup";
+import { BACKEND_URL } from "@/keyword";
 
 export default function BlogsDashboard() {
   const [title, setTitle] = useState("");
@@ -57,7 +58,7 @@ export default function BlogsDashboard() {
       }
 
       const { data } = await axios.post(
-        "http://localhost:5000/api/blog/create",
+        `${BACKEND_URL}/api/blog/create`,
         formData,
       );
 
@@ -75,7 +76,7 @@ export default function BlogsDashboard() {
   useEffect(() => {
     const getAllBlogs = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/blog");
+        const response = await axios.get(`${BACKEND_URL}/api/blog`);
 
         setBlogs(response.data.data);
         setBlogCount(response.data.count);
@@ -97,7 +98,7 @@ export default function BlogsDashboard() {
 
     try {
       const response = await axios.delete(
-        "http://localhost:5000/api/blog/delete",
+        `${BACKEND_URL}/api/blog/delete`,
         {
           data: {
             blogid: selectedBlogId,
@@ -112,7 +113,7 @@ export default function BlogsDashboard() {
   const filtersearch = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/blog/search",
+        `${BACKEND_URL}/api/blog/search`,
         {
           params: {
             search: searchTerm,

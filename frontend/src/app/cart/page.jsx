@@ -5,6 +5,7 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import CheckoutModal from "../Components/CheckoutModal";
+import { BACKEND_URL } from "@/keyword";
 
 export default function CartPage() {
   const { user } = useAuth();
@@ -25,7 +26,7 @@ export default function CartPage() {
 
   const fetchCart = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/cart/${user.id}`);
+      const res = await axios.get(`${BACKEND_URL}/api/cart/${user.id}`);
       setCartId(res.data._id);
 
       // Drop any cart items whose product was deleted from the catalog —
@@ -62,7 +63,7 @@ export default function CartPage() {
 
   const removeItem = async (cartItemId) => {
     try {
-      await axios.delete("http://localhost:5000/api/cart/remove", {
+      await axios.delete(`${BACKEND_URL}/api/cart/remove`, {
         data: {
           userId: user.id,
           cartItemId,
@@ -118,7 +119,7 @@ export default function CartPage() {
   const fetchUserData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/user/${user.id}/addresses`,
+        `${BACKEND_URL}/api/user/${user.id}/addresses`,
       );
 
       if (!response.ok) {
@@ -141,7 +142,7 @@ export default function CartPage() {
 
   const clearCart = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/cart/clear", {
+      const response = await fetch(`${BACKEND_URL}/api/cart/clear`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -185,7 +186,7 @@ export default function CartPage() {
         })),
       };
 
-      const response = await fetch("http://localhost:5000/api/order/create", {
+      const response = await fetch(`${BACKEND_URL}/api/order/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

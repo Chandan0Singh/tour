@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import axios from "axios";
+import { BACKEND_URL } from "@/keyword";
 
 // ─── Sidebar shared data ───────────────────────────────────────────────────────
 const menuItems = [
@@ -208,7 +209,7 @@ export default function GalleryPage() {
   const fetchGallery = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("http://localhost:5000/api/gallery");
+      const { data } = await axios.get(`${BACKEND_URL}/api/gallery`);
       setGallery(data);
     } catch (e) {
       setError("Failed to load gallery.");
@@ -223,7 +224,7 @@ export default function GalleryPage() {
   const handleAdd = async (form) => {
     try {
       setSaving(true);
-      await axios.post("http://localhost:5000/api/gallery/add", form);
+      await axios.post(`${BACKEND_URL}/api/gallery/add`, form);
       setShowAdd(false);
       fetchGallery();
     } catch (e) {
@@ -236,7 +237,7 @@ export default function GalleryPage() {
   const handleEdit = async (form) => {
     try {
       setSaving(true);
-      await axios.put(`http://localhost:5000/api/gallery/${editItem._id}`, form);
+      await axios.put(`${BACKEND_URL}/api/gallery/${editItem._id}`, form);
       setEditItem(null);
       fetchGallery();
     } catch (e) {
@@ -249,7 +250,7 @@ export default function GalleryPage() {
   const handleDelete = async () => {
     try {
       setSaving(true);
-      await axios.delete(`http://localhost:5000/api/gallery/${deleteItem._id}`);
+      await axios.delete(`${BACKEND_URL}/api/gallery/${deleteItem._id}`);
       setDeleteItem(null);
       fetchGallery();
     } catch (e) {

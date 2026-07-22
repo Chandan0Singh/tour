@@ -3,8 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { BACKEND_URL } from "@/keyword";
 
-const API = "http://localhost:5000/api/products";
+const API = `${BACKEND_URL}/api/products`;
 
 export default function DestinationsPage() {
   const [destinations, setDestinations] = useState([]);

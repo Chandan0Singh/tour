@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { BACKEND_URL } from "@/keyword";
 
 export default function TrekDetailPage({ params }) {
   const { slug } = use(params);
@@ -19,7 +20,7 @@ export default function TrekDetailPage({ params }) {
 
   const fetchTrek = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/products/${slug}`);
+      const res = await fetch(`${BACKEND_URL}/api/products/${slug}`);
 
       const data = await res.json();
 

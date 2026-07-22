@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { BACKEND_URL } from "@/keyword";
 import {
   FaEnvelope,
   FaLock,
@@ -33,7 +34,7 @@ export default function LoginPage() {
       setLoading(true);
 
       const response = await fetch(
-        `http://localhost:5000/api/auth/login`,
+        `${BACKEND_URL}/api/auth/login`,
         {
           method: "POST",
           headers: {
@@ -179,11 +180,11 @@ export default function LoginPage() {
 
           {/* Signup Link */}
           <p className="text-center mt-6 text-gray-600">
-            Don't have an account?{" "}
+            Dont have an account?{" "}
             <Link
               href="/signup"
               className="text-[#1B5E20] font-semibold"
-            >
+              >
               Create Account
             </Link>
           </p>

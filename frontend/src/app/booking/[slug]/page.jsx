@@ -2,6 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { BACKEND_URL } from "@/keyword";
 
 export default function BookingPage({ params }) {
   const { slug } = use(params);
@@ -25,7 +26,7 @@ export default function BookingPage({ params }) {
 
   const fetchTrek = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/products/${slug}`);
+      const res = await fetch(`${BACKEND_URL}/api/products/${slug}`);
 
       const data = await res.json();
 
@@ -55,7 +56,7 @@ export default function BookingPage({ params }) {
       });
 
       // Later:
-      await fetch("http://localhost:5000/api/bookings", {
+      await fetch(`${BACKEND_URL}/api/bookings`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

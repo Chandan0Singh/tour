@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { BACKEND_URL } from "@/keyword";
 
-const API = "http://localhost:5000/api/home";
+const API = `${BACKEND_URL}/api/home`;
 
 export default function AdminHomePage() {
   const [formData, setFormData] = useState({
