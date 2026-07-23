@@ -11,7 +11,7 @@ const blog = require("./routes/blogRoutes");
 const order = require("./routes/orderRouter");
 const galleryRoutes = require("./routes/galleryRoutes");
 const contactRoutes = require("./routes/contactRoutes");
-const homeRoutes = require("./routes/homerotes");
+const homeRoutes = require("./routes/homeRoutes");
 const reviewRoutes = require("./routes/reviewRoutes")
 
 require('dotenv').config();
@@ -40,6 +40,19 @@ app.use("/api/reviews", reviewRoutes);
 
 app.get('/', (req, res) => {
   res.send('API running...');
+});
+
+app.use((err, req, res, next) => {
+  console.error("Unhandled Error:", err);
+  res.status(500).json({ message: err.message });
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.error("Unhandled Rejection:", err);
 });
 
 const PORT = process.env.PORT || 5000;
