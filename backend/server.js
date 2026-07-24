@@ -25,18 +25,18 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 // Routes
-app.use("/api/gallery", galleryRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/bookings', bookingRoutes);
-app.use('/api/cart', cartRoutes);
-app.use('/api/user', user);
-app.use("/api/blog", blog);
-app.use("/api/order", order);
-app.use("/api/home", homeRoutes);
-app.use("/api/payment", require("./routes/paymentRoutes"));
-app.use("/api/contact", contactRoutes);
-app.use("/api/reviews", reviewRoutes);
+// app.use("/api/gallery", galleryRoutes);
+// app.use('/api/auth', authRoutes);
+// app.use('/api/products', productRoutes);
+// app.use('/api/bookings', bookingRoutes);
+// app.use('/api/cart', cartRoutes);
+// app.use('/api/user', user);
+// app.use("/api/blog", blog);
+// app.use("/api/order", order);
+// app.use("/api/home", homeRoutes);
+// app.use("/api/payment", require("./routes/paymentRoutes"));
+// app.use("/api/contact", contactRoutes);
+// app.use("/api/reviews", reviewRoutes);
 
 app.get('/', (req, res) => {
   res.send('API running...');
