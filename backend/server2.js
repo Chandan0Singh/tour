@@ -1,15 +1,15 @@
-const express = require("express");
+const http = require("http");
 
-const app = express();
+const PORT = process.env.PORT || 8080;
 
-console.log("PORT from env:", process.env.PORT);
+console.log("PORT =", PORT);
 
-const PORT = Number(process.env.PORT) || 8080;
-
-app.get("/", (req, res) => {
-  res.send("OK");
+const server = http.createServer((req, res) => {
+  console.log("Request:", req.url);
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Hello");
 });
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Listening on ${PORT}`);
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(server.address());
 });
