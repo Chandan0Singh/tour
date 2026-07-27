@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { BACKEND_URL } from "@/keyword";
 
 export default function BlogDetailPage() {
   const [blog, setBlog] = useState(null);
@@ -16,7 +17,7 @@ export default function BlogDetailPage() {
         console.log("Slug:", slug);
 
       const res = await fetch(
-        `http://localhost:5000/api/blog/${slug}`
+        `${BACKEND_URL}/api/blog/${slug}`
       );
 
       const data = await res.json();
@@ -55,7 +56,7 @@ export default function BlogDetailPage() {
   return (
     <div className="max-w-4xl mx-auto px-5 py-10">
       <img
-        src={`http://localhost:5000/${blog.featuredImage}`}
+        src={`${BACKEND_URL}/${blog.featuredImage}`}
         alt={blog.title}
         className="w-full h-[450px] object-cover rounded-xl mb-8"
       />

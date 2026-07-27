@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { Search, Plus, Pencil, Trash2, Package } from "lucide-react";
+import { BACKEND_URL } from "@/keyword";
 
 export default function AdminDashboard() {
   const [products, setProducts] = useState([]);
@@ -16,7 +17,7 @@ export default function AdminDashboard() {
       setLoading(true);
 
       const { data } = await axios.get(
-        "http://localhost:5000/api/products"
+        `${BACKEND_URL}/api/products`
       );
 
       // If backend sends { products: [] }
@@ -38,7 +39,7 @@ export default function AdminDashboard() {
 
     try {
       await axios.delete(
-        `http://localhost:5000/api/products/${id}`
+        `${BACKEND_URL}/api/products/${id}`
       );
 
       // Remove deleted product instantly

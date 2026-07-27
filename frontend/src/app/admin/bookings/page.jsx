@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState, useCallback } from "react";
+import { BACKEND_URL } from "@/keyword";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = BACKEND_URL;
 
 const BOOKING_STATUS_STYLES = {
   Confirmed: "bg-[#EAF0F5] text-[#3E5C76] border border-[#3E5C76]",

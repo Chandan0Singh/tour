@@ -3,8 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { BACKEND_URL } from "@/keyword";
 
-const API = "http://localhost:5000/api/products";
+const API = `${BACKEND_URL}/api/products`;
 
 export default function PackagesPage() {
   const [packages, setPackages] = useState([]);

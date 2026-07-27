@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { BACKEND_URL } from "@/keyword";
 
 export default function EditBlogPage() {
   const { id } = useParams();
@@ -24,7 +25,7 @@ export default function EditBlogPage() {
   const fetchBlog = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/blog/${id}`
+        `${BACKEND_URL}/api/blog/${id}`
       );
 
       setBlogData(response.data.data);
@@ -57,7 +58,7 @@ export default function EditBlogPage() {
       setLoading(true);
 
       await axios.put(
-        `http://localhost:5000/api/blog/update/${id}`,
+        `${BACKEND_URL}/api/blog/update/${id}`,
         blogData
       );
 

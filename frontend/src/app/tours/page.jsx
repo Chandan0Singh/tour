@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "@/keyword";
 
 const categories = [
   "All Tours",
@@ -128,7 +129,7 @@ export default function ToursPage() {
           params.sort = "latest";
       }
 
-      const res = await axios.get("http://localhost:5000/api/products", {
+      const res = await axios.get(`${BACKEND_URL}/api/products`, {
         params,
       });
 

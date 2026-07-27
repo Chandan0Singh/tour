@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { BACKEND_URL } from "@/keyword";
 import {
   FaUser,
   FaEnvelope,
@@ -38,7 +39,7 @@ export default function SignupPage() {
     try {
       setLoading(true);
 
-      const response = await fetch(`http://localhost:5000/api/auth/signup`, {
+      const response = await fetch(`${BACKEND_URL}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

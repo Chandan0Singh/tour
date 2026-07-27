@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { BACKEND_URL } from "@/keyword";
 
 export default function OrdersDashboard() {
   const [orders, setOrders] = useState([]);
@@ -10,7 +11,7 @@ export default function OrdersDashboard() {
 
   useEffect(() => {
     const getBlogs = async () => {
-      const response = await axios.get("http://localhost:5000/api/order/all");
+      const response = await axios.get(`${BACKEND_URL}/api/order/all`);
       setOrders(response.data.data);
     };
 
@@ -21,7 +22,7 @@ export default function OrdersDashboard() {
     const getFilteredBlogs = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/order/filter",
+          `${BACKEND_URL}/api/order/filter`,
           {
             params: {
               search: search || "",

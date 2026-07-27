@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { BACKEND_URL } from "@/keyword";
 
 const categories = [
   "All",
@@ -28,7 +29,7 @@ export default function BlogPage() {
   const fetchBlogs = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/blog/published`,
+        `${BACKEND_URL}/api/blog/published`,
       );
 
       const data = await response.json();
@@ -111,7 +112,7 @@ export default function BlogPage() {
           <article className="mb-14 rounded-2xl overflow-hidden bg-white shadow-sm border border-gray-100 md:flex">
             <div className="md:w-[55%] relative">
               <img
-                src={`http://localhost:5000/${featured.featuredImage}`}
+                src={`${BACKEND_URL}/${featured.featuredImage}`}
                 alt={featured.title}
                 className="w-full h-64 md:h-full object-cover"
               />
@@ -181,7 +182,7 @@ export default function BlogPage() {
               >
                 <div className="relative">
                   <img
-                    src={`http://localhost:5000/${post.featuredImage}`}
+                    src={`${BACKEND_URL}/${post.featuredImage}`}
                     alt={post.title}
                     className="w-full h-48 object-cover"
                   />

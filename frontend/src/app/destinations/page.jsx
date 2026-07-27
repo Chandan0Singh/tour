@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { BACKEND_URL } from "@/keyword";
 
 export default function DestinationsPage() {
   const [destinations, setDestinations] = useState([]);
@@ -15,7 +16,7 @@ export default function DestinationsPage() {
   const fetchDestinations = async () => {
     try {
       const res = await fetch(
-        "http://localhost:5000/api/products?limit=100"
+        `${BACKEND_URL}/api/products?limit=100`
       );
 
       const data = await res.json();
