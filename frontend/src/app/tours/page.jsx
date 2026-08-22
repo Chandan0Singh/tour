@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import axios from "axios";
 import { BACKEND_URL } from "@/keyword";
 
@@ -145,13 +146,68 @@ export default function ToursPage() {
     }
   };
 
-  useEffect(() => {
-    setPage(1);
-  }, [activeCategory, budget, sortBy]);
+  // Reset page when filters change by setting page in the handlers below.
 
   useEffect(() => {
-    fetchTours();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    let cancelled = false;
+
+    const doFetch = async () => {
+      try {
+        setLoading(true);
+
+        const params = {
+          page,
+          limit: 9,
+          type: "Tour",
+          maxPrice: budget,
+        };
+
+        if (activeCategory !== "All Tours") {
+          params.category = activeCategory;
+        }
+
+        switch (sortBy) {
+          case "Price: Low to High":
+            params.sort = "price_asc";
+            break;
+
+          case "Price: High to Low":
+            params.sort = "price_desc";
+            break;
+
+          case "Rating":
+            params.sort = "rating";
+            break;
+
+          default:
+            params.sort = "latest";
+        }
+
+        const res = await axios.get(`${BACKEND_URL}/api/products`, {
+          params,
+        });
+
+        if (cancelled) return;
+
+        const fetchedTours = res.data?.products || [];
+
+        setTours((prev) => (page === 1 ? fetchedTours : [...prev, ...fetchedTours]));
+        setTotal(res.data?.total || 0);
+      } catch (err) {
+        if (cancelled) return;
+        console.log(err);
+        setTours((prev) => (page === 1 ? [] : prev));
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    doFetch();
+
+    return () => {
+      cancelled = true;
+    };
+    // intentionally only depend on these values
   }, [activeCategory, budget, sortBy, page]);
 
   return (
@@ -171,7 +227,7 @@ export default function ToursPage() {
                 Curated Tour Packages
               </span>
               <h1 className="fd text-4xl mt-3 mb-3 leading-tight">
-                India's Most Memorable
+                India&apos;s Most Memorable
                 <br />
                 Tour Experiences
               </h1>
@@ -215,7 +271,10 @@ export default function ToursPage() {
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => {
+                  setActiveCategory(cat);
+                  setPage(1);
+                }}
                 className={`text-sm font-medium px-4 py-1.5 rounded-full whitespace-nowrap transition-all ${
                   activeCategory === cat
                     ? "bg-[#1B5E20] text-white"
@@ -241,7 +300,10 @@ export default function ToursPage() {
               min="3000"
               max="30000"
               value={budget}
-              onChange={(e) => setBudget(Number(e.target.value))}
+              onChange={(e) => {
+                setBudget(Number(e.target.value));
+                setPage(1);
+              }}
               className="w-full accent-[#1B5E20]"
             />
             <div className="flex justify-between text-xs text-gray-400 mt-1">
@@ -308,7 +370,10 @@ export default function ToursPage() {
                 <span className="text-xs text-gray-400">Sort by</span>
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
+                  onChange={(e) => {
+                    setSortBy(e.target.value);
+                    setPage(1);
+                  }}
                   className="text-xs font-medium border border-gray-200 rounded-xl px-3 py-1.5 text-gray-500 bg-white outline-none cursor-pointer"
                 >
                   {[
@@ -354,10 +419,12 @@ export default function ToursPage() {
                   ? "bg-[#FF9800]"
                   : "bg-[#1B5E20]";
 
+                const slug = tour?.slug || tour?._id;
+
                 return (
+                  <Link href={`/tours/${slug}`} key={tour?._id} className="block">
                   <article
-                    key={tour?._id}
-                    className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col"
+                    className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col h-full"
                   >
                     <div className="relative">
                       <img
@@ -453,6 +520,7 @@ export default function ToursPage() {
                       </div>
                     </div>
                   </article>
+                  </Link>
                 );
               })}
             </div>
@@ -553,7 +621,7 @@ export default function ToursPage() {
         {/* CTA */}
         <section className="bg-[#1B5E20] text-white py-14 px-5 text-center">
           <span className="text-[#A5D6A7] text-xs font-semibold uppercase tracking-widest">
-            Can't find the right fit?
+            Can&apos;t find the right fit?
           </span>
           <h2 className="fd text-3xl mt-3 mb-3">Build Your Own Tour</h2>
           <p className="text-white/65 text-sm max-w-md mx-auto mb-6 leading-relaxed">

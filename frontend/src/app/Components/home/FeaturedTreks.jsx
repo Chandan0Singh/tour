@@ -1,47 +1,20 @@
+import { ArrowRight } from "lucide-react";
+
 export default function FeaturedTreks({ data }) {
-
+  const experiences = [
+    { title: "Treks", text: "Explore the best Himalayan treks", image: data?.[0]?.bannerImage },
+    { title: "Tour Packages", text: "Scenic tours & family vacations", image: data?.[1]?.bannerImage },
+    { title: "Camping", text: "Stay close to nature under the stars", image: data?.[2]?.bannerImage },
+    { title: "Bike Trips", text: "Epic road trips for thrill seekers", image: data?.[3]?.bannerImage },
+    { title: "Weekend Getaways", text: "Short trips, big memories", image: data?.[0]?.bannerImage },
+    { title: "Custom Trips", text: "Customized itineraries just for you", image: data?.[1]?.bannerImage },
+  ];
   return (
-    <section className="py-24">
-      <div className="container mx-auto px-4">
-        <div className="mb-12 text-center">
-          <span className="text-orange-500">Popular Adventures</span>
-
-          <h2 className="mt-2 font-serif text-5xl">
-            Featured Treks
-          </h2>
-        </div>
-
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {data?.map((trek) => (
-            <div
-              key={trek._id}
-              className="overflow-hidden rounded-3xl bg-white shadow-lg"
-            >
-              <img
-                src={trek.bannerImage}
-                alt={trek.title}
-                className="h-64 w-full object-cover"
-              />
-
-              <div className="p-5">
-                <h3 className="text-xl font-semibold">
-                  {trek.title}
-                </h3>
-
-                <p className="mt-2 text-gray-600">
-                  {trek.shortDescription}
-                </p>
-
-                <p className="mt-3 font-semibold text-green-700">
-                  ₹{trek.discountPrice}
-                </p>
-
-                <button className="mt-4 text-green-700">
-                  View Details →
-                </button>
-              </div>
-            </div>
-          ))}
+    <section className="tour-section tour-section--tight">
+      <div className="tour-container">
+        <div className="tour-section-heading"><p className="tour-kicker">EXPLORE EXPERIENCES <ArrowRight size={14} /></p></div>
+        <div className="experience-grid">
+          {experiences.map((item) => <article className="experience-card" key={item.title}><img src={item.image || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=700"} alt="" /><div><h3>{item.title}</h3><p>{item.text}</p><span className="round-arrow"><ArrowRight size={13} /></span></div></article>)}
         </div>
       </div>
     </section>

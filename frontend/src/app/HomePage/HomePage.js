@@ -2,7 +2,7 @@
 const { useEffect, useState } = require("react");
 import Hero from "../Components/home/Hero";
 import FeaturedTreks from "../Components/home/FeaturedTreks";
-import FeaturedTours from "../Components/home/FeaturedTours";
+import PopularPackages from "../Components/home/PopularPackages";
 import TopDestinations from "../Components/home/TopDestinations";
 // import BestSellers from "../Components/home/BestSellers";
 import Testimonials from "../Components/home/Testimonials";
@@ -37,8 +37,8 @@ export default function Home() {
   return (
     <>
       <Hero data={data.home} />
-      <FeaturedTreks data = {data.featuredTreks} />
-      <FeaturedTours data={data.featuredTours} />
+      <FeaturedTreks data={data.featuredTreks} />
+      <PopularPackages data={data.featuredTours} />
       <TopDestinations data={data.topDestinations} />
       {/* <BestSellers /> */}
       <Testimonials />

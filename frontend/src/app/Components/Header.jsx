@@ -198,7 +198,7 @@ export default function Header() {
             {/* Logo */}
             <Link
               href="/"
-              aria-label="Nature Explorer home"
+              aria-label="TourTrek home"
               className="flex items-center gap-2.5 shrink-0 no-underline"
             >
               <span className="w-9 h-9 bg-green-900 rounded-lg flex items-center justify-center text-green-300 shrink-0">
@@ -206,10 +206,10 @@ export default function Header() {
               </span>
               <span className="flex flex-col leading-tight">
                 <span className="font-serif text-[17px] font-bold text-green-900 tracking-tight">
-                  Nature Explorer
+                  TourTrek
                 </span>
                 <span className="hidden sm:block text-[9px] font-medium uppercase tracking-widest text-amber-800">
-                  From Mountain Trails to Memorable Journeys
+                  Explore. Experience. Evolve.
                 </span>
               </span>
             </Link>

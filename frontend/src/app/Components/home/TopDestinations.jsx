@@ -1,39 +1,19 @@
+import { ArrowRight } from "lucide-react";
+
 export default function TopDestinations({ data = [] }) {
 
   return (
-    <section className="py-24">
-      <div className="container mx-auto px-4">
-        <div className="mb-12 text-center">
-          <h2 className="font-serif text-5xl">
-            Top Destinations
-          </h2>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {data.slice(0, 3).map((item) => (
-            <div
-              key={item._id}
-              className="overflow-hidden rounded-3xl shadow-lg"
-            >
+    <section className="tour-section tour-section--destinations">
+      <div className="tour-container">
+        <div className="tour-row-heading"><p className="tour-kicker">◉ POPULAR DESTINATIONS</p><a href="/destinations">View All Destinations <ArrowRight size={13} /></a></div>
+        <div className="destination-grid">
+          {data.slice(0, 8).map((item) => (
+            <div key={item._id} className="destination-card">
               <img
                 src={item.bannerImage}
                 alt={item.destination}
-                className="h-[450px] w-full object-cover"
               />
-
-              <div className="p-5 bg-white">
-                <h3 className="text-2xl font-semibold">
-                  {item.destination}
-                </h3>
-
-                <p className="text-gray-600 mt-2">
-                  {item.state}, {item.country}
-                </p>
-
-                <p className="mt-3 font-semibold text-green-700">
-                  Starting ₹{item.discountPrice}
-                </p>
-              </div>
+              <strong>{item.destination}</strong>
             </div>
           ))}
         </div>
