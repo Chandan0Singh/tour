@@ -16,43 +16,9 @@ import {
   Mail,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import { BACKEND_URL } from "@/keyword";
 // import LoginModal from "./LoginModal";
 // import SignupModal from "./SignupModal";
-
-const NAV_ITEMS = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-  {
-    label: "Treks",
-    children: [
-      { label: "All Treks", href: "/treks" },
-      { label: "Best Treks", href: "/treks/best" },
-      { label: "Difficulty Levels", href: "/treks/difficulty" },
-      { label: "Best Season", href: "/treks/season" },
-    ],
-  },
-  {
-    label: "Tours",
-    children: [
-      { label: "All Tours", href: "/tours" },
-      { label: "Himalayan Tours", href: "/tours/himalayan" },
-      { label: "Wildlife Tours", href: "/tours/wildlife" },
-      { label: "Weekend Getaways", href: "/tours/weekend" },
-    ],
-  },
-  {
-    label: "Destinations",
-    children: [
-      { label: "Uttarakhand", href: "/destinations/uttarakhand" },
-      { label: "Himachal Pradesh", href: "/destinations/himachal" },
-      { label: "Kashmir", href: "/destinations/kashmir" },
-      { label: "Rajasthan", href: "/destinations/rajasthan" },
-    ],
-  },
-  { label: "Blogs", href: "/blogs" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "Contact", href: "/contact" },
-];
 
 function DropdownMenu({ item, mobile = false, onClose }) {
   const [open, setOpen] = useState(false);
@@ -150,6 +116,32 @@ export default function Header() {
   const [loginOpen, setLoginOpen] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
 
+   const [menu, setMenu] = useState({
+    tours: [],
+    treks: [],
+    destinations: [],
+  });
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const response = await fetch(
+          `${BACKEND_URL}/api/products/header-menu`
+        );
+
+        const data = await response.json();
+
+        if (data.success) {
+          setMenu(data.menu);
+        }
+      } catch (err) {
+        console.log("Error fetching menu:", err);
+      }
+    };
+
+    fetchMenu();
+  }, []);
+
   useEffect(() => {
     function onResize() {
       if (window.innerWidth >= 1024) setMobileOpen(false);
@@ -157,6 +149,28 @@ export default function Header() {
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
+
+  const NAV_ITEMS = [
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
+   {
+      label: "Treks",
+      children: menu.treks,
+    },
+
+    {
+      label: "Tours",
+      children: menu.tours,
+    },
+
+    {
+      label: "Destinations",
+      children: menu.destinations,
+    },
+  { label: "Blogs", href: "/blogs" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Contact", href: "/contact" },
+];
 
   return (
     <>
