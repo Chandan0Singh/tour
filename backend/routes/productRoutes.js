@@ -12,6 +12,7 @@ const {
   updateProduct,
   deleteProduct,
   getHeaderMenu,
+  getProductCategories,
 } = require("../controllers/productController");
 
 router.get("/", getAllProducts);
@@ -21,6 +22,8 @@ router.get("/featured", getFeaturedProducts);
 router.get("/bestseller", getBestSellerProducts);
 
 router.get("/search", searchProducts);
+
+router.get("/categories", getProductCategories);
 
 router.get("/header-menu", getHeaderMenu);
 

@@ -85,6 +85,50 @@ const getAllProducts = async (req, res) => {
   }
 };
 
+const getProductCategories = async (req, res) => {
+  try {
+    const { type, state } = req.query;
+
+    if (!type || !state) {
+      return res.status(400).json({
+        success: false,
+        message: "Type and state are required",
+      });
+    }
+
+    const filter = {
+      status: "Active",
+      state: {
+        $regex: `^${state}$`,
+        $options: "i",
+      },
+    };
+
+    // Tour / Trek ke liye type filter
+    if (type === "Tour" || type === "Trek") {
+      filter.type = type;
+    }
+
+    const products = await Product.find(filter)
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      type,
+      state,
+      total: products.length,
+      products,
+    });
+  } catch (err) {
+    console.error("Error fetching products:", err);
+
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 // Featured Tours
 const getFeaturedProducts = async (req, res) => {
   try {
@@ -344,4 +388,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   getHeaderMenu,
+  getProductCategories,
 };
