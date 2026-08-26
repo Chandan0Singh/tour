@@ -85,6 +85,50 @@ const getAllProducts = async (req, res) => {
   }
 };
 
+const getProductCategories = async (req, res) => {
+  try {
+    const { type, state } = req.query;
+
+    if (!type || !state) {
+      return res.status(400).json({
+        success: false,
+        message: "Type and state are required",
+      });
+    }
+
+    const filter = {
+      status: "Active",
+      state: {
+        $regex: `^${state}$`,
+        $options: "i",
+      },
+    };
+
+    // Tour / Trek ke liye type filter
+    if (type === "Tour" || type === "Trek") {
+      filter.type = type;
+    }
+
+    const products = await Product.find(filter)
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      type,
+      state,
+      total: products.length,
+      products,
+    });
+  } catch (err) {
+    console.error("Error fetching products:", err);
+
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 // Featured Tours
 const getFeaturedProducts = async (req, res) => {
   try {
@@ -246,6 +290,93 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const createMenuItems = (states, basePath) => {
+  return states
+    .filter(Boolean)
+    .map((state) => {
+      const slug = state
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "");
+
+      return {
+        label: state,
+        href: `${basePath}/${slug}`,
+      };
+    });
+};
+
+const getHeaderMenu = async (req, res) => {
+  try {
+    // Get unique states for Tours
+    const tourStates = await Product.distinct("state", {
+      type: "Tour",
+      status: "Active",
+      state: {
+        $exists: true,
+        $ne: "",
+      },
+    });
+
+    // Get unique states for Treks
+    const trekStates = await Product.distinct("state", {
+      type: "Trek",
+      status: "Active",
+      state: {
+        $exists: true,
+        $ne: "",
+      },
+    });
+
+    // Get unique states for Destinations
+    const destinationStates = await Product.distinct("state", {
+      status: "Active",
+      state: {
+        $exists: true,
+        $ne: "",
+      },
+    });
+
+    const tours = [
+      {
+        label: "All Tours",
+        href: "/tours",
+      },
+      ...createMenuItems(tourStates, "/tours"),
+    ];
+
+    const treks = [
+      {
+        label: "All Treks",
+        href: "/treks",
+      },
+      ...createMenuItems(trekStates, "/treks"),
+    ];
+
+    const destinations = createMenuItems(
+      destinationStates,
+      "/destinations"
+    );
+
+    res.status(200).json({
+      success: true,
+      menu: {
+        tours,
+        treks,
+        destinations,
+      },
+    });
+  } catch (err) {
+    console.log("Error in getHeaderMenu:", err);
+
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   getAllProducts,
   getFeaturedProducts,
@@ -256,4 +387,6 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  getHeaderMenu,
+  getProductCategories,
 };
