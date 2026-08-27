@@ -89,6 +89,8 @@ const getProductCategories = async (req, res) => {
   try {
     const { type, state } = req.query;
 
+    console.log("Received query parameters:", { type, state });
+
     if (!type || !state) {
       return res.status(400).json({
         success: false,
@@ -186,19 +188,26 @@ const searchProducts = async (req, res) => {
 const getProductBySlug = async (req, res) => {
   try {
 
-    const product = await Product.findOne({
-      slug: req.params.slug,
+    const { slug } = req.params;
+
+    console.log("Fetching product with slug:", req.params.slug);
+    
+    const products = await Product.find({
+      state: { $regex: `^${slug}$`, $options: "i" },
       status: "Active",
     });
 
-    if (!product) {
+
+    if (!products) {
       return res.status(404).json({
         message: "Product not found",
       });
     }
 
-    return res.json(product);
+    return res.json(products);
   } catch (err) {
+
+    console.log("Error fetching product by slug:", err);
     return res.status(500).json({
       message: err.message,
     });

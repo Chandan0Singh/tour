@@ -238,7 +238,7 @@ export default function Header() {
             </ul>
 
             {/* Desktop actions */}
-            {isAuthenticated ? (
+            {/* {isAuthenticated ? (
               <div className="hidden lg:flex items-center gap-1.5 shrink-0">
                 {[{ icon: <Heart size={17} />, label: "Wishlist" }].map(
                   ({ icon, label }) => (
@@ -251,8 +251,6 @@ export default function Header() {
                     </button>
                   ),
                 )}
-
-                {/* Cart */}
                 <Link
                   href="/cart"
                   aria-label="Cart"
@@ -262,7 +260,6 @@ export default function Header() {
                   <span className="absolute top-1.5 right-1.5 w-[7px] h-[7px] rounded-full bg-orange-500 border-[1.5px] border-white" />
                 </Link>
 
-                {/* Account */}
                 <div className="relative group">
                   <button
                     aria-label="Account"
@@ -342,15 +339,6 @@ export default function Header() {
                     </button>
                   </div>
                 </div>
-
-                {/* Book Now */}
-                {/* <Link
-                  href="/booking"
-                  className="flex items-center gap-1.5 bg-green-900 hover:bg-green-800 text-white text-[13px] font-semibold px-5 py-2 rounded-full transition-colors"
-                >
-                  <CalendarPlus size={14} />
-                  Book Now
-                </Link> */}
               </div>
             ) : (
               <div className="hidden lg:flex items-center gap-3">
@@ -368,7 +356,7 @@ export default function Header() {
                   Sign Up
                 </Link>
               </div>
-            )}
+            )} */}
 
             {/* Mobile toggle */}
             <button
