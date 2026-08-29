@@ -190,10 +190,12 @@ const getProductBySlug = async (req, res) => {
 
     const { slug } = req.params;
 
+    const stateName = slug.replace(/-/g, " ");
+
     console.log("Fetching product with slug:", req.params.slug);
     
     const products = await Product.find({
-      state: { $regex: `^${slug}$`, $options: "i" },
+      state: { $regex: `^${stateName}$`, $options: "i" },
       status: "Active",
     });
 
