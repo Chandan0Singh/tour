@@ -64,7 +64,9 @@ const PORT = process.env.PORT || 5000;
 //   })
 //   .catch(err => console.error('❌ DB error:', err));
 
-  mongoose.connect(process.env.MONGODB_URI)
+  mongoose.connect(process.env.MONGODB_URI, {
+  dbName: "tour",
+})
   .then(() => {
     console.log("✅ MongoDB Connected");
 
