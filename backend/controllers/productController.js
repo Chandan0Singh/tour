@@ -388,6 +388,47 @@ const getHeaderMenu = async (req, res) => {
   }
 };
 
+const getSinglePageBySlug = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    console.log("Fetching single page with slug:", slug);
+
+    if (!slug) {
+      return res.status(400).json({
+        success: false,
+        message: "Slug parameter is required",
+      })
+    }
+    
+    const product = await Product.findOne({
+      slug: slug,
+      status: "Active",
+    })
+
+    if(!product){
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      product,
+    })
+
+
+
+  } catch(error){
+    console.log("Error in getSinglePageBySlug:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    })
+  }
+}
+
 module.exports = {
   getAllProducts,
   getFeaturedProducts,
@@ -400,4 +441,5 @@ module.exports = {
   deleteProduct,
   getHeaderMenu,
   getProductCategories,
+  getSinglePageBySlug,
 };

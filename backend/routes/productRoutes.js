@@ -13,6 +13,7 @@ const {
   deleteProduct,
   getHeaderMenu,
   getProductCategories,
+  getSinglePageBySlug,
 } = require("../controllers/productController");
 
 router.get("/", getAllProducts);
@@ -28,6 +29,8 @@ router.get("/categories", getProductCategories);
 router.get("/header-menu", getHeaderMenu);
 
 router.get("/related/:id", getRelatedProducts);
+
+router.get("/singleProduct/:slug", getSinglePageBySlug);
 
 router.get("/:slug", getProductBySlug);
 
