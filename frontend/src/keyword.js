@@ -1,2 +1,2 @@
-// export const BACKEND_URL = process.env.API_URL || "http://localhost:5000";
-export const BACKEND_URL = process.env.API_URL || "https://tour-4exy.onrender.com";
+// export const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+export const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "https://tour-4exy.onrender.com";
