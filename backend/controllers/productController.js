@@ -111,8 +111,7 @@ const getProductCategories = async (req, res) => {
       filter.type = type;
     }
 
-    const products = await Product.find(filter)
-      .sort({ createdAt: -1 });
+    const products = await Product.find(filter).sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
@@ -185,32 +184,43 @@ const searchProducts = async (req, res) => {
 };
 
 // Single Product by Slug
+
 const getProductBySlug = async (req, res) => {
   try {
-
     const { slug } = req.params;
 
-    const stateName = slug.replace(/-/g, " ");
+    // jammu-and-kashmir -> ["jammu", "and", "kashmir"]
+    // andaman-and-nicobar -> ["andaman", "and", "nicobar"]
+    const words = slug
+      .toLowerCase()
+      .split("-")
+      .filter((word) => word !== "and" && word !== "or" && word !== "");
 
-    console.log("Fetching product with slug:", req.params.slug);
-    
+    console.log("Search words:", words);
+
     const products = await Product.find({
-      state: { $regex: `^${stateName}$`, $options: "i" },
       status: "Active",
+      $and: words.map((word) => ({
+        state: {
+          $regex: word,
+          $options: "i",
+        },
+      })),
     });
 
-
-    if (!products) {
+    if (products.length === 0) {
       return res.status(404).json({
+        success: false,
         message: "Product not found",
       });
     }
 
-    return res.json(products);
+    return res.status(200).json(products);
   } catch (err) {
-
     console.log("Error fetching product by slug:", err);
+
     return res.status(500).json({
+      success: false,
       message: err.message,
     });
   }
@@ -302,20 +312,18 @@ const deleteProduct = async (req, res) => {
 };
 
 const createMenuItems = (states, basePath) => {
-  return states
-    .filter(Boolean)
-    .map((state) => {
-      const slug = state
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, "");
+  return states.filter(Boolean).map((state) => {
+    const slug = state
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
 
-      return {
-        label: state,
-        href: `${basePath}/${slug}`,
-      };
-    });
+    return {
+      label: state,
+      href: `${basePath}/${slug}`,
+    };
+  });
 };
 
 const getHeaderMenu = async (req, res) => {
@@ -365,10 +373,7 @@ const getHeaderMenu = async (req, res) => {
       ...createMenuItems(trekStates, "/treks"),
     ];
 
-    const destinations = createMenuItems(
-      destinationStates,
-      "/destinations"
-    );
+    const destinations = createMenuItems(destinationStates, "/destinations");
 
     res.status(200).json({
       success: true,
@@ -398,36 +403,33 @@ const getSinglePageBySlug = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Slug parameter is required",
-      })
+      });
     }
-    
+
     const product = await Product.findOne({
       slug: slug,
       status: "Active",
-    })
+    });
 
-    if(!product){
+    if (!product) {
       return res.status(404).json({
         success: false,
         message: "Product not found",
-      })
+      });
     }
 
     res.status(200).json({
       success: true,
       product,
-    })
-
-
-
-  } catch(error){
+    });
+  } catch (error) {
     console.log("Error in getSinglePageBySlug:", error);
     res.status(500).json({
       success: false,
       message: error.message,
-    })
+    });
   }
-}
+};
 
 module.exports = {
   getAllProducts,

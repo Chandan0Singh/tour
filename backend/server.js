@@ -57,13 +57,6 @@ process.on("unhandledRejection", (err) => {
 
 const PORT = process.env.PORT || 5000;
 
-// MongoDB Connection
-// mongoose.connect(process.env.MONGODB_URI)
-//   .then(() => {
-//     app.listen(PORT, () => console.log(`✅ Server started on port ${PORT}`));
-//   })
-//   .catch(err => console.error('❌ DB error:', err));
-
   mongoose.connect(process.env.MONGODB_URI, {
   dbName: "tour",
 })

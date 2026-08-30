@@ -1,8 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function ProductCard({ product }) {
+
+  const pathname = usePathname();
+  
+    const basePath = `/${pathname.split("/")[1]}`
   const {
     _id,
     slug,
@@ -67,9 +72,7 @@ export default function ProductCard({ product }) {
 
   const productSlug = slug || _id;
 
-  const baseRoute = routeMap[type?.toLowerCase()] || "destinations";
-
-  const detailUrl = `/${baseRoute}/${stateSlug}/${productSlug}`;
+  const detailUrl = `${basePath}/${stateSlug}/${productSlug}`;
 
   return (
     <article className="group overflow-hidden border border-[#E4E0D8] bg-white">

@@ -21,11 +21,17 @@ export default function DestinationPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    const stateName = state
+    let stateName = state
         ? decodeURIComponent(state)
               .replace(/-/g, " ")
               .replace(/\b\w/g, (char) => char.toUpperCase())
         : "Destinations";
+
+        if (stateName === "Jammu And Kashmir") {
+    stateName = stateName.replace("And", "&");
+}
+
+        console.log("stateName :", stateName)
 
     useEffect(() => {
         if (!state) return;
