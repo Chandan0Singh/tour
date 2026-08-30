@@ -14,6 +14,8 @@ export default function Home() {
 
   const [data , setData] = useState([])
 
+    console.log("BACKEND_URL :", BACKEND_URL)
+
   const homeData = async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/home`);

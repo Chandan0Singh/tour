@@ -135,7 +135,9 @@ export default function ToursPage() {
 
       const fetchedTours = res.data?.products || [];
 
-      setTours((prev) => (page === 1 ? fetchedTours : [...prev, ...fetchedTours]));
+      setTours((prev) =>
+        page === 1 ? fetchedTours : [...prev, ...fetchedTours],
+      );
       setTotal(res.data?.total || 0);
     } catch (err) {
       console.log(err);
@@ -161,7 +163,6 @@ export default function ToursPage() {
         style={{ fontFamily: "'Poppins', sans-serif" }}
       >
         <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&display=swap');.fd{font-family:'Playfair Display',serif}`}</style>
-
 
         {/* HERO */}
         <section className="bg-[#1B5E20] text-white pt-10 pb-0 px-5">
@@ -327,7 +328,8 @@ export default function ToursPage() {
             <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {tours?.map((tour) => {
                 const imageUrl = tour?.images?.[0]?.url || FALLBACK_IMAGE;
-                const imageAlt = tour?.images?.[0]?.alt || tour?.title || "Tour package";
+                const imageAlt =
+                  tour?.images?.[0]?.alt || tour?.title || "Tour package";
 
                 const displayPrice = tour?.discountPrice || tour?.price || 0;
                 const hasDiscount =
@@ -343,7 +345,8 @@ export default function ToursPage() {
                 const maxGroup = tour?.groupSize?.max ?? "N/A";
 
                 const avgRating = tour?.averageRating || 0;
-                const reviewCount = tour?.totalReviews ?? tour?.reviews?.length ?? 0;
+                const reviewCount =
+                  tour?.totalReviews ?? tour?.reviews?.length ?? 0;
 
                 const badge = tour?.bestSeller
                   ? "Best Seller"
@@ -394,7 +397,8 @@ export default function ToursPage() {
                         {tour?.type && (
                           <span
                             className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                              typeStyle[tour.type] || "bg-gray-100 text-gray-500"
+                              typeStyle[tour.type] ||
+                              "bg-gray-100 text-gray-500"
                             }`}
                           >
                             {tour.type}
@@ -415,8 +419,8 @@ export default function ToursPage() {
                           {"☆".repeat(5 - Math.floor(avgRating))}
                         </span>
                         <span className="text-xs text-gray-400">
-                          {avgRating.toFixed ? avgRating.toFixed(1) : avgRating} (
-                          {reviewCount} reviews)
+                          {avgRating.toFixed ? avgRating.toFixed(1) : avgRating}{" "}
+                          ({reviewCount} reviews)
                         </span>
                       </div>
                       <div className="flex gap-4 text-xs text-gray-400 mb-3">
@@ -424,14 +428,16 @@ export default function ToursPage() {
                         <span>👥 Max {maxGroup}</span>
                       </div>
                       <div className="flex flex-wrap gap-1.5 mb-3">
-                        {(tour?.inclusions || []).slice(0, 4).map((inc, idx) => (
-                          <span
-                            key={`${tour?._id}-inclusion-${idx}`}
-                            className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-lg"
-                          >
-                            {inc}
-                          </span>
-                        ))}
+                        {(tour?.inclusions || [])
+                          .slice(0, 4)
+                          .map((inc, idx) => (
+                            <span
+                              key={`${tour?._id}-inclusion-${idx}`}
+                              className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-lg"
+                            >
+                              {inc}
+                            </span>
+                          ))}
                       </div>
                       <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
                         <div>
