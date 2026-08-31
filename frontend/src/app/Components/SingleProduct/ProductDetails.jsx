@@ -17,8 +17,7 @@ import { usePathname } from "next/navigation";
 export default function ProductDetails({ product }) {
   const pathname = usePathname();
 
-  const basePath = `/${pathname.split("/")[1]}`
-  
+  const basePath = `/${pathname.split("/")[1]}`;
 
   if (!product) return null;
 
@@ -383,12 +382,21 @@ export default function ProductDetails({ product }) {
                   Enquire Now
                 </Link>
 
+                <a
+    href="https://wa.me/8860968260?text=Hi"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="w-full rounded-xl bg-[#25D366] px-5 py-3.5 text-center font-medium text-white transition hover:bg-[#1ebe5d]"
+  >
+    WhatsApp Us
+  </a>
+
                 <Link
-            href={basePath}
-            className="w-full rounded-xl border border-[#5E6B58] px-5 py-3.5 text-center font-medium text-[#5E6B58] transition hover:bg-[#5E6B58] hover:text-white"
-        >
-            Explore More
-        </Link>
+                  href={basePath}
+                  className="w-full rounded-xl border border-[#5E6B58] px-5 py-3.5 text-center font-medium text-[#5E6B58] transition hover:bg-[#5E6B58] hover:text-white"
+                >
+                  Explore More
+                </Link>
               </div>
             </div>
           </aside>
