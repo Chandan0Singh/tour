@@ -35,7 +35,7 @@ export default function ContactPage() {
     try {
       setLoading(true);
 
-      const res = await axios.post(`${BACKEND_URL}/api/contact`, form);
+      const res = await axios.post(`${BACKEND_URL}/api/contact/send`, form);
 
       alert(res.data.message);
 
@@ -214,16 +214,7 @@ export default function ContactPage() {
                   ></textarea>
                 </div>
 
-                <div>
-                  <textarea
-                    name="message"
-                    value={form.message}
-                    onChange={handleChange}
-                    rows="6"
-                    placeholder="Write your message..."
-                    className="w-full border border-gray-300 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
-                  ></textarea>
-                </div>
+                
 
                 <button
                   type="submit"
