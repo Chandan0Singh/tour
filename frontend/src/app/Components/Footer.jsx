@@ -21,15 +21,21 @@ export default function Footer() {
             </p>
 
             <div className="mt-6 flex gap-4">
-              <a href="#" aria-label="Facebook">
+              <a
+                href="https://www.facebook.com/share/1Esk7VdqGN/"
+                aria-label="Facebook"
+              >
                 <FaFacebookF size={20} />
               </a>
 
-              <a href="#" aria-label="Instagram">
+              <a href="https://www.instagram.com/laviadventure?igsi=cTMwOG9iNDZncnpx">
                 <FaInstagram size={20} />
               </a>
 
-              <a href="#" aria-label="YouTube">
+              <a
+                href="https://youtube.com/@jaynegi0311?si=-Jm2jVmTIiNXU5du"
+                aria-label="YouTube"
+              >
                 <FaYoutube size={20} />
               </a>
             </div>
@@ -96,12 +102,12 @@ export default function Footer() {
 
               <div className="flex gap-3">
                 <Phone size={18} className="shrink-0" />
-                <p>+91 98765 43210</p>
+                <p>+91 90450 89285</p>
               </div>
 
               <div className="flex gap-3">
                 <Mail size={18} className="shrink-0" />
-                <p>info@natureexplorer.com</p>
+                <p>code.chandansingh@gmai.com</p>
               </div>
             </div>
           </div>

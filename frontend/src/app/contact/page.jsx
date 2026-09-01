@@ -110,7 +110,7 @@ export default function ContactPage() {
 
                   <div>
                     <h4 className="font-semibold text-lg">Phone</h4>
-                    <p className="text-gray-600">+91 98765 43210</p>
+                    <p className="text-gray-600">+91 90450 89285</p>
                   </div>
                 </div>
 
@@ -121,7 +121,7 @@ export default function ContactPage() {
 
                   <div>
                     <h4 className="font-semibold text-lg">Email</h4>
-                    <p className="text-gray-600">info@natureexplorer.com</p>
+                    <p className="text-gray-600">code.chandansingh@gmai.com</p>
                   </div>
                 </div>
 
@@ -213,8 +213,6 @@ export default function ContactPage() {
                     className="w-full border border-gray-300 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
                   ></textarea>
                 </div>
-
-                
 
                 <button
                   type="submit"
