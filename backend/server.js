@@ -12,9 +12,8 @@ const order = require("./routes/orderRouter");
 const galleryRoutes = require("./routes/galleryRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const homeRoutes = require("./routes/homeRoutes");
-const reviewRoutes = require("./routes/reviewRoutes")
-
-
+const reviewRoutes = require("./routes/reviewRoutes");
+const newsLatterRoutes = require("./routes/newsLatterRouter.js");
 
 const app = express();
 
@@ -37,6 +36,7 @@ app.use("/api/home", homeRoutes);
 app.use("/api/payment", require("./routes/paymentRoutes"));
 app.use("/api/contact", contactRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/newsletter", newsLatterRoutes);
 
 app.get('/', (req, res) => {
   res.send('API running...');

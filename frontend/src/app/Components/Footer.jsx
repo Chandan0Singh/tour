@@ -1,9 +1,52 @@
-import Link from "next/link";
+
+"use client";
+
+import { useState } from "react";import Link from "next/link";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { MapPin, Phone, Mail } from "lucide-react";
+import Toast from "./Toast";
+
 
 export default function Footer() {
+   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+
+  const handleSubscribe = async(e)=>{
+    e.preventDefault();
+
+    try{
+      setLoading(true);
+      setMessage("");
+
+      const response = await fetch("http://localhost:5000/api/newsletter/subscribe", {
+      method: "Post",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({email})
+      }
+    )
+
+    const data = await response.json();
+
+    if(data.success){
+      setMessage(data.message);
+      setEmail("");
+    }
+
+    }catch(error){
+      setMessage("An error occurred while subscribing to the newsletter.");
+      setLoading(false);
+      console.error("Error subscribing to newsletter:", error);
+    }
+
+  }
+
   return (
+    <>
+
     <footer className="bg-[#16361d] text-white">
       <div className="container mx-auto px-4">
         {/* Top Footer */}
@@ -126,18 +169,21 @@ export default function Footer() {
               </p>
             </div>
 
-            <form className="flex w-full max-w-xl flex-col gap-3 sm:flex-row">
+            <form onSubmit={handleSubscribe} className="flex w-full max-w-xl flex-col gap-3 sm:flex-row">
               <input
                 type="email"
+                value={email}
+                onChange={(e)=> setEmail(e.target.value)}
                 placeholder="Enter your email"
                 className="flex-1 rounded-full border border-white/20 bg-white/10 px-5 py-3 outline-none"
               />
 
               <button
                 type="submit"
+                disabled={loading}
                 className="rounded-full bg-orange-500 px-8 py-3 font-medium text-white transition hover:bg-orange-600"
               >
-                Subscribe
+                 {loading ? "Subscribing..." : "Subscribe"}
               </button>
             </form>
           </div>
@@ -149,5 +195,8 @@ export default function Footer() {
         </div>
       </div>
     </footer>
+    <Toast message={message} onClose={() => setMessage(null)} />
+    </>
   );
 }
+
