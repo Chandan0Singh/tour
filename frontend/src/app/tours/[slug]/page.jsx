@@ -1,199 +1,196 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-
+import { ArrowRight, Check, ChevronDown, Clock3, Download, MapPin, MessageCircleMore, Route, ShieldCheck, Star, Users } from "lucide-react";
 import { BACKEND_URL } from "@/keyword";
 
-import DestinationHero from "../../../components/productpage/DestinationHero";
-import ProductCard from "../../../components/productpage/ProductCard";
-import ProductSkeleton from "../../../components/productpage/ProductSkeleton";
+const fallbackItinerary = [
+  { day: 1, title: "Arrival & Welcome", description: "Check in, meet your host, and begin with a relaxed local orientation." },
+  { day: 2, title: "Sightseeing Day", description: "Visit the popular locations and enjoy the best photo spots and local cuisine." },
+  { day: 3, title: "Departure", description: "Return with unforgettable memories and a comfortable transfer to the station." }
+];
 
-export default function DestinationPage() {
-    const params = useParams();
+export default function TourDetailPage({ params }) {
+  const { slug } = use(params);
+  const [tour, setTour] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    const state = Array.isArray(params?.slug)
-        ? params.slug[0]
-        : params?.slug;
-
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
-
-    const stateName = state
-        ? decodeURIComponent(state)
-              .replace(/-/g, " ")
-              .replace(/\b\w/g, (char) => char.toUpperCase())
-        : "Destinations";
-
-    useEffect(() => {
-        if (!state) return;
-
-        fetchProducts();
-    }, [state]);
-
-    const fetchProducts = async () => {
-        try {
-            setLoading(true);
-            setError("");
-
-            const decodedState = decodeURIComponent(state);
-
-            const apiUrl = `${BACKEND_URL}/api/products/${decodedState}`;
-
-            console.log("Current state:", decodedState);
-            console.log("API URL:", apiUrl);
-
-            const res = await fetch(apiUrl, {
-                cache: "no-store",
-            });
-
-            if (!res.ok) {
-                throw new Error(
-                    `API request failed: ${res.status} ${res.statusText}`
-                );
-            }
-
-            const data = await res.json();
-
-            console.log("Full API response:", data);
-
-            if (Array.isArray(data)) {
-                setProducts(data);
-            } else if (Array.isArray(data?.data)) {
-                setProducts(data.data);
-            } else {
-                console.error(
-                    "Expected array but received:",
-                    data
-                );
-
-                setProducts([]);
-            }
-
-        } catch (err) {
-            console.error(
-                "Failed to fetch products:",
-                err
-            );
-
-            setError("Unable to load destinations.");
-            setProducts([]);
-
-        } finally {
-            setLoading(false);
-        }
+  useEffect(() => {
+    const fetchTour = async () => {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/products/${slug}`);
+        const data = await res.json();
+        setTour(data || null);
+      } catch (error) {
+        console.error("Error fetching tour:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    return (
-        <main className="min-h-screen bg-[#F8F5EE] text-[#2E2E2A]">
+    fetchTour();
+  }, [slug]);
 
-            <DestinationHero stateName={stateName} />
+  if (loading) {
+    return <div className="tour-detail-loading">Loading Tour...</div>;
+  }
 
-            <section className="mx-auto max-w-7xl px-6 py-14 md:py-20">
+  if (!tour) {
+    return <div className="tour-detail-loading tour-detail-loading--error">Tour not found.</div>;
+  }
 
-                {/* Top Bar */}
-                <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+  const heroImage = tour.bannerImage || tour.images?.[0]?.url || "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600";
+  const location = [tour.destination, tour.state, tour.country].filter(Boolean).join(", ") || "Uttarakhand, India";
+  const price = tour.discountPrice || tour.price || 6999;
+  const rating = tour.averageRating || 4.8;
+  const reviews = tour.totalReviews || 126;
+  const itinerary = tour.itinerary?.length ? tour.itinerary : fallbackItinerary;
+  const highlights = tour.highlights?.length ? tour.highlights : ["Curated sightseeing", "Local experiences", "Comfortable stays", "Travel support"];
+  const inclusions = tour.inclusions?.length ? tour.inclusions : ["Accommodation on double sharing", "Breakfast and dinner", "Private transfers", "Local guide"]; 
+  const exclusions = tour.exclusions?.length ? tour.exclusions : ["Personal expenses", "Travel insurance", "Any add-ons not mentioned"];
+  const faqs = tour.faqs?.length ? tour.faqs : [
+    { question: "What is included in the tour package?", answer: "The package includes sightseeing, meals, stay, transfers, and local support as specified in the itinerary." },
+    { question: "Can I customize the itinerary?", answer: "Yes, we can customize a tour based on your preferred pace, destination, and travel dates." },
+    { question: "Is the trip suitable for families?", answer: "Yes, our family-friendly tours are designed to balance comfort, relaxation, and sightseeing." }
+  ];
+  const gallery = (tour.gallery && tour.gallery.length ? tour.gallery : tour.images?.map((img) => img.url) || []).slice(0, 4);
 
-                    <div>
-                        <p className="text-sm uppercase tracking-[0.2em] text-[#5E6B58]">
-                            Destinations
-                        </p>
+  return (
+    <div className="tour-detail-page">
+      <header className="tour-detail-hero">
+        <img src={heroImage} alt={tour.title} />
+        <div className="tour-detail-hero__overlay" />
+        <div className="tour-container tour-detail-hero__content">
+          <nav className="tour-detail-breadcrumb">Home <span>›</span> Tours <span>›</span> <strong>{tour.title}</strong></nav>
+          <h1>{tour.title}</h1>
+          <div className="tour-detail-meta">
+            <span><Star size={13} fill="currentColor" /> {rating.toFixed(1)} ({reviews} Reviews)</span>
+            <span><MapPin size={13} /> {location}</span>
+          </div>
+          <p className="tour-detail-description">{tour.shortDescription || tour.description}</p>
 
-                        <h2 className="mt-2 font-['Playfair_Display'] text-3xl md:text-4xl">
-                            Tours in {stateName}
-                        </h2>
-                    </div>
+          <div className="tour-detail-stats">
+            <div><Clock3 size={15} /> <span><strong>{tour.duration?.days || 3}</strong> Days / <strong>{tour.duration?.nights || 2}</strong> Nights</span></div>
+            <div><Route size={15} /> <span><strong>{tour.difficulty || "Easy"}</strong> Difficulty</span></div>
+            <div><Users size={15} /> <span><strong>{tour.groupSize?.min || 2}</strong> - <strong>{tour.groupSize?.max || 8}</strong> People</span></div>
+            <div><ShieldCheck size={15} /> <span><strong>Best Time</strong> {tour.startingPoint || "Year Round"}</span></div>
+          </div>
 
-                    {!loading && !error && (
-                        <p className="text-gray-500">
-                            {products.length}{" "}
-                            {products.length === 1
-                                ? "tour"
-                                : "tours"}{" "}
-                            available
-                        </p>
-                    )}
+          <div className="tour-detail-actions">
+            <button className="tour-button tour-button--green">Book This Tour <ArrowRight size={15} /></button>
+            <button className="tour-button tour-button--light"><Download size={15} /> Download Itinerary</button>
+            <button className="tour-button tour-button--light"><MessageCircleMore size={15} /> Enquire Now</button>
+          </div>
+        </div>
 
+        <aside className="tour-detail-price-card">
+          <span>Starting from</span>
+          <strong>₹{Number(price).toLocaleString("en-IN")}</strong>
+          <small>per person</small>
+          <div className="tour-detail-price-card__guarantee"><ShieldCheck size={13} /> Best Price Guarantee</div>
+        </aside>
+      </header>
+
+      <main className="tour-container tour-detail-main">
+        <div className="tour-detail-main__left">
+          <section className="detail-panel detail-panel--info">
+            <div className="detail-panel__header">Overview</div>
+            <p>{tour.description}</p>
+            <div className="tour-detail-tags">
+              {highlights.slice(0, 4).map((item, index) => (
+                <span key={index}>{item}</span>
+              ))}
+            </div>
+          </section>
+
+          <section className="detail-panel">
+            <div className="detail-panel__header">Detailed Itinerary</div>
+            <div className="tour-detail-itinerary">
+              {itinerary.map((day, idx) => (
+                <div key={`${day.day || idx}-${day.title || "day"}`} className="tour-detail-day">
+                  <div className="tour-detail-day__dot" />
+                  <div className="tour-detail-day__content">
+                    <h3>Day {day.day}: {day.title}</h3>
+                    <p>{day.description}</p>
+                  </div>
                 </div>
+              ))}
+            </div>
+          </section>
 
-                {/* Loading */}
-                {loading && (
-                    <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-                        {[1, 2, 3].map((item) => (
-                            <ProductSkeleton key={item} />
-                        ))}
-                    </div>
-                )}
+          <section className="detail-panel detail-panel--two-col">
+            <div>
+              <div className="detail-panel__header">Inclusions</div>
+              <ul className="tour-detail-list">
+                {inclusions.map((item, idx) => <li key={idx}><Check size={14} /> {item}</li>)}
+              </ul>
+            </div>
+            <div>
+              <div className="detail-panel__header">Exclusions</div>
+              <ul className="tour-detail-list tour-detail-list--muted">
+                {exclusions.map((item, idx) => <li key={idx}><Check size={14} /> {item}</li>)}
+              </ul>
+            </div>
+          </section>
 
-                {/* Error */}
-                {!loading && error && (
-                    <div className="border border-[#E4E0D8] bg-white p-10 text-center">
+          <section className="detail-panel">
+            <div className="detail-panel__header">Gallery</div>
+            <div className="tour-detail-gallery">
+              {gallery.map((img, index) => (
+                <img key={`${img}-${index}`} src={img} alt={`${tour.title} gallery ${index + 1}`} />
+              ))}
+            </div>
+          </section>
 
-                        <h2 className="font-['Playfair_Display'] text-2xl">
-                            Something went wrong
-                        </h2>
+          <section className="detail-panel detail-panel--reviews">
+            <div className="detail-panel__header detail-panel__header--row"><span>What Our Travelers Say</span><Link href="/reviews">View All Reviews <ArrowRight size={12} /></Link></div>
+            <div className="tour-detail-review-grid">
+              {(tour.reviews?.length ? tour.reviews : [
+                { name: "Ankit Sharma", review: "Amazing experience with TourTrek. Everything was well-organized and the team was very helpful.", rating: 5 },
+                { name: "Priya Mehta", review: "The tour was perfectly paced and the views were amazing. I would definitely recommend this package.", rating: 5 },
+                { name: "Rohit Negi", review: "Professional team and a memorable holiday. The itinerary was very well planned.", rating: 5 }
+              ]).slice(0, 3).map((review, idx) => (
+                <article key={`${review.name}-${idx}`} className="tour-review-card">
+                  <div className="tour-review-card__top"><span className="tour-review-avatar">{review.name?.split(" ").map((n) => n[0]).join("").slice(0,2).toUpperCase()}</span><div><h4>{review.name}</h4><small>{tour.destination}</small></div></div>
+                  <div className="tour-review-stars">{[...Array(review.rating || 5)].map((_, i) => (<Star key={i} size={11} fill="currentColor" />))}</div>
+                  <p>{review.review}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>
 
-                        <p className="mt-3 text-gray-500">
-                            {error}
-                        </p>
+        <aside className="tour-detail-main__right">
+          <section className="detail-panel detail-panel--compact">
+            <div className="detail-panel__header">Tour Highlights</div>
+            <ul className="tour-detail-feature-list">
+              {highlights.map((item, index) => <li key={index}><span className="check-bullet">✓</span> {item}</li>)}
+            </ul>
+          </section>
 
-                        <button
-                            onClick={fetchProducts}
-                            className="mt-6 bg-[#5E6B58] px-6 py-3 text-white"
-                        >
-                            Try Again
-                        </button>
+          <section className="detail-panel detail-panel--compact">
+            <div className="detail-panel__header">Upcoming Departures</div>
+            <ul className="tour-detail-upcoming">
+              {[{date: "25 May - 27 May 2024", amount: "₹6,999"}, {date: "01 Jun - 03 Jun 2024", amount: "₹6,999"}, {date: "08 Jun - 10 Jun 2024", amount: "₹6,999"}, {date: "15 Jun - 17 Jun 2024", amount: "₹6,999"}].map((slot, index) => (
+                <li key={index}><span>{slot.date}</span><strong>{slot.amount}</strong></li>
+              ))}
+            </ul>
+          </section>
 
-                    </div>
-                )}
-
-                {/* Empty */}
-                {!loading &&
-                    !error &&
-                    products.length === 0 && (
-                        <div className="border border-[#E4E0D8] bg-white p-12 text-center">
-
-                            <h2 className="font-['Playfair_Display'] text-3xl">
-                                No Tours Found
-                            </h2>
-
-                            <p className="mt-3 text-gray-500">
-                                We couldn't find any tours in{" "}
-                                {stateName}.
-                            </p>
-
-                            <Link
-                                href="/destinations"
-                                className="mt-6 inline-block bg-[#5E6B58] px-6 py-3 text-white"
-                            >
-                                View All Destinations
-                            </Link>
-
-                        </div>
-                    )}
-
-                {/* Products */}
-                {!loading &&
-                    !error &&
-                    products.length > 0 && (
-                        <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-
-                            {products.map((product) => (
-                                <ProductCard
-                                    key={
-                                        product?._id ||
-                                        product?.slug
-                                    }
-                                    product={product}
-                                />
-                            ))}
-
-                        </div>
-                    )}
-
-            </section>
-        </main>
-    );
+          <section className="detail-panel detail-panel--compact">
+            <div className="detail-panel__header">Frequently Asked Questions</div>
+            <div className="tour-detail-faq">
+              {faqs.map((faq, idx) => (
+                <div key={idx} className="tour-detail-faq__item">
+                  <div className="tour-detail-faq__question"><span>{faq.question}</span><ChevronDown size={12} /></div>
+                  <div className="tour-detail-faq__answer">{faq.answer}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </aside>
+      </main>
+    </div>
+  );
 }
