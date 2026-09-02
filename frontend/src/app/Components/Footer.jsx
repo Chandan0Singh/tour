@@ -1,26 +1,203 @@
-import Link from "next/link";
+
+"use client";
+
+import { useState } from "react";import Link from "next/link";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
-import { ArrowRight, MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
+import Toast from "./Toast";
+
 
 export default function Footer() {
+   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+
+  const handleSubscribe = async(e)=>{
+    e.preventDefault();
+
+    try{
+      setLoading(true);
+      setMessage("");
+
+      const response = await fetch("http://localhost:5000/api/newsletter/subscribe", {
+      method: "Post",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({email})
+      }
+    )
+
+    const data = await response.json();
+
+    if(data.success){
+      setMessage(data.message);
+      setEmail("");
+    }
+
+    }catch(error){
+      setMessage("An error occurred while subscribing to the newsletter.");
+      setLoading(false);
+      console.error("Error subscribing to newsletter:", error);
+    }
+
+  }
+
   return (
-    <footer className="tour-footer">
-      <section className="tour-footer__cta">
-        <div className="tour-container tour-footer__cta-inner">
-          <div><h2>Ready for Your Next Adventure?</h2><p>Let&apos;s plan your perfect trip to the Himalayas.</p></div>
-          <div className="tour-footer__actions"><Link href="/tours" className="tour-button tour-button--green">Book Your Trip Now <ArrowRight size={15} /></Link><Link href="/contact" className="tour-button tour-button--light">Chat on WhatsApp</Link></div>
+    <>
+
+    <footer className="bg-[#16361d] text-white">
+      <div className="container mx-auto px-4">
+        {/* Top Footer */}
+        <div className="grid gap-10 py-16 md:grid-cols-2 lg:grid-cols-4">
+          {/* Brand */}
+          <div>
+            <h2 className="mb-4 font-serif text-3xl font-bold">
+              Nature Explorer
+            </h2>
+
+            <p className="text-sm leading-7 text-gray-300">
+              From Mountain Trails to Memorable Journeys. Explore the beauty of
+              nature through curated trekking adventures and unforgettable
+              travel experiences.
+            </p>
+
+            <div className="mt-6 flex gap-4">
+              <a
+                href="https://www.facebook.com/share/1Esk7VdqGN/"
+                aria-label="Facebook"
+              >
+                <FaFacebookF size={20} />
+              </a>
+
+              <a href="https://www.instagram.com/laviadventure?igsi=cTMwOG9iNDZncnpx">
+                <FaInstagram size={20} />
+              </a>
+
+              <a
+                href="https://youtube.com/@jaynegi0311?si=-Jm2jVmTIiNXU5du"
+                aria-label="YouTube"
+              >
+                <FaYoutube size={20} />
+              </a>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="mb-5 text-xl font-semibold">Quick Links</h3>
+
+            <ul className="space-y-3 text-gray-300">
+              <li>
+                <Link href="/">Home</Link>
+              </li>
+              <li>
+                <Link href="/about">About Us</Link>
+              </li>
+              <li>
+                <Link href="/treks">Treks</Link>
+              </li>
+              <li>
+                <Link href="/tours">Tours</Link>
+              </li>
+              <li>
+                <Link href="/blogs">Blogs</Link>
+              </li>
+              <li>
+                <Link href="/contact">Contact</Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Popular Treks */}
+          <div>
+            <h3 className="mb-5 text-xl font-semibold">Popular Treks</h3>
+
+            <ul className="space-y-3 text-gray-300">
+              <li>
+                <Link href="#">Kedarkantha Trek</Link>
+              </li>
+              <li>
+                <Link href="#">Valley of Flowers</Link>
+              </li>
+              <li>
+                <Link href="#">Har Ki Dun</Link>
+              </li>
+              <li>
+                <Link href="#">Brahmatal Trek</Link>
+              </li>
+              <li>
+                <Link href="#">Dayara Bugyal</Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h3 className="mb-5 text-xl font-semibold">Contact Us</h3>
+
+            <div className="space-y-4 text-gray-300">
+              <div className="flex gap-3">
+                <MapPin size={18} className="mt-1 shrink-0" />
+                <p>Dehradun, Uttarakhand, India</p>
+              </div>
+
+              <div className="flex gap-3">
+                <Phone size={18} className="shrink-0" />
+                <p>+91 90450 89285</p>
+              </div>
+
+              <div className="flex gap-3">
+                <Mail size={18} className="shrink-0" />
+                <p>code.chandansingh@gmai.com</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
-      <div className="tour-footer__main">
-        <div className="tour-container tour-footer__grid">
-          <div className="tour-footer__brand"><h2>TourTrek</h2><p>Explore. Experience. Evolve.<br />Curated treks, tours and adventure experiences in Uttarakhand.</p><div className="tour-footer__social"><a href="#" aria-label="Facebook"><FaFacebookF size={13} /></a><a href="#" aria-label="Instagram"><FaInstagram size={13} /></a><a href="#" aria-label="YouTube"><FaYoutube size={13} /></a></div></div>
-          <div><h3>Quick Links</h3><Link href="/">Home</Link><Link href="/treks">Treks</Link><Link href="/tours">Tours</Link><Link href="/camping">Camping</Link><Link href="/blogs">Blogs</Link></div>
-          <div><h3>Popular Treks</h3><Link href="#">Kedarkantha Trek</Link><Link href="#">Valley of Flowers</Link><Link href="#">Roopkund Trek</Link><Link href="#">Har Ki Dun Trek</Link><Link href="#">Kuari Pass Trek</Link></div>
-          <div><h3>Support</h3><p><Phone size={12} /> +91 12345 67890</p><p><Mail size={12} /> info@tourtrek.in</p><p><MapPin size={12} /> Dehradun, Uttarakhand</p><Link href="/contact">Contact Us</Link></div>
-          <div><h3>Company</h3><Link href="/about">About Us</Link><Link href="/contact">Contact Us</Link><Link href="#">Terms & Conditions</Link><Link href="#">Privacy Policy</Link><Link href="#">Refund Policy</Link></div>
+
+        {/* Newsletter */}
+        <div className="border-t border-white/10 py-10">
+          <div className="flex flex-col items-center justify-between gap-5 lg:flex-row">
+            <div>
+              <h3 className="text-2xl font-semibold">
+                Subscribe To Our Newsletter
+              </h3>
+
+              <p className="mt-2 text-gray-300">
+                Get updates about upcoming treks and travel offers.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubscribe} className="flex w-full max-w-xl flex-col gap-3 sm:flex-row">
+              <input
+                type="email"
+                value={email}
+                onChange={(e)=> setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="flex-1 rounded-full border border-white/20 bg-white/10 px-5 py-3 outline-none"
+              />
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="rounded-full bg-orange-500 px-8 py-3 font-medium text-white transition hover:bg-orange-600"
+              >
+                 {loading ? "Subscribing..." : "Subscribe"}
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Bottom */}
+        <div className="border-t border-white/10 py-6 text-center text-sm text-gray-400">
+          © {new Date().getFullYear()} Nature Explorer. All Rights Reserved.
         </div>
         <div className="tour-container tour-footer__bottom">© {new Date().getFullYear()} TourTrek. All Rights Reserved.<span>Made for mountain memories.</span></div>
       </div>
     </footer>
+    <Toast message={message} onClose={() => setMessage(null)} />
+    </>
   );
 }
+

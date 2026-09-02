@@ -1,234 +1,199 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+
 import { BACKEND_URL } from "@/keyword";
 
-export default function DestinationDetailPage() {
-  const { slug } = useParams();
+import DestinationHero from "../../../components/productpage/DestinationHero";
+import ProductCard from "../../../components/productpage/ProductCard";
+import ProductSkeleton from "../../../components/productpage/ProductSkeleton";
 
-  const [destination, setDestination] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function DestinationPage() {
+    const params = useParams();
 
-  useEffect(() => {
-    if (slug) {
-      fetchDestination();
-    }
-  }, [slug]);
+    const state = Array.isArray(params?.slug)
+        ? params.slug[0]
+        : params?.slug;
 
-  const fetchDestination = async () => {
-    try {
-      const res = await fetch(
-        `${BACKEND_URL}/api/products/${slug}`
-      );
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
-      const data = await res.json();
+    const stateName = state
+        ? decodeURIComponent(state)
+              .replace(/-/g, " ")
+              .replace(/\b\w/g, (char) => char.toUpperCase())
+        : "Destinations";
 
-      setDestination(data);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    useEffect(() => {
+        if (!state) return;
 
-  if (loading) {
+        fetchProducts();
+    }, [state]);
+
+    const fetchProducts = async () => {
+        try {
+            setLoading(true);
+            setError("");
+
+            const decodedState = decodeURIComponent(state);
+
+            const apiUrl = `${BACKEND_URL}/api/products/${decodedState}`;
+
+            console.log("Current state:", decodedState);
+            console.log("API URL:", apiUrl);
+
+            const res = await fetch(apiUrl, {
+                cache: "no-store",
+            });
+
+            if (!res.ok) {
+                throw new Error(
+                    `API request failed: ${res.status} ${res.statusText}`
+                );
+            }
+
+            const data = await res.json();
+
+            console.log("Full API response:", data);
+
+            if (Array.isArray(data)) {
+                setProducts(data);
+            } else if (Array.isArray(data?.data)) {
+                setProducts(data.data);
+            } else {
+                console.error(
+                    "Expected array but received:",
+                    data
+                );
+
+                setProducts([]);
+            }
+
+        } catch (err) {
+            console.error(
+                "Failed to fetch products:",
+                err
+            );
+
+            setError("Unable to load destinations.");
+            setProducts([]);
+
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-      <div className="py-24 text-center text-xl">
-        Loading...
-      </div>
-    );
-  }
+        <main className="min-h-screen bg-[#F8F5EE] text-[#2E2E2A]">
 
-  if (!destination) {
-    return (
-      <div className="py-24 text-center text-red-500">
-        Destination Not Found
-      </div>
-    );
-  }
+            <DestinationHero stateName={stateName} />
 
-  return (
-    <>
-      {/* Banner */}
+            <section className="mx-auto max-w-7xl px-6 py-14 md:py-20">
 
-      <section className="relative h-[450px]">
-        <Image
-          src={
-            destination.bannerImage ||
-            destination.images?.[0]?.url ||
-            "/placeholder.jpg"
-          }
-          alt={destination.title}
-          fill
-          className="object-cover"
-        />
+                {/* Top Bar */}
+                <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
 
-        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-          <div className="text-center text-white">
-            <h1 className="text-5xl font-bold">
-              {destination.title}
-            </h1>
+                    <div>
+                        <p className="text-sm uppercase tracking-[0.2em] text-[#5E6B58]">
+                            Destinations
+                        </p>
 
-            <p className="mt-4 text-lg">
-              {destination.destination}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Main */}
-
-      <section className="max-w-7xl mx-auto px-5 py-16">
-
-        <div className="grid lg:grid-cols-3 gap-12">
-
-          {/* Left */}
-
-          <div className="lg:col-span-2">
-
-            <h2 className="text-3xl font-bold mb-6">
-              About Destination
-            </h2>
-
-            <p className="leading-8 text-gray-700">
-              {destination.description}
-            </p>
-
-            {/* Gallery */}
-
-            {destination.images?.length > 0 && (
-              <>
-                <h2 className="text-3xl font-bold mt-16 mb-6">
-                  Gallery
-                </h2>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  {destination.images.map((img, index) => (
-                    <div
-                      key={index}
-                      className="relative h-72 rounded-xl overflow-hidden"
-                    >
-                      <Image
-                        src={img.url}
-                        alt={img.alt || ""}
-                        fill
-                        className="object-cover"
-                      />
+                        <h2 className="mt-2 font-['Playfair_Display'] text-3xl md:text-4xl">
+                            Tours in {stateName}
+                        </h2>
                     </div>
-                  ))}
+
+                    {!loading && !error && (
+                        <p className="text-gray-500">
+                            {products.length}{" "}
+                            {products.length === 1
+                                ? "tour"
+                                : "tours"}{" "}
+                            available
+                        </p>
+                    )}
+
                 </div>
-              </>
-            )}
 
-            {/* Highlights */}
-
-            {destination.highlights?.length > 0 && (
-              <>
-                <h2 className="text-3xl font-bold mt-16 mb-6">
-                  Highlights
-                </h2>
-
-                <ul className="space-y-3">
-                  {destination.highlights.map((item, index) => (
-                    <li key={index}>
-                      ✅ {item}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-
-            {/* FAQ */}
-
-            {destination.faqs?.length > 0 && (
-              <>
-                <h2 className="text-3xl font-bold mt-16 mb-6">
-                  FAQs
-                </h2>
-
-                <div className="space-y-6">
-                  {destination.faqs.map((faq, index) => (
-                    <div
-                      key={index}
-                      className="border rounded-lg p-5"
-                    >
-                      <h4 className="font-semibold">
-                        {faq.question}
-                      </h4>
-
-                      <p className="mt-2 text-gray-600">
-                        {faq.answer}
-                      </p>
+                {/* Loading */}
+                {loading && (
+                    <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+                        {[1, 2, 3].map((item) => (
+                            <ProductSkeleton key={item} />
+                        ))}
                     </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+                )}
 
-          {/* Sidebar */}
+                {/* Error */}
+                {!loading && error && (
+                    <div className="border border-[#E4E0D8] bg-white p-10 text-center">
 
-          <div>
+                        <h2 className="font-['Playfair_Display'] text-2xl">
+                            Something went wrong
+                        </h2>
 
-            <div className="sticky top-28 border rounded-xl p-8 shadow">
+                        <p className="mt-3 text-gray-500">
+                            {error}
+                        </p>
 
-              <h3 className="text-3xl font-bold text-green-700">
+                        <button
+                            onClick={fetchProducts}
+                            className="mt-6 bg-[#5E6B58] px-6 py-3 text-white"
+                        >
+                            Try Again
+                        </button>
 
-                ₹{destination.discountPrice || destination.price}
+                    </div>
+                )}
 
-              </h3>
+                {/* Empty */}
+                {!loading &&
+                    !error &&
+                    products.length === 0 && (
+                        <div className="border border-[#E4E0D8] bg-white p-12 text-center">
 
-              {destination.discountPrice && (
-                <p className="line-through text-gray-500">
-                  ₹{destination.price}
-                </p>
-              )}
+                            <h2 className="font-['Playfair_Display'] text-3xl">
+                                No Tours Found
+                            </h2>
 
-              <div className="space-y-3 mt-6">
+                            <p className="mt-3 text-gray-500">
+                                We couldn't find any tours in{" "}
+                                {stateName}.
+                            </p>
 
-                <p>
-                  📍 {destination.destination}
-                </p>
+                            <Link
+                                href="/destinations"
+                                className="mt-6 inline-block bg-[#5E6B58] px-6 py-3 text-white"
+                            >
+                                View All Destinations
+                            </Link>
 
-                <p>
-                  ⛰ {destination.altitude} m
-                </p>
+                        </div>
+                    )}
 
-                <p>
-                  ⭐ {destination.averageRating}
-                </p>
+                {/* Products */}
+                {!loading &&
+                    !error &&
+                    products.length > 0 && (
+                        <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
 
-                <p>
-                  👥 {destination.groupSize?.min} - {destination.groupSize?.max}
-                </p>
+                            {products.map((product) => (
+                                <ProductCard
+                                    key={
+                                        product?._id ||
+                                        product?.slug
+                                    }
+                                    product={product}
+                                />
+                            ))}
 
-                <p>
-                  🎯 {destination.difficulty}
-                </p>
+                        </div>
+                    )}
 
-              </div>
-
-              <button className="w-full mt-8 bg-green-700 hover:bg-green-800 text-white py-3 rounded-lg">
-                Book Now
-              </button>
-
-              <Link
-                href="/contact"
-                className="block mt-4 text-center border py-3 rounded-lg"
-              >
-                Enquire Now
-              </Link>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-    </>
-  );
+            </section>
+        </main>
+    );
 }

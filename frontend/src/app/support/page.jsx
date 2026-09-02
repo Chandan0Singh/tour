@@ -122,14 +122,14 @@ const CONTACT_CHANNELS = [
   {
     icon: Phone,
     label: "Call Us",
-    value: "+91 98765 43210",
+    value: "+91 90450 89285",
     hint: "Mon-Sat, 9am-7pm IST",
     href: "tel:+919876543210",
   },
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "+91 98765 43210",
+    value: "+91 90450 89285",
     hint: "Fastest response for quick questions",
     href: "https://wa.me/919876543210",
   },
@@ -274,8 +274,8 @@ export default function HelpSupportPage() {
 
             {filteredFaqs.length === 0 ? (
               <div className="bg-white border border-[#E4E0D8] p-10 text-center text-gray-500">
-                No results for that search. Try a different term or browse
-                a category above.
+                No results for that search. Try a different term or browse a
+                category above.
               </div>
             ) : (
               <div className="space-y-3">
@@ -359,8 +359,8 @@ export default function HelpSupportPage() {
                 Already on a trip?
               </h3>
               <p className="text-sm text-white/80">
-                If you need urgent help during an ongoing trek or tour,
-                call our 24/7 emergency line at{" "}
+                If you need urgent help during an ongoing trek or tour, call our
+                24/7 emergency line at{" "}
                 <a href="tel:+911800123456" className="underline">
                   1800-123-456
                 </a>
@@ -379,8 +379,8 @@ export default function HelpSupportPage() {
             Still need help?
           </h2>
           <p className="text-sm text-gray-500 mb-8">
-            Send us a message and our travel desk will get back to you within
-            24 hours.
+            Send us a message and our travel desk will get back to you within 24
+            hours.
           </p>
 
           {submitted ? (
@@ -393,8 +393,8 @@ export default function HelpSupportPage() {
                 Message sent
               </h3>
               <p className="text-sm text-gray-500 max-w-sm">
-                Thanks for reaching out. We've received your message and
-                will respond by email shortly.
+                Thanks for reaching out. We've received your message and will
+                respond by email shortly.
               </p>
               <button
                 onClick={() => setSubmitted(false)}
@@ -480,7 +480,9 @@ export default function HelpSupportPage() {
                 disabled={submitting}
                 className="flex items-center justify-center gap-2 w-full py-4 bg-[#5E6B58] text-white uppercase tracking-[3px] text-sm hover:bg-[#4b5847] transition disabled:opacity-60"
               >
-                {submitting ? "Sending…" : (
+                {submitting ? (
+                  "Sending…"
+                ) : (
                   <>
                     <Send size={15} />
                     Send Message
