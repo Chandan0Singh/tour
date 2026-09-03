@@ -35,7 +35,7 @@ export default function ContactPage() {
     try {
       setLoading(true);
 
-      const res = await axios.post(`${BACKEND_URL}/api/contact`, form);
+      const res = await axios.post(`${BACKEND_URL}/api/contact/send`, form);
 
       alert(res.data.message);
 
@@ -110,7 +110,7 @@ export default function ContactPage() {
 
                   <div>
                     <h4 className="font-semibold text-lg">Phone</h4>
-                    <p className="text-gray-600">+91 98765 43210</p>
+                    <p className="text-gray-600">+91 90450 89285</p>
                   </div>
                 </div>
 
@@ -121,7 +121,7 @@ export default function ContactPage() {
 
                   <div>
                     <h4 className="font-semibold text-lg">Email</h4>
-                    <p className="text-gray-600">info@natureexplorer.com</p>
+                    <p className="text-gray-600">code.chandansingh@gmai.com</p>
                   </div>
                 </div>
 
@@ -209,17 +209,6 @@ export default function ContactPage() {
                     onChange={handleChange}
                     required
                     rows={6}
-                    placeholder="Write your message..."
-                    className="w-full border border-gray-300 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
-                  ></textarea>
-                </div>
-
-                <div>
-                  <textarea
-                    name="message"
-                    value={form.message}
-                    onChange={handleChange}
-                    rows="6"
                     placeholder="Write your message..."
                     className="w-full border border-gray-300 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
                   ></textarea>

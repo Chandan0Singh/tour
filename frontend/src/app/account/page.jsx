@@ -22,7 +22,7 @@ import {
 const USER = {
   name: "Chandan singh",
   email: "chandan.singh@example.com",
-  phone: "+91 98765 43210",
+  phone: "+91 90450 89285",
   memberSince: "March 2024",
   avatar: "CR",
 };
@@ -66,7 +66,7 @@ const ADDRESSES = [
     label: "Home",
     name: "Chandan singh",
     line: "42 Rajpur Road, Dehradun, Uttarakhand, 248001",
-    phone: "+91 98765 43210",
+    phone: "+91 90450 89285",
     isDefault: true,
   },
   {
@@ -74,7 +74,7 @@ const ADDRESSES = [
     label: "Work",
     name: "Chandan singh",
     line: "Tower B, Cyber Hub, DLF Phase 2, Gurugram, Haryana, 122002",
-    phone: "+91 98765 43210",
+    phone: "+91 90450 89285",
     isDefault: false,
   },
 ];
@@ -281,13 +281,9 @@ function BookingsTab() {
                     <Mountain size={11} />
                     {booking.type}
                   </span>
-                  <span className="text-xs text-gray-400">
-                    #{booking.id}
-                  </span>
+                  <span className="text-xs text-gray-400">#{booking.id}</span>
                 </div>
-                <h3 className="text-[#2D2D2D] font-medium">
-                  {booking.title}
-                </h3>
+                <h3 className="text-[#2D2D2D] font-medium">{booking.title}</h3>
                 <p className="flex items-center gap-1.5 text-xs text-gray-400 mt-1">
                   <Calendar size={12} />
                   {booking.date}
@@ -332,10 +328,7 @@ function AddressesTab() {
     >
       <div className="grid sm:grid-cols-2 gap-4">
         {ADDRESSES.map((addr) => (
-          <div
-            key={addr.id}
-            className="border border-[#E4E0D8] p-5 relative"
-          >
+          <div key={addr.id} className="border border-[#E4E0D8] p-5 relative">
             {addr.isDefault && (
               <span className="absolute top-4 right-4 text-[10px] uppercase tracking-[1px] bg-[#EAF1E9] text-[#5E6B58] px-2 py-1">
                 Default

@@ -1,4 +1,4 @@
-
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -12,9 +12,8 @@ const order = require("./routes/orderRouter");
 const galleryRoutes = require("./routes/galleryRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const homeRoutes = require("./routes/homeRoutes");
-const reviewRoutes = require("./routes/reviewRoutes")
-
-require('dotenv').config();
+const reviewRoutes = require("./routes/reviewRoutes");
+const newsLatterRoutes = require("./routes/newsLatterRouter.js");
 
 const app = express();
 
@@ -37,6 +36,7 @@ app.use("/api/home", homeRoutes);
 app.use("/api/payment", require("./routes/paymentRoutes"));
 app.use("/api/contact", contactRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/newsletter", newsLatterRoutes);
 
 app.get('/', (req, res) => {
   res.send('API running...');
@@ -57,14 +57,9 @@ process.on("unhandledRejection", (err) => {
 
 const PORT = process.env.PORT || 5000;
 
-// MongoDB Connection
-// mongoose.connect(process.env.MONGODB_URI)
-//   .then(() => {
-//     app.listen(PORT, () => console.log(`✅ Server started on port ${PORT}`));
-//   })
-//   .catch(err => console.error('❌ DB error:', err));
-
-  mongoose.connect(process.env.MONGODB_URI)
+  mongoose.connect(process.env.MONGODB_URI, {
+  dbName: "tour",
+})
   .then(() => {
     console.log("✅ MongoDB Connected");
 

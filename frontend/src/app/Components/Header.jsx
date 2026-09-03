@@ -16,43 +16,9 @@ import {
   Mail,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import { BACKEND_URL } from "@/keyword";
 // import LoginModal from "./LoginModal";
 // import SignupModal from "./SignupModal";
-
-const NAV_ITEMS = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-  {
-    label: "Treks",
-    children: [
-      { label: "All Treks", href: "/treks" },
-      { label: "Best Treks", href: "/treks/best" },
-      { label: "Difficulty Levels", href: "/treks/difficulty" },
-      { label: "Best Season", href: "/treks/season" },
-    ],
-  },
-  {
-    label: "Tours",
-    children: [
-      { label: "All Tours", href: "/tours" },
-      { label: "Himalayan Tours", href: "/tours/himalayan" },
-      { label: "Wildlife Tours", href: "/tours/wildlife" },
-      { label: "Weekend Getaways", href: "/tours/weekend" },
-    ],
-  },
-  {
-    label: "Destinations",
-    children: [
-      { label: "Uttarakhand", href: "/destinations/uttarakhand" },
-      { label: "Himachal Pradesh", href: "/destinations/himachal" },
-      { label: "Kashmir", href: "/destinations/kashmir" },
-      { label: "Rajasthan", href: "/destinations/rajasthan" },
-    ],
-  },
-  { label: "Blogs", href: "/blogs" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "Contact", href: "/contact" },
-];
 
 function DropdownMenu({ item, mobile = false, onClose }) {
   const [open, setOpen] = useState(false);
@@ -150,6 +116,32 @@ export default function Header() {
   const [loginOpen, setLoginOpen] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
 
+  const [menu, setMenu] = useState({
+    tours: [],
+    treks: [],
+    destinations: [],
+  });
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/products/header-menu`);
+
+        const data = await response.json();
+
+        console.log("data :", data);
+
+        if (data.success) {
+          setMenu(data.menu);
+        }
+      } catch (err) {
+        console.log("Error fetching menu:", err);
+      }
+    };
+
+    fetchMenu();
+  }, []);
+
   useEffect(() => {
     function onResize() {
       if (window.innerWidth >= 1024) setMobileOpen(false);
@@ -157,6 +149,28 @@ export default function Header() {
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
+
+  const NAV_ITEMS = [
+    { label: "Home", href: "/" },
+    { label: "About Us", href: "/about" },
+    {
+      label: "Treks",
+      children: menu.treks,
+    },
+
+    {
+      label: "Tours",
+      children: menu.tours,
+    },
+
+    {
+      label: "Destinations",
+      children: menu.destinations,
+    },
+    { label: "Blogs", href: "/blogs" },
+    { label: "Gallery", href: "/gallery" },
+    { label: "Contact", href: "/contact" },
+  ];
 
   return (
     <>
@@ -167,22 +181,35 @@ export default function Header() {
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1.5">
                 <Phone size={11} aria-hidden="true" />
-                +91 98765 43210
+                +91 90450 89285
               </span>
               <span className="hidden sm:flex items-center gap-1.5">
                 <Mail size={11} aria-hidden="true" />
-                info@natureexplorer.in
+                code.chandansingh@gmail.com
               </span>
             </div>
             <div className="hidden sm:flex items-center gap-4">
-              {["Instagram", "Facebook", "YouTube"].map((s) => (
+              {[
+                {
+                  name: "Instagram",
+                  link: "https://www.instagram.com/laviadventure?igsi=cTMwOG9iNDZncnpx",
+                },
+                {
+                  name: "Facebook",
+                  link: "https://www.facebook.com/share/1Esk7VdqGN/",
+                },
+                {
+                  name: "YouTube",
+                  link: "https://youtube.com/@jaynegi0311?si=-Jm2jVmTIiNXU5du",
+                },
+              ].map((s) => (
                 <a
-                  key={s}
-                  href={`https://${s.toLowerCase()}.com`}
-                  aria-label={s}
+                  key={s.name}
+                  href={s.link}
+                  aria-label={s.name}
                   className="text-white/60 hover:text-green-300 transition-colors"
                 >
-                  {s}
+                  {s.name}
                 </a>
               ))}
             </div>
@@ -224,7 +251,7 @@ export default function Header() {
             </ul>
 
             {/* Desktop actions */}
-            {isAuthenticated ? (
+            {/* {isAuthenticated ? (
               <div className="hidden lg:flex items-center gap-1.5 shrink-0">
                 {[{ icon: <Heart size={17} />, label: "Wishlist" }].map(
                   ({ icon, label }) => (
@@ -237,8 +264,6 @@ export default function Header() {
                     </button>
                   ),
                 )}
-
-                {/* Cart */}
                 <Link
                   href="/cart"
                   aria-label="Cart"
@@ -248,7 +273,6 @@ export default function Header() {
                   <span className="absolute top-1.5 right-1.5 w-[7px] h-[7px] rounded-full bg-orange-500 border-[1.5px] border-white" />
                 </Link>
 
-                {/* Account */}
                 <div className="relative group">
                   <button
                     aria-label="Account"
@@ -328,15 +352,6 @@ export default function Header() {
                     </button>
                   </div>
                 </div>
-
-                {/* Book Now */}
-                {/* <Link
-                  href="/booking"
-                  className="flex items-center gap-1.5 bg-green-900 hover:bg-green-800 text-white text-[13px] font-semibold px-5 py-2 rounded-full transition-colors"
-                >
-                  <CalendarPlus size={14} />
-                  Book Now
-                </Link> */}
               </div>
             ) : (
               <div className="hidden lg:flex items-center gap-3">
@@ -354,7 +369,7 @@ export default function Header() {
                   Sign Up
                 </Link>
               </div>
-            )}
+            )} */}
 
             {/* Mobile toggle */}
             <button
