@@ -286,44 +286,6 @@ export default function GalleryPage() {
         <div className="fixed inset-0 bg-black/50 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      {/* ── Sidebar ── */}
-      <aside className={`fixed top-0 left-0 h-full w-64 bg-[#1B5E20] z-40 flex flex-col transition-transform duration-300
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:flex`}>
-
-        <div className="px-6 py-6 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#FF9800] flex items-center justify-center text-xl shadow-lg">🌿</div>
-            <div>
-              <p className="text-white font-bold text-base leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Nature Explorer
-              </p>
-              <p className="text-green-300 text-xs">Admin Panel</p>
-            </div>
-          </div>
-        </div>
-
-        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-          {menuItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link key={item.id} href={item.href} onClick={() => setSidebarOpen(false)}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
-                  ${isActive ? "bg-white/15 text-white shadow-inner" : "text-green-200 hover:bg-white/10 hover:text-white"}`}>
-                <span className="text-lg">{item.icon}</span>
-                <span>{item.label}</span>
-                {isActive && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#FF9800]" />}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="px-4 py-4 border-t border-white/10">
-          <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-red-300 hover:bg-red-900/30 hover:text-red-200 transition-all text-sm font-medium">
-            <span className="text-lg">🚪</span><span>Logout</span>
-          </button>
-        </div>
-      </aside>
-
       {/* ── Main ── */}
       <div className="flex-1 flex flex-col min-w-0">
 

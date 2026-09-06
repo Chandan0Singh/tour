@@ -2,6 +2,7 @@ import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
+
 import FloatingContact from "../components/common/FloatingContact";
 import { AuthProvider } from "@/context/AuthContext";
 
