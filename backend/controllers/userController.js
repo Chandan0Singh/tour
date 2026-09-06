@@ -36,10 +36,7 @@ const loginUser = async (req, res) => {
     }
 
     // Compare Password
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return res.status(401).json({
@@ -57,7 +54,7 @@ const loginUser = async (req, res) => {
       process.env.JWT_SECRET,
       {
         expiresIn: "7d",
-      }
+      },
     );
 
     return res.status(200).json({
@@ -78,7 +75,6 @@ const loginUser = async (req, res) => {
       },
     });
   } catch (err) {
-
     return res.status(500).json({
       success: false,
       message: "Login failed",
@@ -175,7 +171,7 @@ const signupUser = async (req, res) => {
       process.env.JWT_SECRET,
       {
         expiresIn: "7d",
-      }
+      },
     );
 
     return res.status(201).json({
@@ -200,6 +196,38 @@ const signupUser = async (req, res) => {
       success: false,
       message: "Signup failed",
       error: err.message,
+    });
+  }
+};
+
+const CHECK_ADMIN_PASSWORD = async (req, res) => {
+  try {
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "Password is required",
+      });
+    }
+
+    if (password === process.env.ADMIN_PASSWORD) {
+      return res.status(200).json({
+        success: true,
+        message: "Admin password is correct",
+      });
+    }
+
+    return res.status(401).json({
+      success: false,
+      message: "Incorrect admin password",
+    });
+  } catch (error) {
+    console.error("Error checking admin password:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
     });
   }
 };
@@ -481,4 +509,5 @@ module.exports = {
   blockUser,
   loginUser,
   getFilteredUsers,
+  CHECK_ADMIN_PASSWORD
 };
