@@ -14,6 +14,7 @@ const {
   getHeaderMenu,
   getProductCategories,
   getSinglePageBySlug,
+  getProductById,
 } = require("../controllers/productController");
 
 router.get("/", getAllProducts);
@@ -31,6 +32,10 @@ router.get("/header-menu", getHeaderMenu);
 router.get("/related/:id", getRelatedProducts);
 
 router.get("/singleProduct/:slug", getSinglePageBySlug);
+
+router.get("/singlePage/:slug", getSinglePageBySlug); // New route for single page by slug
+
+router.get("/by-id/:id", getProductById);
 
 router.get("/:slug", getProductBySlug);
 
