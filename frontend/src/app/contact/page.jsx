@@ -56,28 +56,54 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative h-[50vh] flex items-center justify-center">
-        {/* <img
-          src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600"
-          alt="Contact"
-          className="absolute inset-0 w-full h-full object-cover"
-        /> */}
+<section className="relative h-[42vh] min-h-[340px] overflow-hidden flex items-center justify-center bg-[#1B5E20]">
 
-        <div className="absolute inset-0 bg-black/50"></div>
+  {/* Background Image */}
+  <img
+    src="https://images.unsplash.com/photo-150053085085085?w=1600"
+    alt="Nature and travel destination"
+    className="absolute inset-0 w-full h-full object-cover"
+  />
 
-        <div className="relative z-10 text-center text-white px-4">
-          <h1
-            className="text-5xl md:text-7xl font-bold mb-4"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            Contact Us
-          </h1>
+  {/* Theme-matched Green Overlay */}
+  <div className="absolute inset-0 bg-gradient-to-r from-[#123D20]/85 via-[#1B5E20]/65 to-[#1B5E20]/45" />
 
-          <p className="text-lg max-w-2xl mx-auto">
-            We'd love to hear from you. Let's plan your next adventure together.
-          </p>
-        </div>
-      </section>
+  {/* Subtle Bottom Shade */}
+  <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
+
+  {/* Hero Content */}
+  <div className="relative z-10 text-center text-white px-5 max-w-3xl mx-auto">
+
+    {/* Eyebrow */}
+    <div className="flex items-center justify-center gap-3 mb-4">
+      <span className="w-8 h-[2px] bg-[#FF9800]" />
+
+      <span className="text-[#A5D6A7] text-xs md:text-sm uppercase tracking-[0.18em] font-medium">
+        Get In Touch
+      </span>
+
+      <span className="w-8 h-[2px] bg-[#FF9800]" />
+    </div>
+
+    {/* Heading */}
+    <h1
+      className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4"
+      style={{ fontFamily: "var(--font-display)" }}
+    >
+      Contact Us
+    </h1>
+
+    {/* Accent */}
+    <div className="w-14 h-1 bg-[#FF9800] rounded-full mx-auto mb-5" />
+
+    {/* Description */}
+    <p className="text-lg md:text-base text-white max-w-xl mx-auto leading-7">
+      Have questions about your next adventure?
+      Let us help you plan a memorable journey into nature.
+    </p>
+
+  </div>
+</section>
 
       {/* Contact Section */}
       <section className="py-20 bg-[#F4F1EA]">

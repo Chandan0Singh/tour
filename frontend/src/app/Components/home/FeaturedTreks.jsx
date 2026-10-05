@@ -14,7 +14,7 @@ export default function FeaturedTreks({ data }) {
       <div className="tour-container">
         <div className="tour-section-heading"><p className="tour-kicker">EXPLORE EXPERIENCES <ArrowRight size={14} /></p></div>
         <div className="experience-grid">
-          {experiences.map((item) => <article className="experience-card" key={item.title}><img src={item.image || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=700"} alt="" /><div><h3>{item.title}</h3><p>{item.text}</p><span className="round-arrow"><ArrowRight size={13} /></span></div></article>)}
+          {experiences.map((item) => <article className="experience-card" key={item.title}><img src={item.image || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=700"} alt="EXPLORE EXPERIENCES" /><div><h3>{item.title}</h3><p>{item.text}</p><span className="round-arrow"><ArrowRight size={13} /></span></div></article>)}
         </div>
       </div>
     </section>

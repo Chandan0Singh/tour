@@ -24,7 +24,7 @@ export default function Hero({ data }) {
         <h1>
           {hero?.title || "Explore Uttarakhand"}
           <br />
-          <span>{hero?.subtitle || "with TourTrek"}</span>
+          <span>{hero?.subtitle || "with Laviadventure"}</span>
         </h1>
         <p className="tour-hero__description">
           {hero?.description ||
