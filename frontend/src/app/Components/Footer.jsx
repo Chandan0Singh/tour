@@ -47,7 +47,7 @@ export default function Footer() {
             <Link href="/">Home</Link>
             <Link href="/treks">Treks</Link>
             <Link href="/tours">Tours</Link>
-            <Link href="/camping">Camping</Link>
+            {/* <Link href="/camping">Camping</Link> */}
             <Link href="/blogs">Blogs</Link>
           </div>
           <div>
