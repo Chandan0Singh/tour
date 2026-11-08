@@ -71,24 +71,3 @@ const PORT = process.env.PORT || 5000;
     console.error("❌ DB error:", err);
   });
 
-
-// require("dotenv").config();
-
-// const express = require("express");
-
-// console.log("STEP 1");
-
-// const app = express();
-
-// console.log("STEP 2");
-
-// app.get("/", (req, res) => {
-//   console.log("REQUEST HIT");
-//   res.send("Working");
-// });
-
-// const PORT = process.env.PORT || 5000;
-
-// app.listen(PORT, () => {
-//   console.log("LISTENING", PORT);
-// });

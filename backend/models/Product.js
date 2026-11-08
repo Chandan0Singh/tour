@@ -28,19 +28,19 @@ const packageSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: ["Tour", "Trek"],
-      required: true,
+      // required: true,
     },
 
     title: {
       type: String,
-      required: true,
+      // required: true,
       trim: true,
     },
 
     slug: {
       type: String,
       unique: true,
-      required: true,
+      // required: true,
     },
 
     shortDescription: String,
@@ -49,14 +49,14 @@ const packageSchema = new mongoose.Schema(
 
     destination: {
       type: String,
-      required: true,
+      // required: true,
     },
 
     state: String,
 
     country: {
       type: String,
-      default: "India",
+      // default: "India",
     },
 
     duration: {
@@ -77,7 +77,7 @@ const packageSchema = new mongoose.Schema(
 
     price: {
       type: Number,
-      required: true,
+      // required: true,
     },
 
     discountPrice: Number,

@@ -291,13 +291,13 @@ export default function AddPackagePage() {
     e.preventDefault();
     setStatusMsg(null);
 
-    if (!formData.title.trim() || !formData.slug.trim() || !formData.destination.trim() || !formData.price) {
-      setStatusMsg({
-        type: "error",
-        text: "Please fill in title, slug, destination, and price — these are required.",
-      });
-      return;
-    }
+    // if (!formData.title.trim() || !formData.slug.trim() || !formData.destination.trim() || !formData.price) {
+    //   setStatusMsg({
+    //     type: "error",
+    //     text: "Please fill in title, slug, destination, and price — these are required.",
+    //   });
+    //   return;
+    // }
 
     try {
       setSubmitting(true);
@@ -356,7 +356,9 @@ export default function AddPackagePage() {
         {/* BASIC INFO */}
         <SectionCard title="Basic Information">
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Package Type" required>
+            <Field label="Package Type" 
+            // required
+            >
               <select
                 className={inputClass}
                 value={formData.type}
@@ -378,7 +380,9 @@ export default function AddPackagePage() {
             </Field>
           </div>
 
-          <Field label="Title" required>
+          <Field label="Title"
+          //  required
+           >
             <TextInput
               value={formData.title}
               onChange={handleTitleChange}
@@ -388,7 +392,7 @@ export default function AddPackagePage() {
 
           <Field
             label="Slug"
-            required
+            // required
             hint="Auto-generated from title. Edit manually if needed."
           >
             <TextInput
@@ -421,7 +425,9 @@ export default function AddPackagePage() {
         {/* LOCATION */}
         <SectionCard title="Location">
           <div className="grid sm:grid-cols-3 gap-4">
-            <Field label="Destination" required>
+            <Field label="Destination"
+            // required
+            >
               <TextInput
                 value={formData.destination}
                 onChange={(e) => setField("destination", e.target.value)}
@@ -522,7 +528,9 @@ export default function AddPackagePage() {
         {/* PRICING */}
         <SectionCard title="Pricing & Availability">
           <div className="grid sm:grid-cols-3 gap-4">
-            <Field label="Price (₹)" required>
+            <Field label="Price (₹)" 
+            // required
+            >
               <TextInput
                 type="number"
                 min="0"
