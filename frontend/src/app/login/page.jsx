@@ -148,10 +148,10 @@ export default function LoginPage() {
             {/* Forgot Password */}
             <div className="flex justify-end">
               <Link
-                href="/forgot-password"
+                href="/support"
                 className="text-sm text-[#1B5E20] font-medium hover:underline"
               >
-                Forgot Password?
+                Need help signing in?
               </Link>
             </div>
 
@@ -164,19 +164,6 @@ export default function LoginPage() {
               {loading ? "Signing In..." : "Sign In"}
             </button>
           </form>
-
-          {/* Divider */}
-          <div className="relative my-6">
-            <div className="border-t"></div>
-            <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-white px-3 text-gray-500 text-sm">
-              OR
-            </span>
-          </div>
-
-          {/* Google Login */}
-          <button className="w-full border py-3 rounded-xl font-medium hover:bg-gray-50">
-            Continue with Google
-          </button>
 
           {/* Signup Link */}
           <p className="text-center mt-6 text-gray-600">

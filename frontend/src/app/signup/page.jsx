@@ -210,17 +210,6 @@ export default function SignupPage() {
             </button>
           </form>
 
-          <div className="relative my-6">
-            <div className="border-t"></div>
-            <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-white px-3 text-gray-500 text-sm">
-              OR
-            </span>
-          </div>
-
-          <button className="w-full border py-3 rounded-xl font-medium hover:bg-gray-50">
-            Sign Up with Google
-          </button>
-
           <p className="text-center mt-6 text-gray-600">
             Already have an account?{" "}
             <Link href="/login" className="text-[#1B5E20] font-semibold">

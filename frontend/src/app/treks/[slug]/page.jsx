@@ -19,6 +19,7 @@ export default function DestinationPage() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [retryCount, setRetryCount] = useState(0);
 
     let stateName = state
         ? decodeURIComponent(state)
@@ -36,59 +37,66 @@ export default function DestinationPage() {
     useEffect(() => {
         if (!state) return;
 
-        fetchProducts();
-    }, [state]);
+            let active = true;
 
-    const fetchProducts = async () => {
-        try {
-            setLoading(true);
-            setError("");
+            (async () => {
+                try {
+                    const decodedState = decodeURIComponent(state);
+                    const res = await fetch(
+                        `${BACKEND_URL}/api/products/${decodedState}`,
+                        { cache: "no-store" },
+                    );
 
-            const decodedState = decodeURIComponent(state);
+                    if (!res.ok) {
+                        if (res.status === 404) {
+                            const productResponse = await fetch(
+                                `${BACKEND_URL}/api/products/singleProduct/${encodeURIComponent(decodedState)}`,
+                                { cache: "no-store" },
+                            );
+                            const productData = await productResponse.json();
 
-            const apiUrl = `${BACKEND_URL}/api/products/${decodedState}`;
+                            if (productResponse.ok && productData.success && productData.product) {
+                                const product = productData.product;
+                                const stateSlug = String(product.state || product.destination || "destination")
+                                    .trim()
+                                    .toLowerCase()
+                                    .replace(/\s+/g, "-");
+                                const productSlug = product.slug || product._id;
 
+                                window.location.replace(`/treks/${stateSlug}/${productSlug}`);
+                                return;
+                            }
+                        }
 
-            const res = await fetch(apiUrl, {
-                cache: "no-store",
-            });
+                        throw new Error(`API request failed: ${res.status} ${res.statusText}`);
+                    }
 
-            if (!res.ok) {
-                throw new Error(
-                    `API request failed: ${res.status} ${res.statusText}`
-                );
-            }
+                    const data = await res.json();
 
-            const data = await res.json();
+                    if (active) {
+                        if (Array.isArray(data)) {
+                            setProducts(data);
+                        } else if (Array.isArray(data?.data)) {
+                            setProducts(data.data);
+                        } else {
+                            setProducts([]);
+                        }
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch products:", err);
+                    if (active) {
+                        setError("Unable to load destinations.");
+                        setProducts([]);
+                    }
+                } finally {
+                    if (active) setLoading(false);
+                }
+            })();
 
-            console.log("Full API response:", data);
-
-            if (Array.isArray(data)) {
-                setProducts(data);
-            } else if (Array.isArray(data?.data)) {
-                setProducts(data.data);
-            } else {
-                console.error(
-                    "Expected array but received:",
-                    data
-                );
-
-                setProducts([]);
-            }
-
-        } catch (err) {
-            console.error(
-                "Failed to fetch products:",
-                err
-            );
-
-            setError("Unable to load destinations.");
-            setProducts([]);
-
-        } finally {
-            setLoading(false);
-        }
-    };
+            return () => {
+                active = false;
+            };
+        }, [state, retryCount]);
 
     return (
         <main className="min-h-screen bg-[#F8F5EE] text-[#2E2E2A]">
@@ -144,7 +152,11 @@ export default function DestinationPage() {
                         </p>
 
                         <button
-                            onClick={fetchProducts}
+                            onClick={() => {
+                                setLoading(true);
+                                setError("");
+                                setRetryCount((count) => count + 1);
+                            }}
                             className="mt-6 bg-[#5E6B58] px-6 py-3 text-white"
                         >
                             Try Again
@@ -164,7 +176,7 @@ export default function DestinationPage() {
                             </h2>
 
                             <p className="mt-3 text-gray-500">
-                                We couldn't find any tours in{" "}
+                                We couldn&apos;t find any tours in{" "}
                                 {stateName}.
                             </p>
 

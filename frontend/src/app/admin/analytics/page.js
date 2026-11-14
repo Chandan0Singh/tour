@@ -1,3 +1,5 @@
+"use client";
+
 import {
   BarChart3,
   Users,
@@ -47,7 +49,11 @@ export default function AnalyticsDashboard() {
           </p>
         </div>
 
-        <button className="bg-black text-white px-5 py-3 rounded-2xl shadow hover:scale-105 transition">
+        <button
+          type="button"
+          onClick={() => window.print()}
+          className="bg-black text-white px-5 py-3 rounded-2xl shadow hover:scale-105 transition"
+        >
           Export Report
         </button>
       </div>

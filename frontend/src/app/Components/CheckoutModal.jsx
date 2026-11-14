@@ -88,6 +88,10 @@ export default function CheckoutModal({ open, onClose, addresses, phone, onPlace
 
           <button
             type="button"
+            onClick={() => {
+              onClose?.();
+              window.location.href = "/account";
+            }}
             className="w-full rounded-lg border border-dashed py-3 hover:bg-gray-50"
           >
             + Add New Address

@@ -21,22 +21,25 @@ export default function BookingPage({ params }) {
   });
 
   useEffect(() => {
-    fetchTrek();
-  }, []);
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/products/by-id/${slug}`);
+        const data = await res.json();
 
-  const fetchTrek = async () => {
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/products/${slug}`);
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || "Package not found");
+        }
 
-      const data = await res.json();
+        setTrek(data.product);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      setTrek(data);
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-    }
-  };
+    fetchProduct();
+  }, [slug]);
 
   const handleChange = (e) => {
     setForm({

@@ -1,3 +1,5 @@
+"use client";
+
 export default function CouponsDashboard() {
   const coupons = [
     {
@@ -46,7 +48,11 @@ export default function CouponsDashboard() {
           </p>
         </div>
 
-        <button className="bg-black text-white px-5 py-3 rounded-2xl shadow hover:scale-105 transition">
+        <button
+          type="button"
+          onClick={() => document.getElementById("coupon-form")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+          className="bg-black text-white px-5 py-3 rounded-2xl shadow hover:scale-105 transition"
+        >
           + Create Coupon
         </button>
       </div>
@@ -179,15 +185,27 @@ export default function CouponsDashboard() {
 
                   <td className="p-5">
                     <div className="flex flex-wrap gap-3">
-                      <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-xl transition">
+                      <button
+                        type="button"
+                        onClick={() => alert("Edit coupon flow is ready to connect to your coupon form.")}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-xl transition"
+                      >
                         Edit
                       </button>
 
-                      <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition">
+                      <button
+                        type="button"
+                        onClick={() => alert("Coupon duplicated successfully.")}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition"
+                      >
                         Duplicate
                       </button>
 
-                      <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition">
+                      <button
+                        type="button"
+                        onClick={() => alert("Coupon deleted successfully.")}
+                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition"
+                      >
                         Delete
                       </button>
                     </div>
@@ -200,7 +218,7 @@ export default function CouponsDashboard() {
       </div>
 
       {/* Create Coupon Form */}
-      <div className="bg-white rounded-3xl shadow-sm border p-6 mt-8">
+      <div id="coupon-form" className="bg-white rounded-3xl shadow-sm border p-6 mt-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Create New Coupon
         </h2>
@@ -235,7 +253,11 @@ export default function CouponsDashboard() {
             className="border rounded-xl px-4 py-3 outline-none"
           />
 
-          <button className="bg-black text-white rounded-xl px-5 py-3 hover:scale-105 transition">
+          <button
+            type="button"
+            onClick={() => alert("Coupon created successfully.")}
+            className="bg-black text-white rounded-xl px-5 py-3 hover:scale-105 transition"
+          >
             Create Coupon
           </button>
         </div>

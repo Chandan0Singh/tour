@@ -41,18 +41,18 @@ const whyUs = [
   },
   {
     icon: "🔒",
-    title: "Safe & Vetted Travel",
-    desc: "First-aid trained teams, verified accommodation, 24/7 support.",
+    title: "Trip-Specific Safety Details",
+    desc: "Review each package itinerary for route, accommodation, and safety information.",
   },
   {
     icon: "🎒",
     title: "Customisable Packages",
-    desc: "Every tour can be tailored to your pace, group, and budget.",
+    desc: "Customization depends on the package, route, and available dates.",
   },
   {
     icon: "💬",
-    title: "24/7 Customer Support",
-    desc: "A real person picks up — before, during, and after your trip.",
+    title: "Customer Support",
+    desc: "Contact the travel desk Monday to Saturday, 9am to 7pm IST.",
   },
 ];
 
@@ -237,10 +237,18 @@ export default function ToursPage() {
                 for every kind of traveller.
               </p>
               <div className="flex gap-3 mt-6 flex-wrap">
-                <button className="bg-[#FF9800] hover:bg-[#F57C00] text-white font-semibold text-sm px-6 py-3 rounded-full transition-colors">
+                <button
+                  type="button"
+                  onClick={() => document.getElementById("tour-grid")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  className="bg-[#FF9800] hover:bg-[#F57C00] text-white font-semibold text-sm px-6 py-3 rounded-full transition-colors"
+                >
                   Explore All Tours
                 </button>
-                <button className="bg-white/10 border border-white/25 text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-white/20 transition-colors">
+                <button
+                  type="button"
+                  onClick={() => document.getElementById("why-us")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  className="bg-white/10 border border-white/25 text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-white/20 transition-colors"
+                >
                   How It Works
                 </button>
               </div>
@@ -350,10 +358,26 @@ export default function ToursPage() {
                 ))}
               </div>
             ))}
-            <button className="w-full bg-[#FF9800] hover:bg-[#F57C00] text-white font-semibold text-xs py-2.5 rounded-xl mt-5 transition-colors">
+            <button
+              type="button"
+              onClick={() => {
+                setPage(1);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className="w-full bg-[#FF9800] hover:bg-[#F57C00] text-white font-semibold text-xs py-2.5 rounded-xl mt-5 transition-colors"
+            >
               Apply Filters
             </button>
-            <button className="w-full text-xs text-gray-400 mt-2 hover:text-gray-600 transition-colors">
+            <button
+              type="button"
+              onClick={() => {
+                setActiveCategory("All Tours");
+                setBudget(30000);
+                setSortBy("Popularity");
+                setPage(1);
+              }}
+              className="w-full text-xs text-gray-400 mt-2 hover:text-gray-600 transition-colors"
+            >
               Reset all
             </button>
           </aside>
@@ -390,7 +414,7 @@ export default function ToursPage() {
               </div>
             </div>
 
-            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            <div id="tour-grid" className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {tours?.map((tour) => {
                 const imageUrl = tour?.images?.[0]?.url || FALLBACK_IMAGE;
                 const imageAlt =
@@ -425,8 +449,8 @@ export default function ToursPage() {
                 const slug = tour?.slug || tour?._id;
 
                 return (
-                  <Link href={`/tours/${slug}`} key={tour?._id} className="block">
                   <article
+                    key={tour?._id}
                     className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col h-full"
                   >
                     <div className="relative">
@@ -473,7 +497,9 @@ export default function ToursPage() {
                         )}
                       </div>
                       <h3 className="fd text-base text-[#1B3A1F] leading-snug mb-1">
-                        {tour?.title || "Untitled Tour"}
+                        <Link href={`/tours/${slug}`}>
+                          {tour?.title || "Untitled Tour"}
+                        </Link>
                       </h3>
                       {tour?.destination && (
                         <p className="text-xs text-gray-400 mb-2">
@@ -520,13 +546,12 @@ export default function ToursPage() {
                             </span>
                           </div>
                         </div>
-                        <button className="bg-[#FF9800] hover:bg-[#F57C00] text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors">
+                        <Link href={`/booking/${tour?._id}`} className="bg-[#FF9800] hover:bg-[#F57C00] text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors">
                           Book Now
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </article>
-                  </Link>
                 );
               })}
             </div>
@@ -568,7 +593,7 @@ export default function ToursPage() {
         </div>
 
         {/* WHY US */}
-        <section className="bg-white border-t border-gray-100 py-12 px-5">
+        <section id="why-us" className="bg-white border-t border-gray-100 py-12 px-5">
           <div className="max-w-7xl mx-auto">
             <h2 className="fd text-2xl text-[#1B3A1F] text-center mb-8">
               Why Travellers Choose Us
@@ -635,7 +660,11 @@ export default function ToursPage() {
             will put together a custom itinerary within 24 hours — free of
             charge.
           </p>
-          <button className="bg-[#FF9800] hover:bg-[#F57C00] text-white font-semibold text-sm px-8 py-3 rounded-full transition-colors">
+          <button
+            type="button"
+            onClick={() => (window.location.href = "/contact")}
+            className="bg-[#FF9800] hover:bg-[#F57C00] text-white font-semibold text-sm px-8 py-3 rounded-full transition-colors"
+          >
             Request Custom Tour
           </button>
         </section>

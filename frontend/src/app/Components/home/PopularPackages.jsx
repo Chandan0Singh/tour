@@ -24,7 +24,7 @@ export default function PopularPackages({ data = [] }) {
           {packages.slice(0, 6).map((item, index) => (
             <article className="package-card" key={item._id || item.title || index}>
               <div className="package-image-wrap"><img src={item.bannerImage || `https://images.unsplash.com/photo-${[1464822759023, 1500534623283, 1464278533981, 1530789253388, 1526772662000, 1548013146][index]}?q=80&w=600`} alt={item.title} /><span>{index === 0 ? "Best Seller" : ""}</span></div>
-              <div className="package-card__body"><h3>{item.title}</h3><div className="package-meta"><span><CalendarDays size={11} /> {item.duration?.days || item.duration || 3} Days</span><strong>₹{item.discountPrice || item.price || "8,999"}</strong></div><div className="package-rating"><Star size={11} fill="currentColor" /> {item.rating || "4.8"} ({item.reviews || "120"})</div><Link href={`/booking/${item.slug || item._id || "packages"}`}>View Details <ArrowRight size={12} /></Link></div>
+              <div className="package-card__body"><h3>{item.title}</h3><div className="package-meta"><span><CalendarDays size={11} /> {item.duration?.days || item.duration || 3} Days</span><strong>₹{item.discountPrice || item.price || "8,999"}</strong></div><div className="package-rating"><Star size={11} fill="currentColor" /> {item.rating || "4.8"} ({item.reviews || "120"})</div><Link href={item._id ? `/booking/${item._id}` : "/tours"}>View Details <ArrowRight size={12} /></Link></div>
             </article>
           ))}
         </div>

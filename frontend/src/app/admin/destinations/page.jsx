@@ -13,23 +13,21 @@ export default function DestinationsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchDestinations();
-  }, []);
+    (async () => {
+      try {
+        const res = await fetch(`${API}?limit=100`);
+        const data = await res.json();
 
-  async function fetchDestinations() {
-    try {
-      const res = await fetch(`${API}?limit=100`);
-      const data = await res.json();
-
-      if (data.success) {
-        setDestinations(data.products);
+        if (data.success) {
+          setDestinations(data.products);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  }
+    })();
+  }, []);
 
   async function handleDelete(id) {
     if (!confirm("Delete this destination?")) return;
@@ -73,10 +71,10 @@ export default function DestinationsPage() {
         </div>
 
         <Link
-          href="/admin/destinations/add"
+          href="/admin/packages/add"
           className="bg-green-700 text-white px-6 py-3 rounded-lg hover:bg-green-800"
         >
-          + Add Destination
+          + Add Destination Package
         </Link>
       </div>
 
@@ -157,7 +155,7 @@ export default function DestinationsPage() {
 
                   <td className="px-5 py-4 flex gap-3">
                     <Link
-                      href={`/admin/destinations/edit/${item._id}`}
+                      href={`/admin/packages/edit/${item._id}`}
                       className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
                     >
                       Edit

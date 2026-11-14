@@ -383,7 +383,7 @@ export default function ProductDetails({ product }) {
                 </Link>
 
                 <a
-    href="https://wa.me/8860968260?text=Hi"
+    href="https://wa.me/919045089285?text=Hi"
     target="_blank"
     rel="noopener noreferrer"
     className="w-full rounded-xl bg-[#25D366] px-5 py-3.5 text-center font-medium text-white transition hover:bg-[#1ebe5d]"

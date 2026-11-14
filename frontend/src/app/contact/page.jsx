@@ -119,11 +119,11 @@ export default function ContactPage() {
                 className="text-4xl md:text-5xl font-bold text-[#1B5E20] mt-3 mb-6"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
-                Let's Start Your Journey
+                Let&apos;s Start Your Journey
               </h2>
 
               <p className="text-gray-600 mb-8 leading-relaxed">
-                Whether you're planning a trek, family vacation, honeymoon, or
+                Whether you&apos;re planning a trek, family vacation, honeymoon, or
                 adventure trip, our team is ready to help you create memorable
                 travel experiences.
               </p>
@@ -136,7 +136,8 @@ export default function ContactPage() {
 
                   <div>
                     <h4 className="font-semibold text-lg">Phone</h4>
-                    <p className="text-gray-600">+91 90450 89285</p>
+                    <a href="tel:+919045089285" className="text-gray-600 hover:text-[#1B5E20]">+91 90450 89285</a>
+                    <a href="tel:+919389915896" className="block text-gray-600 hover:text-[#1B5E20]">+91 93899 15896</a>
                   </div>
                 </div>
 
@@ -147,7 +148,7 @@ export default function ContactPage() {
 
                   <div>
                     <h4 className="font-semibold text-lg">Email</h4>
-                    <p className="text-gray-600">code.chandansingh@gmai.com</p>
+                    <a href="mailto:travel.jaynegi@gmail.com" className="text-gray-600 hover:text-[#1B5E20]">travel.jaynegi@gmail.com</a>
                   </div>
                 </div>
 

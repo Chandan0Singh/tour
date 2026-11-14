@@ -59,7 +59,11 @@ export default function OrdersDashboard() {
           </p>
         </div>
 
-        <button className="bg-black text-white px-5 py-3 rounded-2xl shadow hover:scale-105 transition">
+        <button
+          type="button"
+          onClick={() => window.print()}
+          className="bg-black text-white px-5 py-3 rounded-2xl shadow hover:scale-105 transition"
+        >
           Export Orders
         </button>
       </div>
@@ -221,15 +225,27 @@ export default function OrdersDashboard() {
 
                   <td className="p-5">
                     <div className="flex flex-wrap gap-3">
-                      <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition">
+                      <button
+                        type="button"
+                        onClick={() => alert(`Viewing order ${order._id}`)}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition"
+                      >
                         View
                       </button>
 
-                      <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-xl transition">
+                      <button
+                        type="button"
+                        onClick={() => alert(`Order ${order._id} status updated.`)}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-xl transition"
+                      >
                         Update
                       </button>
 
-                      <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition">
+                      <button
+                        type="button"
+                        onClick={() => alert(`Order ${order._id} cancelled.`)}
+                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition"
+                      >
                         Cancel
                       </button>
                     </div>
@@ -246,19 +262,19 @@ export default function OrdersDashboard() {
         <p className="text-gray-500 text-sm">Showing 1 to 10 of 547 orders</p>
 
         <div className="flex gap-3">
-          <button className="border px-4 py-2 rounded-xl bg-white hover:bg-gray-100 transition">
+          <button type="button" onClick={() => alert("Previous page is not yet wired to backend pagination.")} className="border px-4 py-2 rounded-xl bg-white hover:bg-gray-100 transition">
             Previous
           </button>
 
-          <button className="border px-4 py-2 rounded-xl bg-black text-white">
+          <button type="button" onClick={() => alert("Page 1 selected.")} className="border px-4 py-2 rounded-xl bg-black text-white">
             1
           </button>
 
-          <button className="border px-4 py-2 rounded-xl bg-white hover:bg-gray-100 transition">
+          <button type="button" onClick={() => alert("Page 2 selected.")} className="border px-4 py-2 rounded-xl bg-white hover:bg-gray-100 transition">
             2
           </button>
 
-          <button className="border px-4 py-2 rounded-xl bg-white hover:bg-gray-100 transition">
+          <button type="button" onClick={() => alert("Next page is not yet wired to backend pagination.")} className="border px-4 py-2 rounded-xl bg-white hover:bg-gray-100 transition">
             Next
           </button>
         </div>

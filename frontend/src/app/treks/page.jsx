@@ -48,6 +48,11 @@ function TrekCard({ trek }) {
 
   const price = trek.discountPrice || trek.price;
   const hasDiscount = trek.discountPrice && trek.discountPrice < trek.price;
+  const stateSlug = String(trek.state || trek.destination || "destination")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+  const productSlug = trek.slug || trek._id;
 
   return (
     <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
@@ -180,7 +185,7 @@ function TrekCard({ trek }) {
             <p className="text-[10px] text-gray-400">per person</p>
           </div>
           <Link
-            href={`/treks/${trek.slug}`}
+            href={`/treks/${stateSlug}/${productSlug}`}
             className="bg-[#1B5E20] text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#4CAF50] transition-colors shadow-md hover:shadow-lg"
           >
             View Trek →
@@ -243,8 +248,45 @@ export default function TreksPage() {
   }, [sort, page, difficulty, minPrice, maxPrice, featured, bestSeller]);
 
   useEffect(() => {
-    fetchTreks();
-  }, [fetchTreks]);
+    let active = true;
+
+    (async () => {
+      try {
+        const params = {
+          type: "Trek",
+          sort,
+          page,
+          limit: LIMIT,
+          ...(difficulty && { difficulty }),
+          ...(minPrice && { minPrice }),
+          ...(maxPrice && { maxPrice }),
+          ...(featured && { featured: "true" }),
+          ...(bestSeller && { bestSeller: "true" }),
+        };
+
+        const { data } = await axios.get(`${BACKEND_URL}/api/products`, {
+          params,
+        });
+
+        if (active) {
+          setTreks(data.products || []);
+          setTotal(data.total || 0);
+          setError("");
+        }
+      } catch {
+        if (active) {
+          setError("Failed to load treks. Please try again.");
+          setTreks([]);
+        }
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [sort, page, difficulty, minPrice, maxPrice, featured, bestSeller]);
 
   // Search (separate endpoint)
   const handleSearch = async () => {
@@ -513,7 +555,7 @@ export default function TreksPage() {
             )}
             {search && (
               <span className="flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1 rounded-full text-xs font-medium">
-                "{search}"
+                &quot;{search}&quot;
                 <button
                   onClick={clearSearch}
                   className="ml-1 hover:text-red-500"

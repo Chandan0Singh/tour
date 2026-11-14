@@ -108,8 +108,12 @@ const BestSellers = () => {
                     </h4>
                   </div>
 
-                  <button className="bg-[#1B5E20] text-white px-5 py-3 rounded-xl hover:bg-[#4CAF50] transition">
-                    View Details
+                  <button
+                    type="button"
+                    onClick={() => (window.location.href = "/treks")}
+                    className="bg-[#1B5E20] text-white px-5 py-3 rounded-xl hover:bg-[#4CAF50] transition"
+                  >
+                    Explore Treks
                   </button>
                 </div>
               </div>
@@ -119,7 +123,11 @@ const BestSellers = () => {
 
         {/* Button */}
         <div className="text-center mt-12">
-          <button className="bg-[#1B5E20] text-white px-8 py-4 rounded-full hover:bg-[#4CAF50] transition-all">
+          <button
+            type="button"
+            onClick={() => (window.location.href = "/tours")}
+            className="bg-[#1B5E20] text-white px-8 py-4 rounded-full hover:bg-[#4CAF50] transition-all"
+          >
             Explore All Packages
           </button>
         </div>

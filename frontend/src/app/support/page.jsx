@@ -37,49 +37,49 @@ const FAQS = [
     category: "booking",
     question: "How do I book a trek or tour package?",
     answer:
-      "Pick a package from the Treks or Tours page, choose your preferred date and group size, and click Book Now. You'll be guided through traveler details and payment. Once confirmed, you'll get a confirmation email with your itinerary and a copy in My Bookings.",
+      "Open a package from the Treks or Tours page and review its available dates, inclusions, and booking options. Follow the booking steps shown for that package. If you need help with a booking, contact the travel desk with your booking ID.",
   },
   {
     id: "f2",
     category: "booking",
     question: "Can I customize a trek itinerary?",
     answer:
-      "Yes. For groups of 6 or more, reach out through the enquiry form on any package page or contact our travel desk directly, and we'll tailor the itinerary, duration, or route to your group's needs.",
+      "Customization depends on the package, route, and available dates. Send your preferred route, dates, and group size through the contact form so the travel desk can confirm what is possible.",
   },
   {
     id: "f3",
     category: "payments",
     question: "What payment methods are accepted?",
     answer:
-      "We accept credit and debit cards, UPI, net banking, and popular wallets through our secure checkout. For select packages, we also offer a partial-advance option with the balance due before departure.",
+      "Available payment methods and any advance-payment options are shown during checkout for the selected package.",
   },
   {
     id: "f4",
     category: "payments",
     question: "Is my payment information secure?",
     answer:
-      "All transactions are processed through an encrypted, PCI-compliant payment gateway. We never store your full card details on our servers.",
+      "Complete payment only through the checkout page. Do not send card or banking details by email, phone, or WhatsApp. Contact support if the checkout page does not load or a payment status is unclear.",
   },
   {
     id: "f5",
     category: "cancellation",
     question: "What is your cancellation policy?",
     answer:
-      "Cancellations made 15+ days before departure receive a full refund minus a small processing fee. Cancellations within 7-14 days are eligible for a 50% refund. Cancellations within 7 days of departure are non-refundable, though we're happy to help you reschedule where possible.",
+      "Cancellation and refund terms can vary by package and booking. Check the terms shown for your package or booking confirmation, then contact the travel desk with your booking ID before making changes.",
   },
   {
     id: "f6",
     category: "cancellation",
     question: "How long do refunds take to process?",
     answer:
-      "Approved refunds are initiated within 3-5 business days and typically reflect in your account within 7-10 business days, depending on your bank or card provider.",
+      "Refund eligibility and timing depend on the package terms and payment provider. Contact the travel desk with your booking ID and payment reference to check the status.",
   },
   {
     id: "f7",
     category: "safety",
     question: "What safety measures are in place on treks?",
     answer:
-      "Every trek is led by certified, experienced guides carrying first-aid kits and communication devices. We monitor weather and altitude conditions closely and adjust routes when needed. High-altitude treks include acclimatization days built into the itinerary.",
+      "Safety requirements and support vary by route. Review the itinerary and trip-specific guidance before booking, and follow the trip leader's instructions during the trek. Contact the travel desk if a package's safety details are unclear.",
   },
   {
     id: "f8",
@@ -93,28 +93,28 @@ const FAQS = [
     category: "safety",
     question: "Do I need travel insurance?",
     answer:
-      "We strongly recommend it, and it's mandatory for treks above 3,500m. You're welcome to add insurance during checkout or arrange your own, provided it covers high-altitude trekking and emergency evacuation.",
+      "Insurance requirements vary by package. Check the package details before booking and confirm that any policy you arrange covers the activities and locations on your itinerary.",
   },
   {
     id: "f10",
     category: "groups",
     question: "Do you offer discounts for group bookings?",
     answer:
-      "Yes, groups of 8 or more receive tiered discounts, and groups of 15+ can request a dedicated guide and customized departure date. Use the group enquiry option on any package page to get a quote.",
+      "Group availability and pricing depend on the package and requested dates. Send the group size and preferred dates through the contact form to request a quote.",
   },
   {
     id: "f11",
     category: "groups",
     question: "Can I book for someone else in my group separately?",
     answer:
-      "Yes. Each traveler can be added individually during checkout with their own contact and ID details, even if one person is paying for the whole group.",
+      "Please follow the traveler-detail fields available during checkout. If your group needs separate bookings or a shared payment arrangement, contact the travel desk before booking.",
   },
   {
     id: "f12",
     category: "booking",
     question: "What is the best season to book a Himalayan trek?",
     answer:
-      "Most Himalayan treks run best between March-June and September-November. Each package page lists its recommended season, along with weather notes for that window.",
+      "The suitable season varies by route and year. Check the selected package's dates and trip information, and contact the travel desk if you need help choosing a departure.",
   },
 ];
 
@@ -124,28 +124,35 @@ const CONTACT_CHANNELS = [
     label: "Call Us",
     value: "+91 90450 89285",
     hint: "Mon-Sat, 9am-7pm IST",
-    href: "tel:+919876543210",
+    href: "tel:+919045089285",
+  },
+  {
+    icon: Phone,
+    label: "Call Us",
+    value: "+91 93899 15896",
+    hint: "Mon-Sat, 9am-7pm IST",
+    href: "tel:+919389915896",
   },
   {
     icon: MessageCircle,
     label: "WhatsApp",
     value: "+91 90450 89285",
     hint: "Fastest response for quick questions",
-    href: "https://wa.me/919876543210",
+    href: "https://wa.me/919045089285",
   },
   {
     icon: Mail,
     label: "Email Us",
-    value: "support@natureexplorer.in",
-    hint: "We reply within 24 hours",
-    href: "mailto:support@natureexplorer.in",
+    value: "travel.jaynegi@gmail.com",
+    hint: "For booking queries, include your booking ID",
+    href: "mailto:travel.jaynegi@gmail.com",
   },
   {
     icon: MapPin,
     label: "Visit Us",
-    value: "Nature Explorer Travel Desk, Delhi",
-    hint: "By appointment only",
-    href: "#",
+    value: "Dehradun, Uttarakhand, India",
+    hint: "Contact us before visiting",
+    href: "https://maps.google.com/?q=Dehradun%2C+Uttarakhand%2C+India",
   },
 ];
 
@@ -191,7 +198,15 @@ export default function HelpSupportPage() {
     setSubmitting(true);
     setSubmitError(null);
     try {
-      await axios.post(`${API_BASE}/support/contact`, form);
+      const message = form.bookingId
+        ? `Booking ID: ${form.bookingId}\n\n${form.message}`
+        : form.message;
+      await axios.post(`${API_BASE}/contact/send`, {
+        name: form.name,
+        email: form.email,
+        subject: form.subject,
+        message,
+      });
       setSubmitted(true);
       setForm({ name: "", email: "", bookingId: "", subject: "", message: "" });
     } catch (err) {
@@ -209,7 +224,7 @@ export default function HelpSupportPage() {
       <section className="py-16 border-b border-[#E4E0D8]">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <p className="uppercase tracking-[4px] text-[#5E6B58] text-sm mb-3">
-            We're Here to Help
+            We&apos;re Here to Help
           </p>
           <h1
             className="text-5xl text-[#2D2D2D]"
@@ -328,6 +343,8 @@ export default function HelpSupportPage() {
                     <a
                       key={channel.label}
                       href={channel.href}
+                      target={channel.label === "Visit Us" ? "_blank" : undefined}
+                      rel={channel.label === "Visit Us" ? "noreferrer" : undefined}
                       className="flex items-start gap-3 group"
                     >
                       <span className="w-10 h-10 flex items-center justify-center bg-[#F8F5EE] border border-[#E4E0D8] text-[#5E6B58] flex-shrink-0">
@@ -359,12 +376,15 @@ export default function HelpSupportPage() {
                 Already on a trip?
               </h3>
               <p className="text-sm text-white/80">
-                If you need urgent help during an ongoing trek or tour, call our
-                24/7 emergency line at{" "}
-                <a href="tel:+911800123456" className="underline">
-                  1800-123-456
+                For help during an ongoing trip, call the travel desk at{" "}
+                <a href="tel:+919045089285" className="underline">
+                  +91 90450 89285
                 </a>
-                .
+                {" / "}
+                <a href="tel:+919389915896" className="underline">
+                  +91 93899 15896
+                </a>
+                . For immediate emergencies, contact local emergency services.
               </p>
             </div>
           </div>
@@ -393,7 +413,7 @@ export default function HelpSupportPage() {
                 Message sent
               </h3>
               <p className="text-sm text-gray-500 max-w-sm">
-                Thanks for reaching out. We've received your message and will
+                Thanks for reaching out. We&apos;ve received your message and will
                 respond by email shortly.
               </p>
               <button

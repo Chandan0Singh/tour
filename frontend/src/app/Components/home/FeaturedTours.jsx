@@ -58,7 +58,11 @@ const FeaturedTours = ({ data }) => {
                   {tour.shortDescription}
                 </p>
 
-                <button className="w-full bg-green-800 hover:bg-green-900 text-white py-3 rounded-xl font-medium transition">
+                <button
+                  type="button"
+                  onClick={() => (window.location.href = `/booking/${tour._id}`)}
+                  className="w-full bg-green-800 hover:bg-green-900 text-white py-3 rounded-xl font-medium transition"
+                >
                   Book Now
                 </button>
               </div>
@@ -68,7 +72,11 @@ const FeaturedTours = ({ data }) => {
 
         {/* View All */}
         <div className="text-center mt-12">
-          <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-full font-semibold transition">
+          <button
+            type="button"
+            onClick={() => (window.location.href = "/tours")}
+            className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-full font-semibold transition"
+          >
             View All Tours
           </button>
         </div>

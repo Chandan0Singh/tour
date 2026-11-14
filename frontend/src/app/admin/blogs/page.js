@@ -110,27 +110,30 @@ export default function BlogsDashboard() {
     }
   };
 
-  const filtersearch = async () => {
-    try {
-      const response = await axios.get(
-        `${BACKEND_URL}/api/blog/search`,
-        {
+  useEffect(() => {
+    let active = true;
+
+    (async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}/api/blog/search`, {
           params: {
             search: searchTerm,
             category: searchCategory,
             status: searchStatus,
           },
-        },
-      );
+        });
 
-      setBlogs(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+        if (active) {
+          setBlogs(response.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
 
-  useEffect(() => {
-    filtersearch();
+    return () => {
+      active = false;
+    };
   }, [searchTerm, searchCategory, searchStatus]);
 
   const draftCount = blogs.filter((blog) => blog.status === "Draft").length;
@@ -431,7 +434,7 @@ export default function BlogsDashboard() {
                     <td className="p-5">
                       <div className="flex flex-wrap gap-3">
                         <button
-                          onClick={() => router.push(`/blog/${blog._id}`)}
+                          onClick={() => router.push(`/blogs/${blog.slug || blog._id}`)}
                           className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition"
                         >
                           View

@@ -50,7 +50,11 @@ const Blogs = ({ data = [] }) => {
                   {blog.title}
                 </h3>
 
-                <button className="flex items-center gap-2 text-[#1B5E20] font-semibold hover:text-[#4CAF50] transition">
+                <button
+                  type="button"
+                  onClick={() => (window.location.href = `/blogs/${blog._id}`)}
+                  className="flex items-center gap-2 text-[#1B5E20] font-semibold hover:text-[#4CAF50] transition"
+                >
                   Read More
                   <FaArrowRight />
                 </button>
@@ -60,7 +64,11 @@ const Blogs = ({ data = [] }) => {
         </div>
 
         <div className="text-center mt-12">
-          <button className="bg-[#1B5E20] text-white px-8 py-4 rounded-full hover:bg-[#4CAF50] transition-all">
+          <button
+            type="button"
+            onClick={() => (window.location.href = "/blogs")}
+            className="bg-[#1B5E20] text-white px-8 py-4 rounded-full hover:bg-[#4CAF50] transition-all"
+          >
             View All Blogs
           </button>
         </div>

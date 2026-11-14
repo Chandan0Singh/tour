@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const menuItems = [
   { id: "dashboard", label: "Dashboard", icon: "🏠", href: "/admin" },
@@ -129,6 +129,7 @@ const greetIcon = hour < 12 ? "🌅" : hour < 17 ? "☀️" : "🌙";
 
 export default function AdminDashboard() {
   const pathname = usePathname();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -184,7 +185,14 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              <button className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 text-red-600 text-xs font-medium hover:bg-red-100 transition">
+              <button
+                type="button"
+                onClick={() => {
+                  localStorage.removeItem("adminAuthenticated");
+                  window.location.href = "/";
+                }}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 text-red-600 text-xs font-medium hover:bg-red-100 transition"
+              >
                 <span>🚪</span> Logout
               </button>
             </div>
@@ -244,14 +252,16 @@ export default function AdminDashboard() {
             </h2>
             <div className="flex flex-wrap gap-3">
               {[
-                { label: "＋ Add Tour", style: "bg-[#1B5E20] text-white hover:bg-[#2E7D32]" },
-                { label: "＋ Add Destination", style: "bg-[#4CAF50] text-white hover:bg-[#388E3C]" },
-                { label: "✍️ Write Blog", style: "bg-[#FF9800] text-white hover:bg-[#F57C00]" },
-                { label: "🖼️ Add Gallery", style: "bg-white border border-[#1B5E20] text-[#1B5E20] hover:bg-green-50" },
-                { label: "📅 View Bookings", style: "bg-white border border-[#FF9800] text-[#FF9800] hover:bg-orange-50" },
+                { label: "＋ Add Tour", style: "bg-[#1B5E20] text-white hover:bg-[#2E7D32]", href: "/admin/packages/add" },
+                { label: "＋ Add Destination", style: "bg-[#4CAF50] text-white hover:bg-[#388E3C]", href: "/admin/destinations" },
+                { label: "✍️ Write Blog", style: "bg-[#FF9800] text-white hover:bg-[#F57C00]", href: "/admin/blogs" },
+                { label: "🖼️ Add Gallery", style: "bg-white border border-[#1B5E20] text-[#1B5E20] hover:bg-green-50", href: "/admin/gallery" },
+                { label: "📅 View Bookings", style: "bg-white border border-[#FF9800] text-[#FF9800] hover:bg-orange-50", href: "/admin/bookings" },
               ].map((btn) => (
                 <button
                   key={btn.label}
+                  type="button"
+                  onClick={() => router.push(btn.href)}
                   className={`${btn.style} px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md`}
                 >
                   {btn.label}
@@ -333,7 +343,13 @@ export default function AdminDashboard() {
               <h2 className="text-base font-bold text-[#1B5E20]" style={{ fontFamily: "'Playfair Display', serif" }}>
                 📅 Recent Bookings
               </h2>
-              <button className="text-xs text-[#FF9800] font-semibold hover:underline">View All →</button>
+              <button
+                type="button"
+                onClick={() => router.push("/admin/bookings")}
+                className="text-xs text-[#FF9800] font-semibold hover:underline"
+              >
+                View All →
+              </button>
             </div>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
@@ -377,7 +393,13 @@ export default function AdminDashboard() {
                 <h2 className="text-base font-bold text-[#1B5E20]" style={{ fontFamily: "'Playfair Display', serif" }}>
                   📩 Recent Enquiries
                 </h2>
-                <button className="text-xs text-[#FF9800] font-semibold hover:underline">View All →</button>
+                <button
+                  type="button"
+                  onClick={() => router.push("/admin/enquiries")}
+                  className="text-xs text-[#FF9800] font-semibold hover:underline"
+                >
+                  View All →
+                </button>
               </div>
               <div className="space-y-3">
                 {enquiries.map((e, i) => (
@@ -404,7 +426,13 @@ export default function AdminDashboard() {
                 <h2 className="text-base font-bold text-[#1B5E20]" style={{ fontFamily: "'Playfair Display', serif" }}>
                   ⭐ Latest Reviews
                 </h2>
-                <button className="text-xs text-[#FF9800] font-semibold hover:underline">View All →</button>
+                <button
+                  type="button"
+                  onClick={() => router.push("/admin/reviews")}
+                  className="text-xs text-[#FF9800] font-semibold hover:underline"
+                >
+                  View All →
+                </button>
               </div>
               <div className="space-y-4">
                 {reviews.map((r, i) => (

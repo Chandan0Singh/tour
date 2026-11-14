@@ -21,31 +21,28 @@ const difficultyStyle = {
 export default function BlogPage() {
    const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(6);
 
   const [activeCategory, setActiveCategory] = useState("All");
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
-  const fetchBlogs = async () => {
-    try {
-      const response = await fetch(
-        `${BACKEND_URL}/api/blog/published`,
-      );
-
-      const data = await response.json();
-
-      if (data.success) {
-        setBlogs(data.data);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchBlogs();
+    (async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/blog/published`);
+
+        const data = await response.json();
+
+        if (data.success) {
+          setBlogs(data.data);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   const filtered =
@@ -54,8 +51,8 @@ export default function BlogPage() {
       : blogs.filter((blog) => blog.category === activeCategory);
 
   const featured = filtered[0];
-
-  const rest = filtered.slice(1);
+  const visiblePosts = filtered.slice(1, 1 + visibleCount);
+  const hasMorePosts = filtered.length > 1 + visibleCount;
 
   return (
     <div className="min-h-screen bg-[#F9F7F4] font-[Poppins,sans-serif]">
@@ -80,7 +77,7 @@ export default function BlogPage() {
           </h1>
           <p className="mt-4 text-white/70 text-base max-w-xl mx-auto leading-relaxed">
             Trek reports, destination guides, packing lists, and honest stories
-            from the mountains — written by guides who've been there.
+            from the mountains — written by guides who&apos;ve been there.
           </p>
         </div>
       </section>
@@ -173,9 +170,9 @@ export default function BlogPage() {
         )}
 
         {/* GRID */}
-        {rest.length > 0 && (
+        {visiblePosts.length > 0 && (
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-            {rest.map((post) => (
+            {visiblePosts.map((post) => (
               <article
                 key={post._id}
                 className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col"
@@ -219,7 +216,7 @@ export default function BlogPage() {
                       </p>
                     </div>
                     <Link
-                      href={`/blog/${post._id}`}
+                      href={`/blogs/${post._id}`}
                       className="text-xs font-semibold text-[#1B5E20] hover:text-[#4CAF50] flex items-center gap-1 group transition-colors"
                     >
                       Read
@@ -264,9 +261,13 @@ export default function BlogPage() {
         )}
 
         {/* LOAD MORE */}
-        {filtered.length > 0 && (
+        {hasMorePosts && (
           <div className="text-center mt-12">
-            <button className="border border-[#1B5E20] text-[#1B5E20] hover:bg-[#1B5E20] hover:text-white font-semibold text-sm px-8 py-3 rounded-full transition-all duration-200">
+            <button
+              type="button"
+              onClick={() => setVisibleCount((prev) => prev + 3)}
+              className="border border-[#1B5E20] text-[#1B5E20] hover:bg-[#1B5E20] hover:text-white font-semibold text-sm px-8 py-3 rounded-full transition-all duration-200"
+            >
               Load More Articles
             </button>
           </div>
@@ -288,7 +289,7 @@ export default function BlogPage() {
           </p>
           {subscribed ? (
             <div className="bg-[#4CAF50]/20 border border-[#4CAF50]/40 rounded-2xl px-6 py-5 text-[#A5D6A7] font-medium">
-              ✓ You're in. Watch your inbox before the next season opens.
+              ✓ You&apos;re in. Watch your inbox before the next season opens.
             </div>
           ) : (
             <div className="flex flex-col sm:flex-row gap-3">

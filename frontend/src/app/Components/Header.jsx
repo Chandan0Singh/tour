@@ -179,14 +179,18 @@ export default function Header() {
         <div className="bg-green-900 text-white/75 text-[11px] font-medium">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 flex items-center justify-between py-1.5">
             <div className="flex items-center gap-4">
-              <span className="flex items-center gap-1.5">
+              <a href="tel:+919045089285" className="flex items-center gap-1.5 hover:text-white">
                 <Phone size={11} aria-hidden="true" />
                 +91 90450 89285
-              </span>
-              <span className="hidden sm:flex items-center gap-1.5">
+              </a>
+              <a href="tel:+919389915896" className="hidden sm:flex items-center gap-1.5 hover:text-white">
+                <Phone size={11} aria-hidden="true" />
+                +91 93899 15896
+              </a>
+              <a href="mailto:travel.jaynegi@gmail.com" className="hidden sm:flex items-center gap-1.5 hover:text-white">
                 <Mail size={11} aria-hidden="true" />
-                code.chandansingh@gmail.com
-              </span>
+                travel.jaynegi@gmail.com
+              </a>
             </div>
             <div className="hidden sm:flex items-center gap-4">
               {[
@@ -207,6 +211,8 @@ export default function Header() {
                   key={s.name}
                   href={s.link}
                   aria-label={s.name}
+                  target="_blank"
+                  rel="noreferrer"
                   className="text-white/60 hover:text-green-300 transition-colors"
                 >
                   {s.name}
@@ -308,7 +314,7 @@ export default function Header() {
                     </Link>
 
                     <Link
-                      href="/my-bookings"
+                      href="/account?tab=bookings"
                       className="block px-5 py-3 text-sm hover:bg-green-50"
                     >
                       🧳 My Bookings
@@ -408,7 +414,7 @@ export default function Header() {
                     Login
                   </Link>
                   <Link
-                    href="/booking"
+                    href="/tours"
                     onClick={() => setMobileOpen(false)}
                     className="flex-1 flex items-center justify-center gap-1.5 bg-green-900 hover:bg-green-800 text-white font-semibold text-[13px] py-2.5 rounded-full transition-colors"
                   >

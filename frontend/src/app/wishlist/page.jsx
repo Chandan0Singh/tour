@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { Heart, MapPin, Clock, Users, ShoppingBag, Star } from "lucide-react";
+import { Heart, MapPin, Clock, Users, Star } from "lucide-react";
 
 // ---- static placeholder data ---------------------------------------
 // Swap this out for a real fetch (e.g. GET /api/wishlist/:userId) whenever
@@ -124,12 +125,12 @@ export default function WishlistPage() {
             <p className="mt-4 text-gray-500">
               Tap the heart icon on any trek or tour to save it here.
             </p>
-            <a
-              href="/treks"
+            <Link
+              href="/tours"
               className="inline-block mt-6 px-8 py-3 bg-[#5E6B58] text-white uppercase tracking-[2px]"
             >
               Explore Treks &amp; Tours
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -195,9 +196,12 @@ export default function WishlistPage() {
                         ₹{item.price.toLocaleString()}
                       </p>
                     </div>
-                    <button className="flex items-center gap-2 px-4 py-2.5 bg-[#5E6B58] text-white text-xs uppercase tracking-[1px] hover:bg-[#4b5847] transition-colors">
-                      <ShoppingBag size={14} />
-                      Add to Cart
+                    <button
+                      type="button"
+                      onClick={() => (window.location.href = item.type === "Trek" ? "/treks" : "/tours")}
+                      className="flex items-center gap-2 px-4 py-2.5 bg-[#5E6B58] text-white text-xs uppercase tracking-[1px] hover:bg-[#4b5847] transition-colors"
+                    >
+                      View {item.type}s
                     </button>
                   </div>
                 </div>

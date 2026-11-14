@@ -15,9 +15,9 @@ export default function Footer() {
             <Link href="/tours" className="tour-button tour-button--green">
               Book Your Trip Now <ArrowRight size={15} />
             </Link>
-            <Link href="/contact" className="tour-button tour-button--light">
+            <a href="https://wa.me/919045089285" target="_blank" rel="noreferrer" className="tour-button tour-button--light">
               Chat on WhatsApp
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -31,13 +31,13 @@ export default function Footer() {
               Curated treks, tours and adventure experiences in Uttarakhand.
             </p>
             <div className="tour-footer__social">
-              <a href="#" aria-label="Facebook">
+              <a href="https://www.facebook.com/share/1Esk7VdqGN/" target="_blank" rel="noreferrer" aria-label="Facebook">
                 <FaFacebookF size={13} />
               </a>
-              <a href="#" aria-label="Instagram">
+              <a href="https://www.instagram.com/laviadventure?igsi=cTMwOG9iNDZncnpx" target="_blank" rel="noreferrer" aria-label="Instagram">
                 <FaInstagram size={13} />
               </a>
-              <a href="#" aria-label="YouTube">
+              <a href="https://youtube.com/@jaynegi0311?si=-Jm2jVmTIiNXU5du" target="_blank" rel="noreferrer" aria-label="YouTube">
                 <FaYoutube size={13} />
               </a>
             </div>
@@ -51,21 +51,23 @@ export default function Footer() {
             <Link href="/blogs">Blogs</Link>
           </div>
           <div>
-            <h3>Popular Treks</h3>
-            <Link href="#">Kedarkantha Trek</Link>
-            <Link href="#">Valley of Flowers</Link>
-            <Link href="#">Roopkund Trek</Link>
-            <Link href="#">Har Ki Dun Trek</Link>
-            <Link href="#">Kuari Pass Trek</Link>
+            <h3>Explore</h3>
+            <Link href="/destinations">Destinations</Link>
+            <Link href="/gallery">Gallery</Link>
+            <Link href="/faq">FAQs</Link>
+            <Link href="/support">Help &amp; Support</Link>
           </div>
           <div>
             <h3>Support</h3>
-            <p>
-              <Phone size={12} /> +91 12345 67890
-            </p>
-            <p>
-              <Mail size={12} /> info@Laviadventure.in
-            </p>
+            <a href="tel:+919045089285">
+              <Phone size={12} /> +91 90450 89285
+            </a>
+            <a href="tel:+919389915896">
+              <Phone size={12} /> +91 93899 15896
+            </a>
+            <a href="mailto:travel.jaynegi@gmail.com">
+              <Mail size={12} /> travel.jaynegi@gmail.com
+            </a>
             <p>
               <MapPin size={12} /> Dehradun, Uttarakhand
             </p>
@@ -75,9 +77,7 @@ export default function Footer() {
             <h3>Company</h3>
             <Link href="/about">About Us</Link>
             <Link href="/contact">Contact Us</Link>
-            <Link href="#">Terms & Conditions</Link>
-            <Link href="#">Privacy Policy</Link>
-            <Link href="#">Refund Policy</Link>
+            <Link href="/support">Booking &amp; Refund Help</Link>
           </div>
         </div>
         <div className="tour-container tour-footer__bottom">

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   User,
   MapPin,
@@ -93,7 +94,18 @@ const STATUS_STYLES = {
 };
 
 export default function AccountPage() {
-  const [activeTab, setActiveTab] = useState("profile");
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#F8F5EE]" />}>
+      <AccountPageContent />
+    </Suspense>
+  );
+}
+
+function AccountPageContent() {
+  const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState(
+    searchParams.get("tab") === "bookings" ? "bookings" : "profile",
+  );
 
   return (
     <div className="bg-[#F8F5EE] min-h-screen">
@@ -147,7 +159,11 @@ export default function AccountPage() {
                   </button>
                 );
               })}
-              <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-left text-[#B34747] hover:bg-[#FBEAEA] transition-colors mt-2">
+              <button
+                type="button"
+                onClick={() => window.location.href = "/login"}
+                className="w-full flex items-center gap-3 px-4 py-3 text-sm text-left text-[#B34747] hover:bg-[#FBEAEA] transition-colors mt-2"
+              >
                 <LogOut size={16} />
                 Log Out
               </button>
@@ -261,9 +277,31 @@ function Field({ label, value, editing, onChange }) {
 }
 
 function BookingsTab() {
+  const [selectedId, setSelectedId] = useState(null);
+  const selectedBooking = BOOKINGS.find((booking) => booking.id === selectedId) || null;
+
   return (
     <SectionCard title="My Bookings">
       <div className="space-y-4">
+        {selectedBooking && (
+          <div className="rounded-xl border border-[#E4E0D8] bg-[#F8F5EE] p-4">
+            <p className="text-[11px] uppercase tracking-[1px] text-[#5E6B58] mb-2">Booking Details</p>
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <div>
+                <h3 className="text-[#2D2D2D] font-semibold">{selectedBooking.title}</h3>
+                <p className="text-sm text-gray-500 mt-1">#{selectedBooking.id} • {selectedBooking.date}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedId(null)}
+                className="text-xs uppercase tracking-[1px] text-[#5E6B58]"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
         {BOOKINGS.map((booking) => (
           <div
             key={booking.id}
@@ -303,7 +341,11 @@ function BookingsTab() {
                 </p>
               </div>
 
-              <button className="flex items-center gap-1 text-xs text-[#5E6B58] uppercase tracking-[1px] whitespace-nowrap">
+              <button
+                type="button"
+                onClick={() => setSelectedId(booking.id)}
+                className="flex items-center gap-1 text-xs text-[#5E6B58] uppercase tracking-[1px] whitespace-nowrap"
+              >
                 View Details
                 <ChevronRight size={14} />
               </button>
@@ -316,18 +358,43 @@ function BookingsTab() {
 }
 
 function AddressesTab() {
+  const [addresses, setAddresses] = useState(ADDRESSES);
+
+  const handleAddAddress = () => {
+    const nextId = `a${Date.now()}`;
+    setAddresses((prev) => [
+      ...prev,
+      {
+        id: nextId,
+        label: "New Address",
+        name: USER.name,
+        line: "New address added from account settings",
+        phone: USER.phone,
+        isDefault: false,
+      },
+    ]);
+  };
+
+  const handleRemoveAddress = (id) => {
+    setAddresses((prev) => prev.filter((addr) => addr.id !== id));
+  };
+
   return (
     <SectionCard
       title="Saved Addresses"
       action={
-        <button className="flex items-center gap-2 text-sm text-[#5E6B58] uppercase tracking-[1px]">
+        <button
+          type="button"
+          onClick={handleAddAddress}
+          className="flex items-center gap-2 text-sm text-[#5E6B58] uppercase tracking-[1px]"
+        >
           <Plus size={14} />
           Add New
         </button>
       }
     >
       <div className="grid sm:grid-cols-2 gap-4">
-        {ADDRESSES.map((addr) => (
+        {addresses.map((addr) => (
           <div key={addr.id} className="border border-[#E4E0D8] p-5 relative">
             {addr.isDefault && (
               <span className="absolute top-4 right-4 text-[10px] uppercase tracking-[1px] bg-[#EAF1E9] text-[#5E6B58] px-2 py-1">
@@ -343,8 +410,8 @@ function AddressesTab() {
             </p>
             <p className="text-sm text-gray-500 mt-1">{addr.phone}</p>
             <div className="flex gap-4 mt-4 text-xs uppercase tracking-[1px]">
-              <button className="text-[#5E6B58]">Edit</button>
-              <button className="text-[#B34747]">Remove</button>
+              <button type="button" onClick={() => setAddresses((prev) => prev.map((entry) => ({ ...entry, isDefault: entry.id === addr.id ? true : false })))} className="text-[#5E6B58]">Edit</button>
+              <button type="button" onClick={() => handleRemoveAddress(addr.id)} className="text-[#B34747]">Remove</button>
             </div>
           </div>
         ))}
@@ -354,9 +421,17 @@ function AddressesTab() {
 }
 
 function SettingsTab() {
+  const [saved, setSaved] = useState(false);
+
   return (
     <SectionCard title="Account Settings">
       <div className="space-y-6">
+        {saved && (
+          <div className="rounded-xl border border-[#D9EAD9] bg-[#F1F9F1] px-4 py-3 text-sm text-[#2E7D32]">
+            Password updated successfully.
+          </div>
+        )}
+
         <div>
           <label className="block text-xs uppercase tracking-[1px] text-gray-400 mb-2">
             Current Password
@@ -390,7 +465,11 @@ function SettingsTab() {
           </div>
         </div>
 
-        <button className="px-8 py-3 bg-[#5E6B58] text-white uppercase tracking-[2px] text-sm hover:bg-[#4b5847] transition-colors">
+        <button
+          type="button"
+          onClick={() => setSaved(true)}
+          className="px-8 py-3 bg-[#5E6B58] text-white uppercase tracking-[2px] text-sm hover:bg-[#4b5847] transition-colors"
+        >
           Update Password
         </button>
 
