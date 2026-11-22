@@ -14,6 +14,8 @@ const contactRoutes = require("./routes/contactRoutes");
 const homeRoutes = require("./routes/homeRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const newsLatterRoutes = require("./routes/newsLatterRouter.js");
+const destinationRoutes = require("./routes/destinationRoutes");
+
 
 const app = express();
 
@@ -28,6 +30,7 @@ app.use("/api/gallery", galleryRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/bookings', bookingRoutes);
+app.use("/api/destinations", destinationRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/user', user);
 app.use("/api/blog", blog);

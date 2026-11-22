@@ -324,6 +324,31 @@ const createMenuItems = (states, basePath) => {
   });
 };
 
+const destinatoons = async (req, res) => {
+  try{
+
+    const destinationStates = await Product.distinct("state", {
+      status: "Active",
+      state: {
+        $exists: true,
+        $ne: "",
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      destinations: destinationStates,
+    })
+
+
+  } catch(error){
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    })
+  }
+}
+
 const getHeaderMenu = async (req, res) => {
   try {
     // Get unique states for Tours
@@ -481,4 +506,5 @@ module.exports = {
   getProductCategories,
   getSinglePageBySlug,
   getProductById,
+  destinatoons,
 };

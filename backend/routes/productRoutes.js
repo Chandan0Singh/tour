@@ -15,6 +15,7 @@ const {
   getProductCategories,
   getSinglePageBySlug,
   getProductById,
+  destinatoons,
 } = require("../controllers/productController");
 
 router.get("/", getAllProducts);
@@ -26,6 +27,8 @@ router.get("/bestseller", getBestSellerProducts);
 router.get("/search", searchProducts);
 
 router.get("/categories", getProductCategories);
+
+router.get("/destinations", destinatoons);
 
 router.get("/header-menu", getHeaderMenu);
 
