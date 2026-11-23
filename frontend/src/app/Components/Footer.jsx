@@ -77,7 +77,7 @@ export default function Footer() {
             <h3>Company</h3>
             <Link href="/about">About Us</Link>
             <Link href="/contact">Contact Us</Link>
-            <Link href="/support">Booking &amp; Refund Help</Link>
+            <Link href="/support">Booking &amp;  Help</Link>
           </div>
         </div>
         <div className="tour-container tour-footer__bottom">

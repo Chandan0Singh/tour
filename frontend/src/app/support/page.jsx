@@ -15,7 +15,6 @@ import {
   ShieldCheck,
   Backpack,
   Users,
-  FileText,
   Send,
   CheckCircle2,
 } from "lucide-react";
@@ -26,7 +25,6 @@ const CATEGORIES = [
   { id: "all", label: "All Topics", icon: Compass },
   { id: "booking", label: "Bookings", icon: Compass },
   { id: "payments", label: "Payments", icon: CreditCard },
-  { id: "cancellation", label: "Cancellations & Refunds", icon: FileText },
   { id: "safety", label: "Safety & Gear", icon: ShieldCheck },
   { id: "groups", label: "Group Trips", icon: Users },
 ];
@@ -59,20 +57,6 @@ const FAQS = [
     question: "Is my payment information secure?",
     answer:
       "Complete payment only through the checkout page. Do not send card or banking details by email, phone, or WhatsApp. Contact support if the checkout page does not load or a payment status is unclear.",
-  },
-  {
-    id: "f5",
-    category: "cancellation",
-    question: "What is your cancellation policy?",
-    answer:
-      "Cancellation and refund terms can vary by package and booking. Check the terms shown for your package or booking confirmation, then contact the travel desk with your booking ID before making changes.",
-  },
-  {
-    id: "f6",
-    category: "cancellation",
-    question: "How long do refunds take to process?",
-    answer:
-      "Refund eligibility and timing depend on the package terms and payment provider. Contact the travel desk with your booking ID and payment reference to check the status.",
   },
   {
     id: "f7",
@@ -233,8 +217,8 @@ export default function HelpSupportPage() {
             Help &amp; Support
           </h1>
           <p className="mt-4 text-gray-500 max-w-xl mx-auto">
-            Find answers about bookings, payments, cancellations, and trip
-            safety, or reach our travel desk directly.
+            Find answers about bookings, payments, and trip safety, or reach
+            our travel desk directly.
           </p>
 
           {/* Search */}
@@ -247,7 +231,7 @@ export default function HelpSupportPage() {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search for a topic, e.g. refund, gear, group size…"
+              placeholder="Search for a topic, e.g. booking, gear, group size…"
               className="w-full bg-white border border-[#E4E0D8] pl-12 pr-4 py-3.5 text-sm text-[#2D2D2D] outline-none focus:border-[#5E6B58]"
             />
           </div>
@@ -341,7 +325,7 @@ export default function HelpSupportPage() {
                   const Icon = channel.icon;
                   return (
                     <a
-                      key={channel.label}
+                      key={channel.href}
                       href={channel.href}
                       target={channel.label === "Visit Us" ? "_blank" : undefined}
                       rel={channel.label === "Visit Us" ? "noreferrer" : undefined}

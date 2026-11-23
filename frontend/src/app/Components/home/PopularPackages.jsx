@@ -17,16 +17,26 @@ export default function PopularPackages({ data = [] }) {
     <section className="tour-section packages-section">
       <div className="tour-container">
         <div className="tour-row-heading">
-          <div className="packages-heading"><p className="tour-kicker">◉ POPULAR PACKAGES</p><div className="package-tabs"><span className="active">TREKS</span><span>TOURS</span></div></div>
+          <div className="packages-heading"><p className="tour-kicker">◉ POPULAR PACKAGES</p><div className="package-tabs"><Link href="/treks" className="active">TREKS</Link><Link href="/tours">TOURS</Link></div></div>
           <Link href="/tours">View All Packages <ArrowRight size={13} /></Link>
         </div>
         <div className="package-grid">
-          {packages.slice(0, 6).map((item, index) => (
-            <article className="package-card" key={item._id || item.title || index}>
-              <div className="package-image-wrap"><img src={item.bannerImage || `https://images.unsplash.com/photo-${[1464822759023, 1500534623283, 1464278533981, 1530789253388, 1526772662000, 1548013146][index]}?q=80&w=600`} alt={item.title} /><span>{index === 0 ? "Best Seller" : ""}</span></div>
-              <div className="package-card__body"><h3>{item.title}</h3><div className="package-meta"><span><CalendarDays size={11} /> {item.duration?.days || item.duration || 3} Days</span><strong>₹{item.discountPrice || item.price || "8,999"}</strong></div><div className="package-rating"><Star size={11} fill="currentColor" /> {item.rating || "4.8"} ({item.reviews || "120"})</div><Link href={item._id ? `/booking/${item._id}` : "/tours"}>View Details <ArrowRight size={12} /></Link></div>
-            </article>
-          ))}
+          {packages.slice(0, 6).map((item, index) => {
+            const isTrek = item.type === "Trek" || (!item.type && item.title?.toLowerCase().includes("trek"));
+            const stateSlug = item.state ? item.state.toLowerCase().replace(/\s+/g, "-") : "";
+            const detailHref = item.slug && stateSlug
+              ? `/${isTrek ? "treks" : "tours"}/${stateSlug}/${item.slug}`
+              : isTrek ? "/treks" : "/tours";
+
+            return (
+              <article className="package-card" key={item._id || item.title || index}>
+                <Link href={detailHref} aria-label={`View ${item.title}`}>
+                  <div className="package-image-wrap"><img src={item.bannerImage || `https://images.unsplash.com/photo-${[1464822759023, 1500534623283, 1464278533981, 1530789253388, 1526772662000, 1548013146][index]}?q=80&w=600`} alt={item.title} /><span>{index === 0 ? "Best Seller" : ""}</span></div>
+                  <div className="package-card__body"><h3>{item.title}</h3><div className="package-meta"><span><CalendarDays size={11} /> {item.duration?.days || item.duration || 3} Days</span><strong>₹{item.discountPrice || item.price || "8,999"}</strong></div><div className="package-rating"><Star size={11} fill="currentColor" /> {item.rating || "4.8"} ({item.reviews || "120"})</div><span className="package-view-details">View Details <ArrowRight size={12} /></span></div>
+                </Link>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

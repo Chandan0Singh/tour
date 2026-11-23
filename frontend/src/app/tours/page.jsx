@@ -22,12 +22,6 @@ const difficultyStyle = {
   Difficult: "bg-[#FFEBEE] text-[#B71C1C]",
 };
 
-// Backend enum: ["Tour", "Trek"]
-const typeStyle = {
-  Tour: "bg-[#E3F2FD] text-[#1565C0]",
-  Trek: "bg-[#F3E5F5] text-[#6A1B9A]",
-};
-
 const whyUs = [
   {
     icon: "🏆",
@@ -81,6 +75,117 @@ const testimonials = [
 ];
 
 const FALLBACK_IMAGE = "https://picsum.photos/seed/tourfallback/800/600";
+
+function TourCard({ tour, isWishlisted, onToggleWishlist }) {
+  const image = tour?.bannerImage || tour?.images?.[0]?.url || FALLBACK_IMAGE;
+  const stateSlug = String(tour?.state || tour?.destination || "destination")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+  const tourSlug = tour?.slug || tour?._id;
+  const price = tour?.discountPrice || tour?.price || 0;
+  const hasDiscount = tour?.discountPrice && tour?.discountPrice < tour?.price;
+  const rating = Number(tour?.averageRating || 0);
+  const reviewCount = tour?.totalReviews ?? tour?.reviews?.length ?? 0;
+
+  return (
+    <article className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+      <div className="relative h-64 overflow-hidden">
+        <img
+          src={image}
+          alt={tour?.images?.[0]?.alt || tour?.title || "Tour package"}
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+          {tour?.bestSeller && (
+            <span className="rounded-full bg-[#FF9800] px-2.5 py-1 text-[10px] font-bold text-white shadow">
+              🏆 Best Seller
+            </span>
+          )}
+          {tour?.featured && (
+            <span className="rounded-full bg-[#1B5E20] px-2.5 py-1 text-[10px] font-bold text-white shadow">
+              ⭐ Featured
+            </span>
+          )}
+        </div>
+        <button
+          type="button"
+          aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+          aria-pressed={isWishlisted}
+          onClick={() => onToggleWishlist(tour?._id)}
+          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-lg transition-transform hover:scale-110"
+        >
+          {isWishlisted ? "❤️" : "♡"}
+        </button>
+        <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
+          {tour?.duration?.days != null && (
+            <span className="rounded-full bg-black/40 px-3 py-1 text-sm font-medium text-white backdrop-blur">
+              🕐 {tour.duration.days}D / {tour.duration.nights ?? 0}N
+            </span>
+          )}
+          {tour?.difficulty && (
+            <span className={`rounded-full px-3 py-1 text-[10px] font-bold ${difficultyStyle[tour.difficulty] || "bg-gray-100 text-gray-600"}`}>
+              {tour.difficulty}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col p-6">
+        <div className="mb-2 flex items-center gap-1.5 text-sm text-gray-500">
+          <span className="text-[#4CAF50]">📍</span>
+          <span>{tour?.destination}{tour?.state ? `, ${tour.state}` : ""}</span>
+        </div>
+        <h3
+          className="mb-3 line-clamp-2 text-xl font-bold leading-tight text-[#1B5E20]"
+          style={{ fontFamily: "'Playfair Display', serif" }}
+        >
+          {tour?.title || "Untitled Tour"}
+        </h3>
+        {tour?.shortDescription && (
+          <p className="mb-4 line-clamp-2 text-sm text-gray-500">
+            {tour.shortDescription}
+          </p>
+        )}
+        {rating > 0 && (
+          <div className="mb-4 flex items-center gap-1 text-sm font-semibold text-gray-700">
+            <span className="text-[#FF9800]">★</span> {rating.toFixed(1)}
+            <span className="text-xs font-normal text-gray-400">({reviewCount} reviews)</span>
+          </div>
+        )}
+        <div className="mb-4 flex items-center justify-between text-sm text-gray-500">
+          <span>👥 Max {tour?.groupSize?.max || "—"} travellers</span>
+          {tour?.inclusions?.[0] && (
+            <span className="max-w-[50%] truncate">✓ {tour.inclusions[0]}</span>
+          )}
+        </div>
+        <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4">
+          <div>
+            <p className="text-xs font-medium text-gray-400">Starting from</p>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-[#1B5E20]">
+                ₹{Number(price).toLocaleString("en-IN")}
+              </span>
+              {hasDiscount && (
+                <span className="text-sm text-gray-400 line-through">
+                  ₹{Number(tour.price).toLocaleString("en-IN")}
+                </span>
+              )}
+            </div>
+            <p className="text-[10px] text-gray-400">per person</p>
+          </div>
+          <Link
+            href={`/tours/${stateSlug}/${tourSlug}`}
+            className="rounded-xl bg-[#1B5E20] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#4CAF50] hover:shadow-lg"
+          >
+            View Tour →
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
 
 export default function ToursPage() {
   const [wishlist, setWishlist] = useState([]);
@@ -221,376 +326,211 @@ export default function ToursPage() {
         <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&display=swap');.fd{font-family:'Playfair Display',serif}`}</style>
 
         {/* HERO */}
-        <section className="bg-[#1B5E20] text-white pt-10 pb-0 px-5">
-          <div className="max-w-7xl mx-auto flex items-end gap-10 pb-12 flex-wrap">
-            <div className="flex-1 min-w-[260px]">
-              <span className="text-[#A5D6A7] text-xs font-semibold uppercase tracking-widest">
-                Curated Tour Packages
-              </span>
-              <h1 className="fd text-4xl mt-3 mb-3 leading-tight">
-                India&apos;s Most Memorable
-                <br />
-                Tour Experiences
-              </h1>
-              <p className="text-white/65 text-sm leading-relaxed max-w-md">
-                From Himalayan valleys to Goan shores — handcrafted itineraries
-                for every kind of traveller.
-              </p>
-              <div className="flex gap-3 mt-6 flex-wrap">
-                <button
-                  type="button"
-                  onClick={() => document.getElementById("tour-grid")?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                  className="bg-[#FF9800] hover:bg-[#F57C00] text-white font-semibold text-sm px-6 py-3 rounded-full transition-colors"
-                >
-                  Explore All Tours
-                </button>
-                <button
-                  type="button"
-                  onClick={() => document.getElementById("why-us")?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                  className="bg-white/10 border border-white/25 text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-white/20 transition-colors"
-                >
-                  How It Works
-                </button>
+        <section className="relative flex h-[65vh] items-center justify-center overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600"
+            alt="Scenic tour destination"
+            className="absolute inset-0 h-full w-full scale-105 object-cover"
+            style={{ animation: "subtleZoom 12s ease-in-out infinite alternate" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70" />
+          <div className="relative z-10 mx-auto max-w-4xl px-6 text-center text-white">
+            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-[#FF9800]">
+              Curated Journeys
+            </p>
+            <h1
+              className="mb-6 text-5xl font-bold leading-tight md:text-7xl"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              Explore Tours
+            </h1>
+            <p className="mx-auto mb-8 max-w-2xl text-lg text-white/85 md:text-xl">
+              Discover unforgettable destinations, vibrant cultures, and journeys
+              thoughtfully planned for every kind of traveller.
+            </p>
+            <div className="flex items-center justify-center gap-8 text-sm text-white/80">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-white">{total}+</p>
+                <p>Tours Available</p>
+              </div>
+              <div className="h-10 w-px bg-white/30" />
+              <div className="text-center">
+                <p className="text-2xl font-bold text-white">4.8★</p>
+                <p>Avg Rating</p>
+              </div>
+              <div className="h-10 w-px bg-white/30" />
+              <div className="text-center">
+                <p className="text-2xl font-bold text-white">15k+</p>
+                <p>Happy Travellers</p>
               </div>
             </div>
-            <div className="flex gap-3 pb-0 flex-wrap">
-              {[
-                ["50+", "Tour Packages"],
-                ["15k+", "Happy Travellers"],
-                ["30+", "Destinations"],
-              ].map(([n, l]) => (
-                <div
-                  key={l}
-                  className="bg-white/10 rounded-2xl px-5 py-4 text-center min-w-[90px]"
-                >
-                  <div className="text-[#4CAF50] text-2xl font-bold">{n}</div>
-                  <div className="text-white/55 text-xs mt-1 font-medium">
-                    {l}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
-          <div className="h-7 bg-[#F9F7F4] rounded-t-3xl"></div>
+          <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 animate-bounce flex-col items-center gap-1 text-xs text-white/60">
+            <span>Scroll</span>
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 9-7 7-7-7" />
+            </svg>
+          </div>
         </section>
 
         {/* FILTER BAR */}
-        <div className="bg-white border-b border-gray-100 sticky top-0 z-10">
-          <div className="max-w-7xl mx-auto px-5 flex gap-1 py-2.5 overflow-x-auto">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => {
-                  setActiveCategory(cat);
-                  setPage(1);
-                }}
-                className={`text-sm font-medium px-4 py-1.5 rounded-full whitespace-nowrap transition-all ${
-                  activeCategory === cat
-                    ? "bg-[#1B5E20] text-white"
-                    : "text-gray-500 hover:text-[#1B5E20] hover:bg-[#E8F5E9]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* MAIN */}
-        <div className="max-w-7xl mx-auto px-5 py-8 flex gap-7 items-start">
-          {/* SIDEBAR */}
-          <aside className="w-52 flex-shrink-0 bg-white rounded-2xl p-5 border border-gray-100 sticky top-16 hidden lg:block">
-            <h3 className="fd text-base text-[#1B3A1F] mb-4">Filter Tours</h3>
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">
-              Budget / person
-            </p>
-            <input
-              type="range"
-              min="3000"
-              max="30000"
-              value={budget}
-              onChange={(e) => {
-                setBudget(Number(e.target.value));
-                setPage(1);
-              }}
-              className="w-full accent-[#1B5E20]"
-            />
-            <div className="flex justify-between text-xs text-gray-400 mt-1">
-              <span>₹3k</span>
-              <span className="text-[#1B5E20] font-semibold">
-                ₹{budget.toLocaleString()}
-              </span>
-              <span>₹30k</span>
-            </div>
-            {[
-              ["Duration", ["1–3 Days", "4–7 Days", "8–14 Days", "15+ Days"]],
-              ["Difficulty", ["Easy", "Moderate", "Difficult"]],
-              [
-                "Group Size",
-                ["Solo / Private", "Small Group (≤12)", "Large Group"],
-              ],
-              ["Season", ["Summer", "Monsoon", "Winter"]],
-            ].map(([label, opts]) => (
-              <div key={label}>
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mt-4 mb-2">
-                  {label}
-                </p>
-                {opts.map((o) => (
-                  <label
-                    key={o}
-                    className="flex items-center gap-2 text-xs text-gray-500 py-1 cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      defaultChecked={[
-                        "1–3 Days",
-                        "4–7 Days",
-                        "Easy",
-                        "Moderate",
-                        "Small Group (≤12)",
-                        "Summer",
-                        "Monsoon",
-                      ].includes(o)}
-                      className="accent-[#1B5E20]"
-                    />
-                    {o}
-                  </label>
-                ))}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => {
-                setPage(1);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className="w-full bg-[#FF9800] hover:bg-[#F57C00] text-white font-semibold text-xs py-2.5 rounded-xl mt-5 transition-colors"
-            >
-              Apply Filters
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setActiveCategory("All Tours");
-                setBudget(30000);
-                setSortBy("Popularity");
-                setPage(1);
-              }}
-              className="w-full text-xs text-gray-400 mt-2 hover:text-gray-600 transition-colors"
-            >
-              Reset all
-            </button>
-          </aside>
-
-          {/* GRID */}
-          <div className="flex-1 min-w-0">
-            <div className="flex justify-between items-center mb-5 flex-wrap gap-3">
-              <p className="text-sm text-gray-400">
-                <span className="text-[#1B5E20] font-semibold">
-                  {tours?.length || 0} tours
-                </span>{" "}
-                found
-              </p>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-400">Sort by</span>
-                <select
-                  value={sortBy}
+        <section className="sticky top-0 z-20 border-b border-gray-100 bg-white shadow-md">
+          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="flex min-w-[220px] flex-1 items-center gap-3 rounded-xl border border-gray-200 bg-[#F4F1EA] px-3 py-2.5 text-sm text-gray-500">
+                <span>Budget / person</span>
+                <input
+                  type="range"
+                  min="3000"
+                  max="30000"
+                  value={budget}
+                  aria-label="Maximum budget per person"
                   onChange={(e) => {
-                    setSortBy(e.target.value);
+                    setBudget(Number(e.target.value));
                     setPage(1);
                   }}
-                  className="text-xs font-medium border border-gray-200 rounded-xl px-3 py-1.5 text-gray-500 bg-white outline-none cursor-pointer"
+                  className="min-w-[70px] flex-1 accent-[#1B5E20]"
+                />
+                <span className="whitespace-nowrap font-semibold text-[#1B5E20]">
+                  ₹{budget.toLocaleString("en-IN")}
+                </span>
+              </label>
+              <select
+                value={sortBy}
+                onChange={(e) => {
+                  setSortBy(e.target.value);
+                  setPage(1);
+                }}
+                aria-label="Sort tours"
+                className="rounded-xl border border-gray-200 bg-[#F4F1EA] px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
+              >
+                <option>Popularity</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+                <option>Duration</option>
+                <option>Rating</option>
+              </select>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveCategory("All Tours");
+                  setBudget(30000);
+                  setSortBy("Popularity");
+                  setPage(1);
+                }}
+                className="rounded-xl border border-gray-200 px-4 py-2.5 text-sm text-gray-600 transition hover:bg-gray-50"
+              >
+                Reset
+              </button>
+            </div>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => {
+                    setActiveCategory(cat);
+                    setPage(1);
+                  }}
+                  className={`rounded-full border px-4 py-1.5 text-xs font-semibold transition-all ${
+                    activeCategory === cat
+                      ? "border-[#1B5E20] bg-[#1B5E20] text-white"
+                      : "border-gray-200 bg-white text-gray-600 hover:border-[#1B5E20] hover:text-[#1B5E20]"
+                  }`}
                 >
-                  {[
-                    "Popularity",
-                    "Price: Low to High",
-                    "Price: High to Low",
-                    "Duration",
-                    "Rating",
-                  ].map((o) => (
-                    <option key={o}>{o}</option>
-                  ))}
-                </select>
+                  {cat}
+                </button>
+              ))}
+              <span className="ml-auto text-xs text-gray-400">
+                {total} tour{total !== 1 ? "s" : ""} found
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* TOUR GRID */}
+        <section id="tour-grid" className="bg-[#F4F1EA] py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <div className="mb-12 text-center">
+              <span className="text-sm font-medium uppercase tracking-wider text-[#FF9800]">
+                {activeCategory === "All Tours" ? "Find your next journey" : activeCategory}
+              </span>
+              <h2
+                className="mt-2 text-3xl font-bold text-[#1B5E20] md:text-4xl"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                {activeCategory === "All Tours" ? "Explore All Tours" : `${activeCategory} Tours`}
+              </h2>
+            </div>
+
+            {loading && (
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {Array.from({ length: 6 }, (_, index) => (
+                  <div key={index} className="animate-pulse overflow-hidden rounded-3xl bg-white shadow-lg">
+                    <div className="h-64 bg-gray-200" />
+                    <div className="space-y-3 p-6">
+                      <div className="h-3 w-1/3 rounded bg-gray-200" />
+                      <div className="h-5 w-2/3 rounded bg-gray-200" />
+                      <div className="h-3 w-1/2 rounded bg-gray-100" />
+                      <div className="mt-4 h-10 rounded-xl bg-gray-100" />
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
+            )}
 
-            <div id="tour-grid" className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-              {tours?.map((tour) => {
-                const imageUrl = tour?.images?.[0]?.url || FALLBACK_IMAGE;
-                const imageAlt =
-                  tour?.images?.[0]?.alt || tour?.title || "Tour package";
-
-                const displayPrice = tour?.discountPrice || tour?.price || 0;
-                const hasDiscount =
-                  tour?.discountPrice &&
-                  tour?.price &&
-                  tour.discountPrice < tour.price;
-
-                const durationLabel =
-                  tour?.duration?.days != null && tour?.duration?.nights != null
-                    ? `${tour.duration.days}D / ${tour.duration.nights}N`
-                    : "N/A";
-
-                const maxGroup = tour?.groupSize?.max ?? "N/A";
-
-                const avgRating = tour?.averageRating || 0;
-                const reviewCount =
-                  tour?.totalReviews ?? tour?.reviews?.length ?? 0;
-
-                const badge = tour?.bestSeller
-                  ? "Best Seller"
-                  : tour?.featured
-                  ? "Featured"
-                  : null;
-                const badgeColor = tour?.bestSeller
-                  ? "bg-[#FF9800]"
-                  : "bg-[#1B5E20]";
-
-                const slug = tour?.slug || tour?._id;
-
-                return (
-                  <article
-                    key={tour?._id}
-                    className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col h-full"
-                  >
-                    <div className="relative">
-                      <img
-                        src={imageUrl}
-                        alt={imageAlt}
-                        className="w-full h-48 object-cover"
-                      />
-                      {badge && (
-                        <span
-                          className={`absolute top-3 left-3 ${badgeColor} text-white text-xs font-semibold px-3 py-1 rounded-full`}
-                        >
-                          {badge}
-                        </span>
-                      )}
-                      <button
-                        onClick={() => toggleWishlist(tour?._id)}
-                        className="absolute top-3 right-3 bg-white/90 rounded-full w-8 h-8 flex items-center justify-center text-base hover:scale-110 transition-transform"
-                      >
-                        {wishlist.includes(tour?._id) ? "❤️" : "♡"}
-                      </button>
-                    </div>
-                    <div className="p-5 flex flex-col flex-1">
-                      <div className="flex gap-2 items-center mb-2 flex-wrap">
-                        {tour?.difficulty && (
-                          <span
-                            className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                              difficultyStyle[tour.difficulty] ||
-                              "bg-gray-100 text-gray-500"
-                            }`}
-                          >
-                            {tour.difficulty}
-                          </span>
-                        )}
-                        {tour?.type && (
-                          <span
-                            className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                              typeStyle[tour.type] ||
-                              "bg-gray-100 text-gray-500"
-                            }`}
-                          >
-                            {tour.type}
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="fd text-base text-[#1B3A1F] leading-snug mb-1">
-                        <Link href={`/tours/${slug}`}>
-                          {tour?.title || "Untitled Tour"}
-                        </Link>
-                      </h3>
-                      {tour?.destination && (
-                        <p className="text-xs text-gray-400 mb-2">
-                          📍 {tour.destination}
-                        </p>
-                      )}
-                      <div className="flex items-center gap-1 mb-2">
-                        <span className="text-[#FF9800] text-xs">
-                          {"★".repeat(Math.floor(avgRating))}
-                          {"☆".repeat(5 - Math.floor(avgRating))}
-                        </span>
-                        <span className="text-xs text-gray-400">
-                          {avgRating.toFixed ? avgRating.toFixed(1) : avgRating}{" "}
-                          ({reviewCount} reviews)
-                        </span>
-                      </div>
-                      <div className="flex gap-4 text-xs text-gray-400 mb-3">
-                        <span>📅 {durationLabel}</span>
-                        <span>👥 Max {maxGroup}</span>
-                      </div>
-                      <div className="flex flex-wrap gap-1.5 mb-3">
-                        {(tour?.inclusions || [])
-                          .slice(0, 4)
-                          .map((inc, idx) => (
-                            <span
-                              key={`${tour?._id}-inclusion-${idx}`}
-                              className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-lg"
-                            >
-                              {inc}
-                            </span>
-                          ))}
-                      </div>
-                      <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                        <div>
-                          {hasDiscount && (
-                            <div className="text-xs text-gray-400 line-through">
-                              ₹{tour.price.toLocaleString()}
-                            </div>
-                          )}
-                          <div className="text-xl font-bold text-[#1B5E20]">
-                            ₹{displayPrice.toLocaleString()}{" "}
-                            <span className="text-xs font-normal text-gray-400">
-                              / person
-                            </span>
-                          </div>
-                        </div>
-                        <Link href={`/booking/${tour?._id}`} className="bg-[#FF9800] hover:bg-[#F57C00] text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors">
-                          Book Now
-                        </Link>
-                      </div>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-
-            {!loading && (!tours || tours.length === 0) && (
-              <div className="text-center py-20 text-gray-400">
-                <p className="text-base">
-                  No tours match your current filters.
+            {!loading && tours.length === 0 && (
+              <div className="py-24 text-center">
+                <div className="mb-4 text-7xl" aria-hidden="true">🧭</div>
+                <h3
+                  className="mb-3 text-2xl font-bold text-gray-700"
+                  style={{ fontFamily: "'Playfair Display', serif" }}
+                >
+                  No Tours Found
+                </h3>
+                <p className="mb-6 text-gray-400">
+                  Try adjusting your category or budget.
                 </p>
                 <button
+                  type="button"
                   onClick={() => {
                     setActiveCategory("All Tours");
                     setBudget(30000);
+                    setPage(1);
                   }}
-                  className="mt-4 text-sm text-[#1B5E20] font-semibold underline"
+                  className="rounded-xl bg-[#1B5E20] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#4CAF50]"
                 >
-                  Reset filters
+                  Clear Filters
                 </button>
               </div>
             )}
 
-            {loading && (
-              <div className="text-center py-14 text-gray-400 text-sm">
-                Loading tours...
+            {!loading && tours.length > 0 && (
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {tours.map((tour) => (
+                  <TourCard
+                    key={tour._id}
+                    tour={tour}
+                    isWishlisted={wishlist.includes(tour._id)}
+                    onToggleWishlist={toggleWishlist}
+                  />
+                ))}
               </div>
             )}
 
-            {!loading && tours?.length > 0 && tours.length < total && (
-              <div className="flex justify-center mt-8">
+            {!loading && tours.length > 0 && tours.length < total && (
+              <div className="mt-14 flex justify-center">
                 <button
-                  onClick={() => setPage((p) => p + 1)}
-                  className="border-2 border-[#1B5E20] text-[#1B5E20] px-10 py-3 rounded-full hover:bg-[#1B5E20] hover:text-white transition-colors"
+                  type="button"
+                  onClick={() => setPage((currentPage) => currentPage + 1)}
+                  className="rounded-xl border border-gray-200 px-6 py-3 text-sm font-medium text-gray-600 transition hover:border-[#1B5E20] hover:text-[#1B5E20]"
                 >
                   Load More Tours
                 </button>
               </div>
             )}
           </div>
-        </div>
+        </section>
 
         {/* WHY US */}
         <section id="why-us" className="bg-white border-t border-gray-100 py-12 px-5">
