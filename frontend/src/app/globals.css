@@ -180,25 +180,28 @@ button {
 .tour-section--tight { padding-top: 14px; }
 .tour-section-heading { text-align: center; }
 .tour-section-heading .tour-kicker { justify-content: center; }
-.experience-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
-.experience-card { overflow: hidden; border: 1px solid #e3e8e4; border-radius: 7px; background: white; box-shadow: 0 2px 10px rgba(20, 55, 38, .06); }
-.experience-card a { display: block; color: inherit; text-decoration: none; }
+.experience-section-heading { margin-bottom: 16px; }
+.experience-carousel { position: relative; width: min(1520px, calc(100% - 72px)); margin: 0 auto; }
+.experience-grid { display: flex; gap: 20px; overflow-x: auto; padding: 6px 6px 18px; scroll-behavior: smooth; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.experience-grid::-webkit-scrollbar { display: none; }
+.experience-card { flex: 0 0 28.25%; min-width: 300px; overflow: hidden; border: 1px solid #e3e8e4; border-radius: 14px; background: white; box-shadow: 0 2px 10px rgba(20, 55, 38, .06); scroll-snap-align: start; }
+.experience-card a { display: block; height: 100%; color: inherit; text-decoration: none; }
 .experience-card a:hover h3 { color: #168652; }
-.experience-card img { width: 100%; height: 82px; object-fit: cover; }
-.experience-card > div { position: relative; padding: 8px 24px 9px 9px; min-height: 67px; }
-.experience-card h3 { font-family: var(--font-body); font-size: 11px; letter-spacing: 0; margin: 0; color: #13251f; }
-.experience-card p { color: #6a756f; font-size: 9px; line-height: 1.25; margin: 3px 0 0; }
-.round-arrow { position: absolute; right: 7px; bottom: 9px; display: grid; place-items: center; width: 15px; height: 15px; border-radius: 50%; color: white; background: #168652; }
+.experience-card img { width: 100%; height: clamp(210px, 22vw, 340px); object-fit: cover; transition: transform .4s; }
+.experience-card:hover img { transform: scale(1.04); }
+.experience-card > div { position: relative; padding: 18px 54px 20px 20px; min-height: 105px; }
+.experience-card h3 { font-family: var(--font-body); font-size: 19px; letter-spacing: 0; margin: 0; color: #13251f; }
+.experience-card p { color: #6a756f; font-size: 13px; line-height: 1.45; margin: 6px 0 0; }
+.round-arrow { position: absolute; right: 16px; bottom: 18px; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: white; background: #168652; }
+.experience-carousel__control { position: absolute; z-index: 2; top: 50%; display: grid; width: 48px; height: 48px; place-items: center; border: 0; border-radius: 50%; background: white; color: #17241e; box-shadow: 0 5px 20px rgba(0, 0, 0, .18); cursor: pointer; transform: translateY(-50%); transition: transform .2s, box-shadow .2s; }
+.experience-carousel__control:hover { transform: translateY(-50%) scale(1.08); box-shadow: 0 7px 24px rgba(0, 0, 0, .24); }
+.experience-carousel__control--previous { left: -24px; }
+.experience-carousel__control--previous svg { transform: rotate(180deg); }
+.experience-carousel__control--next { right: -24px; }
 .tour-row-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 11px; }
 .tour-row-heading .tour-kicker { margin: 0; }
 .tour-row-heading a { display: flex; align-items: center; gap: 4px; color: #176b4a; font-size: 10px; font-weight: 700; }
-.tour-section--destinations { padding-top: 8px; }
-.destination-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
-.destination-card { position: relative; height: 116px; overflow: hidden; border-radius: 7px; background: #17352b; }
-.destination-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
-.destination-card:hover img { transform: scale(1.05); }
-.destination-card::after { content: ""; position: absolute; inset: 35% 0 0; background: linear-gradient(transparent, rgba(0,0,0,.72)); }
-.destination-card strong { position: absolute; z-index: 1; left: 12px; bottom: 10px; color: white; font-size: 12px; }
+.tour-section--destinations { padding-top: 24px; }
 .tour-footer { color: #fff; }
 .tour-footer__cta { min-height: 112px; position: relative; background: linear-gradient(90deg, rgba(8, 63, 44, .96), rgba(8, 63, 44, .65)), url("https://images.unsplash.com/photo-1464278533981-50106e6176b1?q=80&w=1600") center/cover; }
 .tour-footer__cta-inner { min-height: 112px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
@@ -224,25 +227,20 @@ button {
 .package-tabs { display: flex; gap: 16px; align-self: stretch; align-items: center; font-size: 9px; font-weight: 800; color: #68756e; }
 .package-tabs span { height: 100%; display: flex; align-items: center; }
 .package-tabs .active { color: #168652; border-bottom: 2px solid #168652; }
-.package-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 9px; }
-.package-card { overflow: hidden; background: white; border: 1px solid #e1e8e3; border-radius: 7px; box-shadow: 0 2px 9px rgba(20, 55, 38, .06); }
-.package-image-wrap { height: 83px; position: relative; overflow: hidden; }
-.package-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
-.package-card:hover img { transform: scale(1.06); }
-.package-image-wrap span { position: absolute; top: 6px; left: 6px; color: white; background: #168652; border-radius: 3px; padding: 2px 5px; font-size: 7px; font-weight: 800; }
-.package-card__body { padding: 8px; }
-.package-card h3 { font-family: var(--font-body); font-size: 10px; line-height: 1.2; letter-spacing: 0; min-height: 24px; margin: 0 0 5px; color: #162721; }
-.package-meta, .package-rating, .package-card__body a { display: flex; align-items: center; gap: 4px; font-size: 8px; }
-.package-meta { justify-content: space-between; color: #68756e; }
-.package-meta strong { color: #17261f; font-size: 9px; }
-.package-rating { color: #e69b16; margin-top: 4px; }
-.package-card__body a { color: #168652; font-weight: 800; margin-top: 7px; }
-.package-card > a { color: inherit; text-decoration: none; }
-.package-view-details { display: flex; align-items: center; gap: 4px; color: #168652; font-size: 8px; font-weight: 800; margin-top: 7px; }
-@media (max-width: 1000px) { .package-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 480px) { .packages-heading { gap: 10px; } .package-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 800px) { .tour-container { width: min(100% - 28px, 560px); } .tour-hero { min-height: 500px; } .tour-hero__shade { background: linear-gradient(90deg, rgba(250,252,247,.96), rgba(250,252,247,.62)); } .tour-hero__content { padding-top: 68px; } .experience-grid { grid-template-columns: repeat(2, 1fr); } .destination-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .experience-grid, .destination-grid { grid-template-columns: 1fr 1fr; gap: 6px; } .experience-card img { height: 72px; } .experience-card > div { min-height: 73px; } .tour-proof { gap: 8px; } }
+.home-image-carousel { position: relative; left: 50%; width: calc(100vw - 32px); margin: 0; transform: translateX(-50%); }
+.home-image-carousel__track { display: flex; gap: 18px; overflow-x: auto; padding: 4px 4px 16px; scroll-behavior: smooth; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.home-image-carousel__track::-webkit-scrollbar { display: none; }
+.home-image-card { position: relative; display: block; flex: 0 0 326px; height: 206px; overflow: hidden; border-radius: 20px; background: #17352b; scroll-snap-align: start; color: #fff; }
+.home-image-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.home-image-card:hover img { transform: scale(1.05); }
+.home-image-card__shade { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 38%, rgba(0, 0, 0, .68)); }
+.home-image-card__caption { position: absolute; z-index: 1; right: 12px; bottom: 0; left: 12px; display: flex; align-items: center; justify-content: center; gap: 11px; min-height: 60px; padding: 12px; color: #fff; font-size: 18px; font-weight: 700; text-align: center; text-shadow: 0 1px 5px rgba(0, 0, 0, .45); }
+.home-image-carousel__control { position: absolute; z-index: 2; top: 50%; display: grid; width: 48px; height: 48px; place-items: center; border: 1px solid rgba(255,255,255,.55); border-radius: 50%; background: rgba(255,255,255,.88); color: #17241e; box-shadow: 0 5px 18px rgba(0,0,0,.2); cursor: pointer; transform: translateY(-50%); transition: background .2s, transform .2s; }
+.home-image-carousel__control:hover { background: #fff; transform: translateY(-50%) scale(1.06); }
+.home-image-carousel__control--previous { left: 4px; }
+.home-image-carousel__control--next { right: 4px; }
+@media (max-width: 800px) { .tour-container { width: min(100% - 28px, 560px); } .tour-hero { min-height: 500px; } .tour-hero__shade { background: linear-gradient(90deg, rgba(250,252,247,.96), rgba(250,252,247,.62)); } .tour-hero__content { padding-top: 68px; } .experience-carousel { width: calc(100% - 64px); } .experience-card { flex-basis: 48%; min-width: 250px; } .experience-card img { height: 250px; } .experience-carousel__control { width: 42px; height: 42px; } .experience-carousel__control--previous { left: -20px; } .experience-carousel__control--next { right: -20px; } .home-image-card { flex-basis: 300px; } }
+@media (max-width: 480px) { .packages-heading { gap: 10px; } .experience-carousel { width: calc(100% - 50px); } .experience-grid { gap: 12px; } .experience-card { flex-basis: 88%; min-width: 0; } .experience-card img { height: 220px; } .experience-card > div { padding: 15px 48px 17px 16px; min-height: 92px; } .experience-card h3 { font-size: 17px; } .experience-card p { font-size: 12px; } .experience-carousel__control { width: 38px; height: 38px; } .experience-carousel__control--previous { left: -17px; } .experience-carousel__control--next { right: -17px; } .home-image-carousel { width: calc(100vw - 20px); } .home-image-carousel__track { gap: 12px; } .home-image-card { flex-basis: 82vw; max-width: 326px; height: 190px; } .home-image-carousel__control { width: 40px; height: 40px; } .tour-proof { gap: 8px; } }
 
 .tour-detail-page { background: #f5f7f4; color: #1f2b29; }
 .tour-detail-loading { min-height: 50vh; display: grid; place-items: center; font-size: 1.5rem; font-weight: 700; color: #123b2f; }

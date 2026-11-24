@@ -7,7 +7,7 @@ const getHome = async (req, res) => {
   try {
     const home = await Home.findOne();
     const featuredTreks = await Product.find({type: "Trek"}).limit(4);
-    const featuredTours = await Product.find({type: "Tour"}).limit(3);
+    const featuredTours = await Product.find({type: "Tour"}).limit(8);
     const topDestinations = await Product.find({}).sort({createdAt: -1}).limit(8);
     const latestBlogs = await Blog.find({}).sort({createdAt: -1}).limit(3)
 
