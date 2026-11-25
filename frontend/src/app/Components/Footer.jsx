@@ -34,7 +34,7 @@ export default function Footer() {
               <a href="https://www.facebook.com/share/1Esk7VdqGN/" target="_blank" rel="noreferrer" aria-label="Facebook">
                 <FaFacebookF size={13} />
               </a>
-              <a href="https://www.instagram.com/laviadventure?igsi=cTMwOG9iNDZncnpx" target="_blank" rel="noreferrer" aria-label="Instagram">
+              <a href="https://www.instagram.com/reel/Df9Bxgyv6IC/?fqnt=MTc3ajhjMW85emlueg==" target="_blank" rel="noreferrer" aria-label="Instagram">
                 <FaInstagram size={13} />
               </a>
               <a href="https://youtube.com/@jaynegi0311?si=-Jm2jVmTIiNXU5du" target="_blank" rel="noreferrer" aria-label="YouTube">

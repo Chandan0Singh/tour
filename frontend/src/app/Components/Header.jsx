@@ -196,7 +196,7 @@ export default function Header() {
               {[
                 {
                   name: "Instagram",
-                  link: "https://www.instagram.com/laviadventure?igsi=cTMwOG9iNDZncnpx",
+                  link: "https://www.instagram.com/reel/Df9Bxgyv6IC/?fqnt=MTc3ajhjMW85emlueg==",
                 },
                 {
                   name: "Facebook",

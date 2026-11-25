@@ -18,6 +18,9 @@ export default function ProductDetails({ product }) {
   const pathname = usePathname();
 
   const basePath = `/${pathname.split("/")[1]}`;
+  const faqs = (Array.isArray(product?.faqs) ? product.faqs : []).filter(
+    (faq) => faq?.question?.trim() && faq?.answer?.trim(),
+  );
 
   if (!product) return null;
 
@@ -216,6 +219,25 @@ export default function ProductDetails({ product }) {
                         </p>
                       )}
                     </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {faqs.length > 0 && (
+              <section className="mt-12">
+                <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
+                <div className="mt-6 space-y-3">
+                  {faqs.map((faq, index) => (
+                    <details
+                      key={`${faq.question}-${index}`}
+                      className="group rounded-xl border border-gray-200 bg-white p-5"
+                    >
+                      <summary className="cursor-pointer font-semibold text-gray-900 marker:text-green-700">
+                        {faq.question}
+                      </summary>
+                      <p className="mt-3 leading-7 text-gray-600">{faq.answer}</p>
+                    </details>
                   ))}
                 </div>
               </section>
